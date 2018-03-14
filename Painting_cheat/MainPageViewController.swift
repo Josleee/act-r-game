@@ -11,6 +11,7 @@ import UIKit
 class MainPageViewController: UIViewController {
 
     var numberOfBit = 0
+    var test = 1
     
     @IBOutlet weak var BitsCount: UILabel!
     
