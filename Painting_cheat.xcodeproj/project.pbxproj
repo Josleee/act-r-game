@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8592691F20596C6B00E41F42 /* HelpPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8592691E20596C6B00E41F42 /* HelpPageViewController.swift */; };
 		85EB2B50205871F700BD38CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EB2B4F205871F700BD38CC /* AppDelegate.swift */; };
 		85EB2B52205871F700BD38CC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EB2B51205871F700BD38CC /* ViewController.swift */; };
 		85EB2B55205871F700BD38CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85EB2B53205871F700BD38CC /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8592691E20596C6B00E41F42 /* HelpPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpPageViewController.swift; sourceTree = "<group>"; };
 		85EB2B4C205871F700BD38CC /* Painting_cheat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Painting_cheat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85EB2B4F205871F700BD38CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85EB2B51205871F700BD38CC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				85EB2B4F205871F700BD38CC /* AppDelegate.swift */,
 				85EB2B51205871F700BD38CC /* ViewController.swift */,
 				85EB2B53205871F700BD38CC /* Main.storyboard */,
+				8592691E20596C6B00E41F42 /* HelpPageViewController.swift */,
 				85EB2B56205871F700BD38CC /* Assets.xcassets */,
 				85EB2B58205871F700BD38CC /* LaunchScreen.storyboard */,
 				85EB2B5B205871F700BD38CC /* Info.plist */,
@@ -139,6 +142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8592691F20596C6B00E41F42 /* HelpPageViewController.swift in Sources */,
 				85EB2B52205871F700BD38CC /* ViewController.swift in Sources */,
 				85EB2B6420587A4C00BD38CC /* MainPageViewController.swift in Sources */,
 				85EB2B50205871F700BD38CC /* AppDelegate.swift in Sources */,
