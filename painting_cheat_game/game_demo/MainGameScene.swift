@@ -23,6 +23,7 @@ class MainGameScene: SKScene {
     private var picture1 : SKSpriteNode!
     private var picture2 : SKSpriteNode!
     private var movableNode : SKNode?
+    private var originalPosition : CGPoint!
 
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
@@ -115,8 +116,10 @@ class MainGameScene: SKScene {
                 if let spriteNode = child as? SKSpriteNode {
                     if (spriteNode.name?.range(of:"coin") != nil) {
                         if (spriteNode.contains(location)) {
+                            originalPosition = spriteNode.position
                             movableNode = spriteNode
                             movableNode!.position = location
+                            return
                         }
                     }
                 }
@@ -137,7 +140,11 @@ class MainGameScene: SKScene {
         if (movableNode != nil) {
             for touch in touches {
                 let location = touch.location(in: self)
-                movableNode?.position = location
+                if (location.y > -115) {
+                    movableNode?.position = originalPosition
+                } else {
+                    movableNode?.position = location
+                }
             }
         }
     }
