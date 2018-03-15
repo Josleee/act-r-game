@@ -99,7 +99,7 @@ class GameScene: SKScene {
 //    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let gameSceneTemp = MenuScene(fileNamed: "MenuScene")
+        let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
         self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 3))
     }
     
