@@ -18,24 +18,25 @@ class MainGameScene: SKScene {
     private var numberOfCoinsExist : Int = 0
     private var totalCoins : Int = 20
     
+    private var gameTimer : Timer!
+    private var background : SKSpriteNode!
+    private var picture1 : SKSpriteNode!
+    private var picture2 : SKSpriteNode!
+    
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
-    
-    private var background : SKSpriteNode!
-    private var bigCoins : SKSpriteNode!
-    private var bigCoins2 : SKSpriteNode!
-
-    private var gameTimer : Timer!
-
     
     override func didMove(to view: SKView) {
         print("Enter didMove")
         // Add background
-        background = SKSpriteNode(imageNamed: "Backgroundnoc")
+        background = SKSpriteNode(imageNamed: "Backgroundonlyp")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
         background.position = CGPoint(x: 0, y: 0)
         background.zPosition = -1
         self.addChild(background)
+        
+        // Load paintings
+        loadPics()
         
 //        let myLabel = SKLabelNode(fontNamed: "Chalkduster")
 //        myLabel.text = "SecondScene!@"
@@ -48,6 +49,17 @@ class MainGameScene: SKScene {
     
     //        let randomAlienPosition = GKRandomDistribution(lowestValue: 0, highestValue: 414)
     //        let position = CGFloat(randomAlienPosition.nextInt())
+    
+    func loadPics() {
+        picture1 = SKSpriteNode(imageNamed: "pic1")
+        picture2 = SKSpriteNode(imageNamed: "pic2")
+        picture1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        picture2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        picture1.position = CGPoint(x: -60, y: 70)
+        picture2.position = CGPoint(x: 60, y: 70)
+        self.addChild(picture1)
+        self.addChild(picture2)
+    }
     
     @objc func addCoins() {
         // Count
