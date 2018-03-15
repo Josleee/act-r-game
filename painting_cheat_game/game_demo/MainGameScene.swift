@@ -56,6 +56,13 @@ class MainGameScene: SKScene {
              SKAction.fadeIn(withDuration: 0.1),
              ]
         ))
+        for child in self.children {
+            if let spriteNode = child as? SKSpriteNode {
+                if (spriteNode.name?.range(of:"coin") != nil) {
+                    print(spriteNode.name)
+                }
+            }
+        }
     }
     
     //        let randomAlienPosition = GKRandomDistribution(lowestValue: 0, highestValue: 414)
@@ -94,11 +101,30 @@ class MainGameScene: SKScene {
         l2Coin.position = CGPoint(x: -self.scene!.size.width / 2 + 60, y: (lCoin.size.height * CGFloat(self.numberOfCoinsExist) / 4 - 30))
         rCoin.position = CGPoint(x: self.scene!.size.width / 2 - 35, y: (lCoin.size.height * CGFloat(self.numberOfCoinsExist) / 4 - 30))
         r2Coin.position = CGPoint(x: self.scene!.size.width / 2 - 60, y: (lCoin.size.height * CGFloat(self.numberOfCoinsExist) / 4 - 30))
+        // Name the coins
+        lCoin.name = "coin_l1_" + String(numberOfCoinsExist/2)
+        l2Coin.name = "coin_l2_" + String(numberOfCoinsExist/2)
+        rCoin.name = "coin_r1_" + String(numberOfCoinsExist/2)
+        r2Coin.name = "coin_r2_" + String(numberOfCoinsExist/2)
         // Add Children
         self.addChild(lCoin)
         self.addChild(rCoin)
         self.addChild(l2Coin)
         self.addChild(r2Coin)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {
