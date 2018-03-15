@@ -47,6 +47,17 @@ class MainGameScene: SKScene {
         gameTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(addCoins), userInfo: nil, repeats: true)
     }
     
+    func flipCard (node: SKNode){
+        node.run(SKAction.sequence(
+            [SKAction.fadeOut(withDuration: 0.1),
+             SKAction.scaleX(to: 0, duration: 0.35),
+             SKAction.scale(to: 1, duration: 0.0),
+             SKAction.setTexture(SKTexture(imageNamed: "pic3")),
+             SKAction.fadeIn(withDuration: 0.1),
+             ]
+        ))
+    }
+    
     //        let randomAlienPosition = GKRandomDistribution(lowestValue: 0, highestValue: 414)
     //        let position = CGFloat(randomAlienPosition.nextInt())
     
@@ -94,6 +105,7 @@ class MainGameScene: SKScene {
         // Stop timer
         if(isInitializingCoins == false) {
             if(gameTimer != nil) {
+                flipCard(node: picture1)
                 gameTimer.invalidate()
                 gameTimer = nil
             }
