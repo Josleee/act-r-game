@@ -28,7 +28,6 @@ class GameScene: SKScene {
         self.addChild(myLabel)
         
         bigCoins = SKSpriteNode(imageNamed: "bc")
-//        bigCoins.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
         bigCoins.position = CGPoint(x: 0, y: 0)
         self.addChild(bigCoins)
         
