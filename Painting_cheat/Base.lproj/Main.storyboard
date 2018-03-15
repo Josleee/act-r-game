@@ -97,7 +97,8 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="UI design" translatesAutoresizingMaskIntoConstraints="NO" id="zQ9-uj-ZgK">
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <gestureRecognizers/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XZy-eW-O2v">
                                 <rect key="frame" x="607" y="325" width="34" height="30"/>
@@ -153,6 +154,6 @@
         <image name="UI design" width="2780" height="1563"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="RoY-Tv-vyN"/>
+        <segue reference="F94-9A-HOK"/>
     </inferredMetricsTieBreakers>
 </document>
