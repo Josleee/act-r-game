@@ -22,7 +22,8 @@ class MainGameScene: SKScene {
     private var background : SKSpriteNode!
     private var picture1 : SKSpriteNode!
     private var picture2 : SKSpriteNode!
-    
+    private var movableNode : SKNode?
+
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
@@ -56,13 +57,6 @@ class MainGameScene: SKScene {
              SKAction.fadeIn(withDuration: 0.1),
              ]
         ))
-        for child in self.children {
-            if let spriteNode = child as? SKSpriteNode {
-                if (spriteNode.name?.range(of:"coin") != nil) {
-                    print(spriteNode.name)
-                }
-            }
-        }
     }
     
     //        let randomAlienPosition = GKRandomDistribution(lowestValue: 0, highestValue: 414)
@@ -113,19 +107,47 @@ class MainGameScene: SKScene {
         self.addChild(r2Coin)
     }
     
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
-            
+            for child in self.children {
+                if let spriteNode = child as? SKSpriteNode {
+                    if (spriteNode.name?.range(of:"coin") != nil) {
+                        if (spriteNode.contains(location)) {
+                            movableNode = spriteNode
+                            movableNode!.position = location
+                        }
+                    }
+                }
+            }
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches {
-            let location = touch.location(in: self)
-            
+        if (movableNode != nil) {
+            for touch in touches {
+                let location = touch.location(in: self)
+                movableNode?.position = location
+            }
         }
     }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (movableNode != nil) {
+            for touch in touches {
+                let location = touch.location(in: self)
+                movableNode?.position = location
+            }
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let _ = touches.first {
+            movableNode = nil
+        }
+    }
+    
     
     override func update(_ currentTime: TimeInterval) {
         // Stop timer
