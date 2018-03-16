@@ -27,18 +27,33 @@ class MainGameScene: SKScene {
     private var originalPosition : CGPoint!
     
     private var startMove : Bool = false
+    
+    private var btnFold : SKSpriteNode!
+    private var btnRaise : SKSpriteNode!
 
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
     override func didMove(to view: SKView) {
-        print("Enter didMove")
+        // print("Enter didMove")
         // Add background
         background = SKSpriteNode(imageNamed: "Backgroundv3")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
         background.position = CGPoint(x: 0, y: 0)
         background.zPosition = -1
         self.addChild(background)
+        
+        // Load two buttons
+        btnFold = SKSpriteNode(imageNamed: "fold")
+        btnFold.size = CGSize(width: (btnFold.size.width / 2), height: (btnFold.size.height / 2))
+        btnFold.position = CGPoint(x: 270, y: -145)
+        btnFold.zPosition = 1
+        self.addChild(btnFold)
+        btnRaise = SKSpriteNode(imageNamed: "raise")
+        btnRaise.size = CGSize(width: (btnRaise.size.width / 2), height: (btnRaise.size.height / 2))
+        btnRaise.position = CGPoint(x: 210, y: -145)
+        btnRaise.zPosition = 1
+        self.addChild(btnRaise)
         
         // Load paintings
         loadPics()
