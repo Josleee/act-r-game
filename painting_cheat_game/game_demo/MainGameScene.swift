@@ -17,6 +17,7 @@ class MainGameScene: SKScene {
     private var isInitializingCoins : Bool = true
     private var numberOfCoinsExist : Int = 0
     private var totalCoins : Int = 20
+    private var coinSize: CGSize!
     
     private var gameTimer : Timer!
     private var background : SKSpriteNode!
@@ -106,12 +107,91 @@ class MainGameScene: SKScene {
         self.addChild(rCoin)
         self.addChild(l2Coin)
         self.addChild(r2Coin)
+        // Set size
+        coinSize = lCoin.size
+    }
+    
+    
+    func resetCoins(humanPlayerWin : Bool) {
+        for child in self.children {
+            if let spriteNode = child as? SKSpriteNode {
+                if (spriteNode.name?.range(of:"coin") != nil) {
+                    if (spriteNode.position.y <= -115) {
+                        if (humanPlayerWin) {
+                            let position = findAvailablePosition(x1: -self.scene!.size.width / 2 + 35, x2: -self.scene!.size.width / 2 + 60)
+                            spriteNode.position = position
+                        } else {
+                            let position = findAvailablePosition(x1: self.scene!.size.width / 2 - 35, x2: self.scene!.size.width / 2 - 60)
+                            spriteNode.position = position
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    func findAvailablePosition(x1 : CGFloat, x2 : CGFloat) -> CGPoint {
+        var count : Int = 0
+        while true {
+            var position : CGPoint
+            position = CGPoint(x: x1, y: (coinSize.height * CGFloat(count) / 2 - 30))
+            if checkWhetherHasCoin(position: position) {
+                return position
+            }
+            position = CGPoint(x: x2, y: (coinSize.height * CGFloat(count) / 2 - 30))
+            if checkWhetherHasCoin(position: position) {
+                return position
+            }
+            position = CGPoint(x: x1, y: (-coinSize.height * CGFloat(count) / 2 - 30))
+            if checkWhetherHasCoin(position: position) {
+                return position
+            }
+            position = CGPoint(x: x2, y: (-coinSize.height * CGFloat(count) / 2 - 30))
+            if checkWhetherHasCoin(position: position) {
+                return position
+            }
+            print("count: " + String(count))
+            count += 1
+        }
+    }
+    
+    
+    func checkWhetherHasCoin(position : CGPoint) -> Bool {
+        var isContain : Bool = true
+        var distanceInRange : Bool = true
+        for child in self.children {
+            if let spriteNode = child as? SKSpriteNode {
+                if (spriteNode.name?.range(of:"coin") != nil) {
+                    if (!spriteNode.contains(position)) {
+                        continue
+                    } else {
+                        isContain = false
+                        if (abs(position.y - spriteNode.position.y) > (spriteNode.size.height / 2)) {
+                            continue
+                        } else {
+                            distanceInRange = false
+                        }
+                    }
+                }
+            }
+        }
+        if isContain == true || distanceInRange == true {
+            return true
+        } else {
+            return false
+        }
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
+            
+            if (picture1.contains(location)) {
+                resetCoins(humanPlayerWin: true)
+            }
+            
             for child in self.children {
                 if let spriteNode = child as? SKSpriteNode {
                     if (spriteNode.name?.range(of:"coin") != nil) {
