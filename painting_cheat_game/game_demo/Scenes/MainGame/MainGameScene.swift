@@ -25,6 +25,8 @@ class MainGameScene: SKScene {
     private var picture2 : SKSpriteNode!
     private var movableNode : SKNode?
     private var originalPosition : CGPoint!
+    
+    private var startMove : Bool = false
 
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
@@ -32,7 +34,7 @@ class MainGameScene: SKScene {
     override func didMove(to view: SKView) {
         print("Enter didMove")
         // Add background
-        background = SKSpriteNode(imageNamed: "Backgroundonlyp")
+        background = SKSpriteNode(imageNamed: "Backgroundversion3")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
         background.position = CGPoint(x: 0, y: 0)
         background.zPosition = -1
@@ -266,6 +268,10 @@ class MainGameScene: SKScene {
                 gameTimer = nil
             }
         }
+        
+//        if (movableNode != nil && !startMove) {
+//            startMove = true
+//        }
         
     }
 }

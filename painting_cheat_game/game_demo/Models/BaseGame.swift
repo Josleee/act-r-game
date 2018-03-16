@@ -57,6 +57,11 @@ class BaseGame {
         coinsAmountInPot = 0
     }
     
+    /**
+     Human wins: return 1
+     AI wins: return -1
+     End in draw: return 0
+     */
     func endGame() -> Int {
         if (humanPaintingValue > AIPaintingValue) {
             humanCoinsAmount! += coinsAmountInPot
