@@ -47,11 +47,13 @@ class MainGameScene: SKScene {
         btnFold = SKSpriteNode(imageNamed: "fold")
         btnFold.size = CGSize(width: (btnFold.size.width / 2), height: (btnFold.size.height / 2))
         btnFold.position = CGPoint(x: 270, y: -145)
+        btnFold.name = "btn_fold"
         btnFold.zPosition = 1
         self.addChild(btnFold)
         btnRaise = SKSpriteNode(imageNamed: "raise")
         btnRaise.size = CGSize(width: (btnRaise.size.width / 2), height: (btnRaise.size.height / 2))
         btnRaise.position = CGPoint(x: 210, y: -145)
+        btnRaise.name = "btn_raise"
         btnRaise.zPosition = 1
         self.addChild(btnRaise)
         
@@ -223,6 +225,16 @@ class MainGameScene: SKScene {
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        if let location = touch?.location(in: self) {
+            let nodeArray = self.nodes(at: location)
+            if (nodeArray.first?.name == "btn_raise") {
+                resetCoins(humanPlayerWin: true)
+            } else if (nodeArray.first?.name == "btn_fold") {
+                resetCoins(humanPlayerWin: false)
+            }
+        }
+        
         for touch in touches {
             let location = touch.location(in: self)
             
