@@ -232,7 +232,7 @@ class MainGameScene: SKScene {
     
     func checkGameState() {
         if (game.isFinished()) {
-            var winner : Int = game.endGame()
+            let winner : Int = game.endGame()
             if (winner == 1) {
                 resetCoins(humanPlayerWin: true)
             } else if (winner == -1) {
@@ -262,7 +262,7 @@ class MainGameScene: SKScene {
                 game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                 checkGameState()
                 
-                var AIRaiseAmount : Int = game.AIrandomlyRaise()
+                let AIRaiseAmount : Int = game.AIrandomlyRaise()
                 
                 checkGameState()
                 
@@ -296,6 +296,18 @@ class MainGameScene: SKScene {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        if let location = touch?.location(in: self) {
+            let nodeArray = self.nodes(at: location)
+            if (nodeArray.first?.name == "btn_raise") {
+                movableNode = nil
+                return
+            } else if (nodeArray.first?.name == "btn_fold") {
+                movableNode = nil
+                return
+            }
+        }
+
         if (movableNode != nil) {
             for touch in touches {
                 let location = touch.location(in: self)
