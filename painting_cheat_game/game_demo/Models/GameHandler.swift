@@ -50,6 +50,13 @@ class GameHandler: BaseGame {
     }
     
     func AIrandomlyRaise() -> Int {
+        print("raiseCount: " + String(raiseCount))
+        print("lastRaise: " + String(lastRaise))
+        if raiseCount == 2 {
+            raiseCount += 1
+            return lastRaise
+        }
+        
         do {
             while true {
                 let randomIndex = Int(arc4random_uniform(UInt32(listRaiseAmount.count)))
@@ -69,6 +76,9 @@ class GameHandler: BaseGame {
     func printPaintingValues() {
         print("Human painting value: " + String(getHumanPainting()))
         print("AI painting value: " + String(getAIPainting()))
+        print("Human coins: " + String(getHumanCoins()))
+        print("AI coins: " + String(getAICoins()))
+        print()
     }
     
 }

@@ -35,6 +35,14 @@ class BaseGame {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
     }
+    
+    func getHumanCoins() -> Int {
+        return humanCoinsAmount
+    }
+    
+    func getAICoins() -> Int {
+        return AICoinsAmount
+    }
 
     func getHumanPainting() -> Int {
         return humanPaintingValue

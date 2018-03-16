@@ -26,7 +26,7 @@ class MainGameScene: SKScene {
     private var movableNode : SKNode?
     private var originalPosition : CGPoint!
     
-    private var startMove : Bool = false
+    private var humanTurn : Bool = true
     
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
@@ -182,22 +182,23 @@ class MainGameScene: SKScene {
     
     
     func AIMoveCoins(numberOfCoins : Int) {
-        var count : Int = 1
+        var count : Int = 0
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
                 if (spriteNode.name?.range(of:"coin") != nil) {
                     if (spriteNode.position.y > -115 && spriteNode.position.x > 0) {
+                        if (count >= numberOfCoins) {
+                            return
+                        } else {
+                            count += 1
+                        }
+                        
                         let position : CGPoint = CGPoint(x: CGFloat(Int(arc4random_uniform(240)) - Int(120)),
                                                          y: CGFloat(-Int(arc4random_uniform(45)) - Int(115)))
                         let moveAction = SKAction.move(to: position, duration: 0.35)
                         moveAction.timingMode = SKActionTimingMode.easeInEaseOut
                         // Run animation
                         spriteNode.run(moveAction)
-                        if (count >= numberOfCoins) {
-                            return
-                        } else {
-                            count += 1
-                        }
                     }
                 }
             }
@@ -258,6 +259,7 @@ class MainGameScene: SKScene {
     
     
     func checkGameState() {
+        // sleep(1)
         if (game.isFinished()) {
             let winner : Int = game.endGame()
             if (winner == 1) {
@@ -275,7 +277,7 @@ class MainGameScene: SKScene {
         let touch = touches.first
         if let location = touch?.location(in: self) {
             let nodeArray = self.nodes(at: location)
-            if (nodeArray.first?.name == "btn_raise") {
+            if (nodeArray.first?.name == "btn_raise" && humanTurn) {
                 var coinsToRaise : Int = 0
                 for child in self.children {
                     if let spriteNode = child as? SKSpriteNode {
@@ -287,17 +289,14 @@ class MainGameScene: SKScene {
                     }
                 }
                 game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                checkGameState()
-                
-                let AIRaiseAmount : Int = game.AIrandomlyRaise()
-                // print(AIRaiseAmount)
-                AIMoveCoins(numberOfCoins: AIRaiseAmount)
-                checkGameState()
-                
-            } else if (nodeArray.first?.name == "btn_fold") {
+                self.checkGameState()
+                humanTurn = false
+
+            } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
                 game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
                 game.newRandomGame()
+                humanTurn = false
             }
         }
         
@@ -374,9 +373,20 @@ class MainGameScene: SKScene {
             }
         }
         
-//        if (movableNode != nil && !startMove) {
-//            startMove = true
-//        }
-        
+        if (!humanTurn) {
+            let wait = SKAction.wait(forDuration:0.75)
+            let action = SKAction.run {
+                let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
+                self.AIMoveCoins(numberOfCoins: AIRaiseAmount)
+            }
+            run(SKAction.sequence([wait,action]))
+            
+            let wait2 = SKAction.wait(forDuration:2)
+            let action2 = SKAction.run {
+                self.checkGameState()
+            }
+            run(SKAction.sequence([wait2,action2]))
+            humanTurn = true
+        }
     }
 }
