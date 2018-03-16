@@ -34,6 +34,9 @@ class BaseGame {
     func setPainting(humanPainting : Int, AIPainintg : Int) {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
+        humanCoinsAmount! -= 1
+        AICoinsAmount! -= 1
+        coinsAmountInPot += 2
     }
     
     func getHumanCoins() -> Int {
@@ -69,6 +72,7 @@ class BaseGame {
     }
     
     func fold(isHumanPlayer : Bool) {
+        print("Coins in pot: " + String(coinsAmountInPot))
         if (isHumanPlayer) {
             AICoinsAmount! += coinsAmountInPot
         } else {
@@ -83,6 +87,7 @@ class BaseGame {
      End in draw: return 0
      */
     func endGame() -> Int {
+        print("Coins in pot: " + String(coinsAmountInPot))
         if (humanPaintingValue > AIPaintingValue) {
             humanCoinsAmount! += coinsAmountInPot
             coinsAmountInPot = 0

@@ -40,7 +40,6 @@ class MainGameScene: SKScene {
     private var spinnyNode : SKShapeNode?
     
     override func didMove(to view: SKView) {
-        // print("Enter didMove")
         // Initialize game
         game = GameHandler()
         game.newRandomGame()
@@ -79,6 +78,12 @@ class MainGameScene: SKScene {
         loadPics()
         
         gameTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(addCoins), userInfo: nil, repeats: true)
+        let wait = SKAction.wait(forDuration:2)
+        let action = SKAction.run {
+            self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+            self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+        }
+        run(SKAction.sequence([wait,action]))
     }
     
     func flipCard (node: SKNode){
@@ -181,12 +186,12 @@ class MainGameScene: SKScene {
     }
     
     
-    func AIMoveCoins(numberOfCoins : Int) {
+    func moveCoins(numberOfCoins : Int, humanPlayer : Bool) {
         var count : Int = 0
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
                 if (spriteNode.name?.range(of:"coin") != nil) {
-                    if (spriteNode.position.y > -115 && spriteNode.position.x > 0) {
+                    if (spriteNode.position.y > -115 && ((spriteNode.position.x > 0) == !humanPlayer)) {
                         if (count >= numberOfCoins) {
                             return
                         } else {
@@ -269,6 +274,13 @@ class MainGameScene: SKScene {
             }
             game.printPaintingValues()
             game.newRandomGame()
+            
+            let wait = SKAction.wait(forDuration:1)
+            let action = SKAction.run {
+                self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+                self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+            }
+            run(SKAction.sequence([wait,action]))
         }
     }
     
@@ -295,8 +307,16 @@ class MainGameScene: SKScene {
             } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
                 game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
+                game.printPaintingValues()
                 game.newRandomGame()
                 humanTurn = false
+                
+                let wait = SKAction.wait(forDuration:1)
+                let action = SKAction.run {
+                    self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+                    self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+                }
+                run(SKAction.sequence([wait,action]))
             }
         }
         
@@ -374,14 +394,14 @@ class MainGameScene: SKScene {
         }
         
         if (!humanTurn) {
-            let wait = SKAction.wait(forDuration:0.75)
+            let wait = SKAction.wait(forDuration:1.5)
             let action = SKAction.run {
                 let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
-                self.AIMoveCoins(numberOfCoins: AIRaiseAmount)
+                self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
             }
             run(SKAction.sequence([wait,action]))
             
-            let wait2 = SKAction.wait(forDuration:2)
+            let wait2 = SKAction.wait(forDuration:3)
             let action2 = SKAction.run {
                 self.checkGameState()
             }

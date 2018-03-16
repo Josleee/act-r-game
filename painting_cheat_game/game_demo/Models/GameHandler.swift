@@ -52,12 +52,13 @@ class GameHandler: BaseGame {
     func AIrandomlyRaise() -> Int {
         print("raiseCount: " + String(raiseCount))
         print("lastRaise: " + String(lastRaise))
-        if raiseCount == 2 {
-            raiseCount += 1
-            return lastRaise
-        }
-        
+
         do {
+            if raiseCount == 2 {
+                try raise(amountCoins: lastRaise, isHumanPlayer: false)
+                raiseCount += 1
+                return lastRaise
+            }
             while true {
                 let randomIndex = Int(arc4random_uniform(UInt32(listRaiseAmount.count)))
                 if listRaiseAmount[randomIndex] >= lastRaise {
