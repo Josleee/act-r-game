@@ -34,7 +34,7 @@ class MainGameScene: SKScene {
     override func didMove(to view: SKView) {
         print("Enter didMove")
         // Add background
-        background = SKSpriteNode(imageNamed: "Backgroundversion3")
+        background = SKSpriteNode(imageNamed: "Backgroundv3")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
         background.position = CGPoint(x: 0, y: 0)
         background.zPosition = -1
