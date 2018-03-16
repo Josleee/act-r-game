@@ -185,8 +185,8 @@ class MainGameScene: SKScene {
         var count : Int = 1
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
-                if (spriteNode.name?.range(of:"coin_r") != nil) {
-                    if (spriteNode.position.y > -115) {
+                if (spriteNode.name?.range(of:"coin") != nil) {
+                    if (spriteNode.position.y > -115 && spriteNode.position.x > 0) {
                         let position : CGPoint = CGPoint(x: CGFloat(Int(arc4random_uniform(240)) - Int(120)),
                                                          y: CGFloat(-Int(arc4random_uniform(45)) - Int(115)))
                         let moveAction = SKAction.move(to: position, duration: 0.35)
@@ -290,7 +290,7 @@ class MainGameScene: SKScene {
                 checkGameState()
                 
                 let AIRaiseAmount : Int = game.AIrandomlyRaise()
-                print(AIRaiseAmount)
+                // print(AIRaiseAmount)
                 AIMoveCoins(numberOfCoins: AIRaiseAmount)
                 checkGameState()
                 
