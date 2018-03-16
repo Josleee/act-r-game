@@ -177,6 +177,29 @@ class MainGameScene: SKScene {
     }
     
     
+    func AIMoveCoins(numberOfCoins : Int) {
+        var count : Int = 1
+        for child in self.children {
+            if let spriteNode = child as? SKSpriteNode {
+                if (spriteNode.name?.range(of:"coin_r") != nil) {
+                    if (spriteNode.position.y > -115) {
+                        let position : CGPoint = CGPoint(x: CGFloat(Int(arc4random_uniform(240)) - Int(120)),
+                                                         y: CGFloat(-Int(arc4random_uniform(45)) - Int(115)))
+                        let moveAction = SKAction.move(to: position, duration: 0.35)
+                        moveAction.timingMode = SKActionTimingMode.easeInEaseOut
+                        // Run animation
+                        spriteNode.run(moveAction)
+                        if (count >= numberOfCoins) {
+                            return
+                        } else {
+                            count += 1
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func findAvailablePosition(x1 : CGFloat, x2 : CGFloat) -> CGPoint {
         var count : Int = 0
         while true {
@@ -263,7 +286,8 @@ class MainGameScene: SKScene {
                 checkGameState()
                 
                 let AIRaiseAmount : Int = game.AIrandomlyRaise()
-                
+                print(AIRaiseAmount)
+                AIMoveCoins(numberOfCoins: AIRaiseAmount)
                 checkGameState()
                 
             } else if (nodeArray.first?.name == "btn_fold") {
