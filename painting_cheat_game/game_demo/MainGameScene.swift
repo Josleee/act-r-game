@@ -151,7 +151,7 @@ class MainGameScene: SKScene {
             if checkWhetherHasCoin(position: position) {
                 return position
             }
-            print("count: " + String(count))
+            // print("count: " + String(count))
             count += 1
         }
     }
@@ -167,7 +167,7 @@ class MainGameScene: SKScene {
                         continue
                     } else {
                         isContain = false
-                        if (abs(position.y - spriteNode.position.y) > (spriteNode.size.height / 2)) {
+                        if (abs(position.y - spriteNode.position.y) > (spriteNode.size.height / 4)) {
                             continue
                         } else {
                             distanceInRange = false
