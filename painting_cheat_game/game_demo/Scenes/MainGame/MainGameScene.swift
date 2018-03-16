@@ -36,8 +36,9 @@ class MainGameScene: SKScene {
     private var soundCoins : SKAction!
     private var soundCoins2 : SKAction!
 
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    private var label : SKLabelNode!
+    private var label2 : SKLabelNode!
+
     
     override func didMove(to view: SKView) {
         // Initialize game
@@ -76,6 +77,7 @@ class MainGameScene: SKScene {
         
         // Load paintings
         loadPics()
+        loadPocker()
         
         gameTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(addCoins), userInfo: nil, repeats: true)
         let wait = SKAction.wait(forDuration:2)
@@ -95,6 +97,29 @@ class MainGameScene: SKScene {
              SKAction.fadeIn(withDuration: 0.1),
              ]
         ))
+    }
+    
+    func loadPocker() {
+        if label != nil {
+            label.removeFromParent()
+        }
+        if label2 != nil {
+            label2.removeFromParent()
+        }
+
+        label = SKLabelNode(fontNamed: "Chalkduster")
+        label.fontSize = 50
+        label.position = CGPoint(x: -60, y: 70)
+        label.text = String(game.getHumanPainting())
+        label.zPosition = 2
+        self.addChild(label)
+        
+        label2 = SKLabelNode(fontNamed: "Chalkduster")
+        label2.fontSize = 50
+        label2.position = CGPoint(x: 60, y: 70)
+        label2.text = String(game.getAIPainting())
+        label2.zPosition = 2
+        self.addChild(label2)
     }
     
     func loadPics() {
@@ -290,6 +315,7 @@ class MainGameScene: SKScene {
                 return
             }
             game.newRandomGame()
+            loadPocker()
             
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
@@ -347,6 +373,7 @@ class MainGameScene: SKScene {
                     return
                 }
                 game.newRandomGame()
+                loadPocker()
                 humanTurn = false
                 
                 let wait = SKAction.wait(forDuration:1)

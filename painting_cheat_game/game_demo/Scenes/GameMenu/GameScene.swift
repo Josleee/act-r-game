@@ -17,8 +17,8 @@ class GameScene: SKScene {
         let myLabel = SKLabelNode(fontNamed: "Chalkduster")
         myLabel.text = "Welcome to Painting Cheat @~@"
         myLabel.fontSize = 30
-        print(self.frame.size.width)
-        print(self.frame.size.height)
+        // print(self.frame.size.width)
+        // print(self.frame.size.height)
         myLabel.position = CGPoint(x: 0, y: 0)
         self.addChild(myLabel)
     }
