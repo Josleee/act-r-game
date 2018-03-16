@@ -33,7 +33,8 @@ class MainGameScene: SKScene {
     
     private var game : GameHandler!
     private var backgroundMusic: SKAudioNode!
-
+    private var soundCoins : SKAction!
+    private var soundCoins2 : SKAction!
 
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
@@ -57,6 +58,8 @@ class MainGameScene: SKScene {
             backgroundMusic.autoplayLooped = true
             self.addChild(backgroundMusic)
         }
+        soundCoins = SKAction.playSoundFileNamed("Coin1.mp3", waitForCompletion: false)
+        soundCoins2 = SKAction.playSoundFileNamed("Coin2.mp3", waitForCompletion: false)
         
         // Load two buttons
         btnFold = SKSpriteNode(imageNamed: "fold")
@@ -75,12 +78,6 @@ class MainGameScene: SKScene {
         // Load paintings
         loadPics()
         
-//        let myLabel = SKLabelNode(fontNamed: "Chalkduster")
-//        myLabel.text = "SecondScene!@"
-//        myLabel.fontSize = 65
-//        myLabel.position = CGPoint(x: 0, y: 0)
-//        self.addChild(myLabel)
-        
         gameTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(addCoins), userInfo: nil, repeats: true)
     }
     
@@ -94,9 +91,6 @@ class MainGameScene: SKScene {
              ]
         ))
     }
-    
-    //        let randomAlienPosition = GKRandomDistribution(lowestValue: 0, highestValue: 414)
-    //        let position = CGFloat(randomAlienPosition.nextInt())
     
     func loadPics() {
         picture1 = SKSpriteNode(imageNamed: "pic1")
@@ -170,6 +164,7 @@ class MainGameScene: SKScene {
                         // print(self.children.count)
                         // Run animation
                         spriteNode.run(moveAction)
+                        run(soundCoins2)
                     }
                 }
             }
