@@ -117,14 +117,35 @@ class MainGameScene: SKScene {
             if let spriteNode = child as? SKSpriteNode {
                 if (spriteNode.name?.range(of:"coin") != nil) {
                     if (spriteNode.position.y <= -115) {
+                        var position : CGPoint
                         if (humanPlayerWin) {
-                            let position = findAvailablePosition(x1: -self.scene!.size.width / 2 + 35, x2: -self.scene!.size.width / 2 + 60)
-                            spriteNode.position = position
+                            position = findAvailablePosition(x1: -self.scene!.size.width / 2 + 35, x2: -self.scene!.size.width / 2 + 60)
                         } else {
-                            let position = findAvailablePosition(x1: self.scene!.size.width / 2 - 35, x2: self.scene!.size.width / 2 - 60)
-                            spriteNode.position = position
+                            position = findAvailablePosition(x1: self.scene!.size.width / 2 - 35, x2: self.scene!.size.width / 2 - 60)
                         }
+                        let moveAction = SKAction.move(to: position, duration: 0.35)
+                        moveAction.timingMode = SKActionTimingMode.easeInEaseOut
+                        
+                        // Place temp node
+                        let tempNode = SKSpriteNode()
+                        tempNode.name = "tmpNode"
+                        tempNode.position = position
+                        tempNode.size = spriteNode.size
+                        self.addChild(tempNode)
+                        
+                        // print(self.children.count)
+                        // Run animation
+                        spriteNode.run(moveAction)
                     }
+                }
+            }
+        }
+        
+        // Remove all temp nodes
+        for child in self.children {
+            if let spriteNode = child as? SKSpriteNode {
+                if (spriteNode.name?.range(of:"tmp") != nil) {
+                    spriteNode.removeFromParent()
                 }
             }
         }
@@ -162,7 +183,7 @@ class MainGameScene: SKScene {
         var distanceInRange : Bool = true
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
-                if (spriteNode.name?.range(of:"coin") != nil) {
+                if (spriteNode.name?.range(of:"coin") != nil || spriteNode.name?.range(of:"tmp") != nil) {
                     if (!spriteNode.contains(position)) {
                         continue
                     } else {
