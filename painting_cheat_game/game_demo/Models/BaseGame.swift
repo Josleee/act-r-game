@@ -100,4 +100,19 @@ class BaseGame {
             return 0
         }
     }
+    
+    /**
+     Human is the winer: return 1
+     AI is the winer: return -1
+     No winer: return 0
+     */
+    func checkIsThereAWiner() -> Int {
+        if (humanCoinsAmount == 0) {
+            return -1
+        } else if (AICoinsAmount == 0) {
+            return 1
+        } else {
+            return 0
+        }
+    }
 }

@@ -263,8 +263,21 @@ class MainGameScene: SKScene {
     }
     
     
+    func checkWinner() -> Bool {
+        let gameWinner : Int = game.checkIsThereAWiner()
+        if (gameWinner == 1) {
+            print("Human wins!!!")
+            return true
+        } else if (gameWinner == -1) {
+            print("AI wins!!!")
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    
     func checkGameState() {
-        // sleep(1)
         if (game.isFinished()) {
             let winner : Int = game.endGame()
             if (winner == 1) {
@@ -273,6 +286,9 @@ class MainGameScene: SKScene {
                 resetCoins(humanPlayerWin: false)
             }
             game.printPaintingValues()
+            if checkWinner() {
+                return
+            }
             game.newRandomGame()
             
             let wait = SKAction.wait(forDuration:1)
@@ -325,7 +341,11 @@ class MainGameScene: SKScene {
             } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
                 game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
+                
                 game.printPaintingValues()
+                if checkWinner() {
+                    return
+                }
                 game.newRandomGame()
                 humanTurn = false
                 
