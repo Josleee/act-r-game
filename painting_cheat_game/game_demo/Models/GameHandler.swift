@@ -11,7 +11,7 @@ import Foundation
 class GameHandler: BaseGame {
     
     private var raiseCount : Int = 0
-    private let listRaiseAmount : [Int] = [1, 3, 6]
+    public let listRaiseAmount : [Int] = [1, 3, 6]
     
     private var lastRaise : Int = 0
     
@@ -43,6 +43,7 @@ class GameHandler: BaseGame {
         do {
             try raise(amountCoins: coinsAmount, isHumanPlayer: true)
             lastRaise = coinsAmount - lastRaise
+            print("Last raise: " + String(lastRaise))
             raiseCount += 1
         } catch let error {
             print(error.localizedDescription)
@@ -55,6 +56,10 @@ class GameHandler: BaseGame {
 
         do {
             if raiseCount == 2 {
+                if lastRaise < 0 {
+                    raiseCount += 1
+                    return 0
+                }
                 try raise(amountCoins: lastRaise, isHumanPlayer: false)
                 raiseCount += 1
                 return lastRaise

@@ -300,10 +300,28 @@ class MainGameScene: SKScene {
                         }
                     }
                 }
-                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                self.checkGameState()
-                humanTurn = false
-
+                if (game.getHumanCoins() < game.getLastRaise()) {
+                    if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
+                        game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                        self.checkGameState()
+                        humanTurn = false
+                    } else {
+                        print("Invalid raise")
+                    }
+                } else {
+                    if ((coinsToRaise - game.getCoinsInPot()) >= game.getLastRaise()) {
+                        if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise() ||
+                            game.listRaiseAmount.contains(coinsToRaise - game.getCoinsInPot())) {
+                            game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                            self.checkGameState()
+                            humanTurn = false
+                        } else {
+                            print("Invalid raise")
+                        }
+                    } else {
+                        print("Invalid raise")
+                    }
+                }
             } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
                 game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
