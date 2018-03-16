@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850DFD7B205B56D700CFE8F9 /* BaseGame.swift */; };
 		85199506205C0554003FEB0C /* GameHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85199505205C0554003FEB0C /* GameHandler.swift */; };
+		8519950B205C5595003FEB0C /* bgmusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85199508205C5594003FEB0C /* bgmusic.mp3 */; };
 		855A34CF205AB47600360891 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855A34CE205AB47600360891 /* AppDelegate.swift */; };
 		855A34D1205AB47600360891 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 855A34D0205AB47600360891 /* GameScene.sks */; };
 		855A34D5205AB47700360891 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855A34D4205AB47700360891 /* GameScene.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		850DFD7B205B56D700CFE8F9 /* BaseGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGame.swift; sourceTree = "<group>"; };
 		85199505205C0554003FEB0C /* GameHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHandler.swift; sourceTree = "<group>"; };
+		85199508205C5594003FEB0C /* bgmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgmusic.mp3; sourceTree = "<group>"; };
 		855A34CB205AB47600360891 /* game_demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = game_demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		855A34CE205AB47600360891 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		855A34D0205AB47600360891 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -83,6 +85,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		8519950F205C55C5003FEB0C /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				85199508205C5594003FEB0C /* bgmusic.mp3 */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
 		855A34C2205AB47600360891 = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +114,7 @@
 		855A34CD205AB47600360891 /* game_demo */ = {
 			isa = PBXGroup;
 			children = (
+				8519950F205C55C5003FEB0C /* Music */,
 				855A34CE205AB47600360891 /* AppDelegate.swift */,
 				855A34DB205AB47700360891 /* Assets.xcassets */,
 				855A34E0205AB47700360891 /* Info.plist */,
@@ -173,6 +184,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8519950B205C5595003FEB0C /* bgmusic.mp3 in Resources */,
 				855A34DA205AB47700360891 /* Main.storyboard in Resources */,
 				855A34E7205ABD8400360891 /* MainGameScene.sks in Resources */,
 				855A34D1205AB47600360891 /* GameScene.sks in Resources */,

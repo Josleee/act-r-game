@@ -32,6 +32,8 @@ class MainGameScene: SKScene {
     private var btnRaise : SKSpriteNode!
     
     private var game : GameHandler!
+    private var backgroundMusic: SKAudioNode!
+
 
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
@@ -48,6 +50,13 @@ class MainGameScene: SKScene {
         background.position = CGPoint(x: 0, y: 0)
         background.zPosition = -1
         self.addChild(background)
+        
+        // Add background music
+        if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(url: musicURL)
+            backgroundMusic.autoplayLooped = true
+            self.addChild(backgroundMusic)
+        }
         
         // Load two buttons
         btnFold = SKSpriteNode(imageNamed: "fold")
