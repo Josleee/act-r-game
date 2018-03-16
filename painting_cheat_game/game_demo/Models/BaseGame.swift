@@ -31,6 +31,14 @@ class BaseGame {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
     }
+
+    func getHumanPainting() -> Int {
+        return humanPaintingValue
+    }
+    
+    func getAIPainting() -> Int {
+        return AIPaintingValue
+    }
     
     func raise(amountCoins : Int, isHumanPlayer : Bool) throws {
         if (isHumanPlayer) {
