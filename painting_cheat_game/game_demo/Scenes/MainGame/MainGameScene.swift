@@ -30,12 +30,18 @@ class MainGameScene: SKScene {
     
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
+    
+    private var game : GameHandler!
 
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
     override func didMove(to view: SKView) {
         // print("Enter didMove")
+        // Initialize game
+        game = GameHandler()
+        game.newRandomGame()
+
         // Add background
         background = SKSpriteNode(imageNamed: "Backgroundv3")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
@@ -224,14 +230,46 @@ class MainGameScene: SKScene {
     }
     
     
+    func checkGameState() {
+        if (game.isFinished()) {
+            var winner : Int = game.endGame()
+            if (winner == 1) {
+                resetCoins(humanPlayerWin: true)
+            } else if (winner == -1) {
+                resetCoins(humanPlayerWin: false)
+            }
+            game.printPaintingValues()
+            game.newRandomGame()
+        }
+    }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         if let location = touch?.location(in: self) {
             let nodeArray = self.nodes(at: location)
             if (nodeArray.first?.name == "btn_raise") {
-                resetCoins(humanPlayerWin: true)
+                var coinsToRaise : Int = 0
+                for child in self.children {
+                    if let spriteNode = child as? SKSpriteNode {
+                        if (spriteNode.name?.range(of:"coin") != nil) {
+                            if (spriteNode.position.y <= -115) {
+                                coinsToRaise += 1
+                            }
+                        }
+                    }
+                }
+                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                checkGameState()
+                
+                var AIRaiseAmount : Int = game.AIrandomlyRaise()
+                
+                checkGameState()
+                
             } else if (nodeArray.first?.name == "btn_fold") {
+                game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
+                game.newRandomGame()
             }
         }
         

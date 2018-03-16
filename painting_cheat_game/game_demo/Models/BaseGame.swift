@@ -27,6 +27,10 @@ class BaseGame {
         
     }
     
+    func getCoinsInPot() -> Int {
+        return coinsAmountInPot
+    }
+    
     func setPainting(humanPainting : Int, AIPainintg : Int) {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
