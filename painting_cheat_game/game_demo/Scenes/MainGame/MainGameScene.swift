@@ -57,18 +57,14 @@ class MainGameScene: SKScene {
         game.newRandomGame()
 
         // Add background
+        createBackground()
+        
         background = SKSpriteNode(imageNamed: "Background")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
         background.position = CGPoint(x: 0, y: 0)
         background.zPosition = -10
         self.addChild(background)
-        
-        backgroundCloudNoOne = SKSpriteNode(imageNamed: "CloundNoOne")
-        backgroundCloudNoOne.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
-        backgroundCloudNoOne.position = CGPoint(x: 0, y: 0)
-        backgroundCloudNoOne.zPosition = -3
-        self.addChild(backgroundCloudNoOne)
-        
+
         backgroundMontains = SKSpriteNode(imageNamed: "Montains")
         backgroundMontains.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
         backgroundMontains.position = CGPoint(x: 0, y: 0)
@@ -115,6 +111,27 @@ class MainGameScene: SKScene {
             self.moveCoins(numberOfCoins: 1, humanPlayer: true)
         }
         run(SKAction.sequence([wait,action]))
+    }
+    
+    func createBackground() {
+        for i in 0...3 {
+            let backgroundCloudNoOnelocal = SKSpriteNode(imageNamed: "CloundNoOne")
+            backgroundCloudNoOnelocal.name = "CloudNoOne"
+            backgroundCloudNoOnelocal.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
+            backgroundCloudNoOnelocal.position = CGPoint(x: CGFloat(i) * (self.scene!.size.width), y: 0)
+            backgroundCloudNoOnelocal.zPosition = -3
+            self.addChild(backgroundCloudNoOnelocal)
+        }
+    }
+    
+    func moveClouds() {
+        self.enumerateChildNodes(withName: "CloudNoOne", using: ({ (node, error) in
+            node.position.x -= 0.5
+            
+            if node.position.x < -(self.scene!.size.width) {
+                node.position.x += (self.scene!.size.width) * 3
+            }
+            }))
     }
     
     func flipCard (node: SKNode){
@@ -516,6 +533,9 @@ class MainGameScene: SKScene {
     
     
     override func update(_ currentTime: TimeInterval) {
+        // Move clouds
+        moveClouds()
+        
         // Stop timer
         if(isInitializingCoins == false) {
             if(gameTimer != nil) {
