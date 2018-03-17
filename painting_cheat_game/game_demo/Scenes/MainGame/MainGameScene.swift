@@ -352,13 +352,19 @@ class MainGameScene: SKScene {
     
     
     func checkWinner() -> Bool {
+        let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
         let gameWinner : Int = game.checkIsThereAWiner()
+        
         if (gameWinner == 1) {
             print("Human wins!!!")
+            self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
             return true
+            
         } else if (gameWinner == -1) {
             print("AI wins!!!")
+            self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
             return true
+            
         } else {
             return false
         }
