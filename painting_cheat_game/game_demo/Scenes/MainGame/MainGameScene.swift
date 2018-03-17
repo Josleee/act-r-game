@@ -27,6 +27,7 @@ class MainGameScene: SKScene {
     private var originalPosition : CGPoint!
     
     private var humanTurn : Bool = true
+    private var newGame : Bool = false
     
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
@@ -112,6 +113,7 @@ class MainGameScene: SKScene {
         label.position = CGPoint(x: -60, y: 70)
         label.text = String(game.getHumanPainting())
         label.zPosition = 2
+        label.isHidden = true
         self.addChild(label)
         
         label2 = SKLabelNode(fontNamed: "Chalkduster")
@@ -303,6 +305,10 @@ class MainGameScene: SKScene {
         }
     }
     
+    func endOneRound() {
+        flipCard(node: picture1)
+        label.isHidden = false
+    }
     
     func checkGameState() {
         if (game.isFinished()) {
@@ -311,25 +317,34 @@ class MainGameScene: SKScene {
                 resetCoins(humanPlayerWin: true)
             } else if (winner == -1) {
                 resetCoins(humanPlayerWin: false)
+            } else {
+                // End in draw
             }
             game.printPaintingValues()
+            endOneRound()
             if checkWinner() {
                 return
             }
             game.newRandomGame()
-            loadPocker()
-            
-            let wait = SKAction.wait(forDuration:1)
-            let action = SKAction.run {
-                self.moveCoins(numberOfCoins: 1, humanPlayer: true)
-                self.moveCoins(numberOfCoins: 1, humanPlayer: false)
-            }
-            run(SKAction.sequence([wait,action]))
+            newGame = true
         }
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Tap to start new game
+        if newGame {
+            let wait = SKAction.wait(forDuration:1)
+            let action = SKAction.run {
+                self.loadPocker()
+                self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+                self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+            }
+            run(SKAction.sequence([wait,action]))
+            newGame = false
+            return
+        }
+
         let touch = touches.first
         if let location = touch?.location(in: self) {
             let nodeArray = self.nodes(at: location)
@@ -381,19 +396,15 @@ class MainGameScene: SKScene {
                 resetCoins(humanPlayerWin: false)
                 
                 game.printPaintingValues()
+                endOneRound()
                 if checkWinner() {
                     return
                 }
+            
                 game.newRandomGame()
-                loadPocker()
                 humanTurn = false
-                
-                let wait = SKAction.wait(forDuration:1)
-                let action = SKAction.run {
-                    self.moveCoins(numberOfCoins: 1, humanPlayer: true)
-                    self.moveCoins(numberOfCoins: 1, humanPlayer: false)
-                }
-                run(SKAction.sequence([wait,action]))
+                newGame = true
+                return
             }
         }
         
@@ -464,14 +475,13 @@ class MainGameScene: SKScene {
         // Stop timer
         if(isInitializingCoins == false) {
             if(gameTimer != nil) {
-                flipCard(node: picture1)
                 gameTimer.invalidate()
                 gameTimer = nil
             }
         }
         
-        if (!humanTurn) {
-            let wait = SKAction.wait(forDuration:1.5)
+        if (!humanTurn && !newGame) {
+            let wait = SKAction.wait(forDuration:2)
             let action = SKAction.run {
                 let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
                 print("AI raised coins: ", String(AIRaiseAmount))
