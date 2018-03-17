@@ -107,9 +107,9 @@ class BaseGame {
      No winer: return 0
      */
     func checkIsThereAWiner() -> Int {
-        if (humanCoinsAmount == 0) {
+        if (humanCoinsAmount == 0 && getCoinsInPot() == 0) {
             return -1
-        } else if (AICoinsAmount == 0) {
+        } else if (AICoinsAmount == 0 && getCoinsInPot() == 0) {
             return 1
         } else {
             return 0
