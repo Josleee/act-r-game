@@ -18,9 +18,14 @@ class MainGameScene: SKScene {
     private var numberOfCoinsExist : Int = 0
     private var totalCoins : Int = 20
     private var coinSize: CGSize!
-    
     private var gameTimer : Timer!
+    
     private var background : SKSpriteNode!
+    private var backgroundCloudNoOne : SKSpriteNode!
+    private var backgroundCloudNoTwo : SKSpriteNode!
+    private var backgroundMontains : SKSpriteNode!
+    private var backgroundPlayers : SKSpriteNode!
+    
     private var picture1 : SKSpriteNode!
     private var picture2 : SKSpriteNode!
     private var movableNode : SKNode?
@@ -52,12 +57,30 @@ class MainGameScene: SKScene {
         game.newRandomGame()
 
         // Add background
-        background = SKSpriteNode(imageNamed: "Backgroundv3")
+        background = SKSpriteNode(imageNamed: "Background")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
         background.position = CGPoint(x: 0, y: 0)
-        background.zPosition = -1
+        background.zPosition = -10
         self.addChild(background)
         
+        backgroundCloudNoOne = SKSpriteNode(imageNamed: "CloundNoOne")
+        backgroundCloudNoOne.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
+        backgroundCloudNoOne.position = CGPoint(x: 0, y: 0)
+        backgroundCloudNoOne.zPosition = -3
+        self.addChild(backgroundCloudNoOne)
+        
+        backgroundMontains = SKSpriteNode(imageNamed: "Montains")
+        backgroundMontains.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
+        backgroundMontains.position = CGPoint(x: 0, y: 0)
+        backgroundMontains.zPosition = -2
+        self.addChild(backgroundMontains)
+        
+        backgroundPlayers = SKSpriteNode(imageNamed: "Players")
+        backgroundPlayers.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
+        backgroundPlayers.position = CGPoint(x: 0, y: 0)
+        backgroundPlayers.zPosition = -1
+        self.addChild(backgroundPlayers)
+
         // Add background music
         if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
             backgroundMusic = SKAudioNode(url: musicURL)
