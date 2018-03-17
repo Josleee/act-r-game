@@ -19,7 +19,11 @@ class CongratsScene: SKScene {
     private var backgroundPlayers : SKSpriteNode!
     private var backgroundMusic: SKAudioNode!
     
+    
     override func didMove(to view: SKView) {
+        // Set gravity
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: -1)
+        
         // Add background
         createBackground()
         
@@ -57,8 +61,32 @@ class CongratsScene: SKScene {
     
     
     func playPartyPoppers() {
-        for i in 0...11 {
-            print(i)
+        for _ in 1...2 {
+            // Load colorful pieces
+            for i in 1...11 {
+                let cp = SKSpriteNode(imageNamed: "ppb" + String(i))
+                let randomPosition = GKRandomDistribution(lowestValue: -30, highestValue: 30)
+                let xPosition = CGFloat(randomPosition.nextInt())
+                cp.name = "PartyPoppers"
+                cp.position = CGPoint(x: xPosition, y: 100)
+                cp.size = CGSize(width: (cp.size.width / 3), height: (cp.size.height / 3))
+                cp.physicsBody = SKPhysicsBody(texture: cp.texture!, size: cp.texture!.size())
+                cp.zPosition = 2
+                self.addChild(cp)
+            }
+            
+            // Load riband
+            for i in 1...3 {
+                let lb = SKSpriteNode(imageNamed: "ppl" + String(i))
+                let randomPosition = GKRandomDistribution(lowestValue: -30, highestValue: 30)
+                let xPosition = CGFloat(randomPosition.nextInt())
+                lb.name = "PartyPoppers"
+                lb.position = CGPoint(x: xPosition, y: 100)
+                lb.size = CGSize(width: (lb.size.width / 2), height: (lb.size.height / 2))
+                lb.physicsBody = SKPhysicsBody(texture: lb.texture!, size: lb.texture!.size())
+                lb.zPosition = 2
+                self.addChild(lb)
+            }
         }
     }
     
