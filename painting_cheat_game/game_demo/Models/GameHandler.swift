@@ -55,6 +55,12 @@ class GameHandler: BaseGame {
         print("lastRaise: " + String(lastRaise))
 
         do {
+            if lastRaise > getAICoins() {
+                try raise(amountCoins: getAICoins(), isHumanPlayer: false)
+                raiseCount += 1
+                return getAICoins()
+            }
+            
             if raiseCount == 2 {
                 if lastRaise < 0 {
                     raiseCount += 1
@@ -66,7 +72,7 @@ class GameHandler: BaseGame {
             }
             while true {
                 let randomIndex = Int(arc4random_uniform(UInt32(listRaiseAmount.count)))
-                if listRaiseAmount[randomIndex] >= lastRaise {
+                if (listRaiseAmount[randomIndex] >= lastRaise && listRaiseAmount[randomIndex] <= getAICoins()) {
                     try raise(amountCoins: listRaiseAmount[randomIndex], isHumanPlayer: false)
                     lastRaise = listRaiseAmount[randomIndex] - lastRaise
                     raiseCount += 1

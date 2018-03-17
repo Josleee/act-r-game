@@ -80,10 +80,10 @@ class MainGameScene: SKScene {
         loadPocker()
         
         gameTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(addCoins), userInfo: nil, repeats: true)
-        let wait = SKAction.wait(forDuration:2)
+        let wait = SKAction.wait(forDuration: 2)
         let action = SKAction.run {
-            self.moveCoins(numberOfCoins: 1, humanPlayer: true)
             self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+            self.moveCoins(numberOfCoins: 1, humanPlayer: true)
         }
         run(SKAction.sequence([wait,action]))
     }
@@ -174,7 +174,8 @@ class MainGameScene: SKScene {
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
                 if (spriteNode.name?.range(of:"coin") != nil) {
-                    if (spriteNode.position.y <= -115) {
+                    if ((spriteNode.position.x >= -self.scene!.size.width / 2 + 90) &&
+                        (spriteNode.position.x <= self.scene!.size.width / 2 - 90)) {
                         var position : CGPoint
                         if (humanPlayerWin) {
                             position = findAvailablePosition(x1: -self.scene!.size.width / 2 + 35, x2: -self.scene!.size.width / 2 + 60)
@@ -216,7 +217,8 @@ class MainGameScene: SKScene {
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
                 if (spriteNode.name?.range(of:"coin") != nil) {
-                    if (spriteNode.position.y > -115 && ((spriteNode.position.x > 0) == !humanPlayer)) {
+                    if (((spriteNode.position.x <= -self.scene!.size.width / 2 + 90) || (spriteNode.position.x >= self.scene!.size.width / 2 - 90))
+                        && ((spriteNode.position.x > 0) == !humanPlayer)) {
                         if (count >= numberOfCoins) {
                             return
                         } else {
@@ -336,10 +338,20 @@ class MainGameScene: SKScene {
                 for child in self.children {
                     if let spriteNode = child as? SKSpriteNode {
                         if (spriteNode.name?.range(of:"coin") != nil) {
-                            if (spriteNode.position.y <= -115) {
+                            if (spriteNode.position.x > -self.scene!.size.width / 2 + 90 &&
+                                spriteNode.position.x < self.scene!.size.width / 2 - 90) {
                                 coinsToRaise += 1
                             }
                         }
+                    }
+                }
+                if (game.getAICoins() == 0) {
+                    if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
+                        game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                        self.checkGameState()
+                        humanTurn = false
+                    } else {
+                        print("Invalid raise")
                     }
                 }
                 if (game.getHumanCoins() < game.getLastRaise()) {
@@ -432,7 +444,7 @@ class MainGameScene: SKScene {
         if (movableNode != nil) {
             for touch in touches {
                 let location = touch.location(in: self)
-                if (location.y > -115) {
+                if (location.y > -115 || location.x < -self.scene!.size.width / 2 + 90 || location.x > self.scene!.size.width / 2 - 90) {
                     movableNode?.position = originalPosition
                 } else {
                     movableNode?.position = location
@@ -462,6 +474,7 @@ class MainGameScene: SKScene {
             let wait = SKAction.wait(forDuration:1.5)
             let action = SKAction.run {
                 let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
+                print("AI raised coins: ", String(AIRaiseAmount))
                 self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
             }
             run(SKAction.sequence([wait,action]))
