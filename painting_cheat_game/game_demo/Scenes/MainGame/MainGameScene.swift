@@ -40,6 +40,11 @@ class MainGameScene: SKScene {
     private var label : SKLabelNode!
     private var label2 : SKLabelNode!
 
+    private let moveNodeUp = SKAction.moveBy(x: 0, y: 10, duration: 0.2)
+    private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
+    private let scaleUpAlongY = SKAction.scaleY(to: 0.8, duration: 0.2)
+    private let scaleDownAlongY = SKAction.scaleY(to: 1.25, duration: 0.2)
+    
     
     override func didMove(to view: SKView) {
         // Initialize game
@@ -349,6 +354,14 @@ class MainGameScene: SKScene {
         if let location = touch?.location(in: self) {
             let nodeArray = self.nodes(at: location)
             if (nodeArray.first?.name == "btn_raise" && humanTurn) {
+                // Button animation
+                nodeArray.first?.run(moveNodeUp)
+                let wait = SKAction.wait(forDuration:0.25)
+                let action = SKAction.run {
+                    nodeArray.first?.run(self.moveNodeDown)
+                }
+                run(SKAction.sequence([wait,action]))
+
                 var coinsToRaise : Int = 0
                 for child in self.children {
                     if let spriteNode = child as? SKSpriteNode {
@@ -392,6 +405,14 @@ class MainGameScene: SKScene {
                     }
                 }
             } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
+                // Button animation
+                nodeArray.first?.run(scaleUpAlongY)
+                let wait = SKAction.wait(forDuration:0.25)
+                let action = SKAction.run {
+                    nodeArray.first?.run(self.scaleDownAlongY)
+                }
+                run(SKAction.sequence([wait,action]))
+                
                 game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
                 
