@@ -47,6 +47,8 @@ class CongratsScene: SKScene {
             backgroundMusic.autoplayLooped = true
             self.addChild(backgroundMusic)
         }
+        
+        playPartyPoppers()
     }
 
     
@@ -54,8 +56,15 @@ class CongratsScene: SKScene {
     }
     
     
+    func playPartyPoppers() {
+        for i in 0...11 {
+            print(i)
+        }
+    }
+    
+    
     func createBackground() {
-        for i in 0...3 {
+        for i in 0...2 {
             let backgroundCloudNoOneLocal = SKSpriteNode(imageNamed: "CloudNoOne")
             backgroundCloudNoOneLocal.name = "CloudNoOne"
             backgroundCloudNoOneLocal.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
@@ -78,14 +87,14 @@ class CongratsScene: SKScene {
             node.position.x -= 0.5
             
             if node.position.x < -(self.scene!.size.width) {
-                node.position.x += (self.scene!.size.width) * 3
+                node.position.x += (self.scene!.size.width) * 2
             }
         }))
         self.enumerateChildNodes(withName: "CloudNoTwo", using: ({ (node, error) in
             node.position.x -= 0.8
             
             if node.position.x < -(self.scene!.size.width) {
-                node.position.x += (self.scene!.size.width) * 3
+                node.position.x += (self.scene!.size.width) * 2
             }
         }))
     }
