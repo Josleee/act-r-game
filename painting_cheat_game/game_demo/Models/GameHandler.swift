@@ -28,7 +28,7 @@ class GameHandler: BaseGame {
     }
     
     func isFinished() -> Bool {
-        if raiseCount == 3 {
+        if (raiseCount == 3 || (raiseCount == 2 && lastRaise == 0)) {
             return true
         } else {
             return false
@@ -50,12 +50,24 @@ class GameHandler: BaseGame {
         }
     }
     
+    func AIRaise(coinsAmount : Int) {
+        do {
+            try raise(amountCoins: coinsAmount, isHumanPlayer: false)
+            lastRaise = coinsAmount - lastRaise
+            print("Last raise: " + String(lastRaise))
+            raiseCount += 1
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
     func AIrandomlyRaise() -> Int {
         print("raiseCount: " + String(raiseCount))
         print("lastRaise: " + String(lastRaise))
 
         do {
             if lastRaise > getAICoins() {
+                lastRaise = getAICoins() - lastRaise
                 try raise(amountCoins: getAICoins(), isHumanPlayer: false)
                 raiseCount += 1
                 return getAICoins()
@@ -66,10 +78,12 @@ class GameHandler: BaseGame {
                     raiseCount += 1
                     return 0
                 }
+                lastRaise = 0
                 try raise(amountCoins: lastRaise, isHumanPlayer: false)
                 raiseCount += 1
                 return lastRaise
             }
+            
             while true {
                 let randomIndex = Int(arc4random_uniform(UInt32(listRaiseAmount.count)))
                 if (listRaiseAmount[randomIndex] >= lastRaise && listRaiseAmount[randomIndex] <= getAICoins()) {

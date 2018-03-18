@@ -455,40 +455,49 @@ class MainGameScene: SKScene {
                         }
                     }
                 }
+                // When opponent doesn't has coins
                 if (game.getAICoins() == 0) {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         self.checkGameState()
                         humanTurn = false
+                        return
                     } else {
                         showInvalidRaise()
                         print("Invalid raise")
+                        return
                     }
                 }
+                // When human player doesn't have enought coins
                 if (game.getHumanCoins() < game.getLastRaise()) {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         self.checkGameState()
                         humanTurn = false
+                        return
                     } else {
                         showInvalidRaise()
                         print("Invalid raise")
+                        return
+                    }
+                }
+                // Normal condition
+                if ((coinsToRaise - game.getCoinsInPot()) >= game.getLastRaise()) {
+                    if ((((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) && game.getLastRaise() != 0) ||
+                        game.listRaiseAmount.contains(coinsToRaise - game.getCoinsInPot())) {
+                        game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                        self.checkGameState()
+                        humanTurn = false
+                        return
+                    } else {
+                        showInvalidRaise()
+                        print("Invalid raise")
+                        return
                     }
                 } else {
-                    if ((coinsToRaise - game.getCoinsInPot()) >= game.getLastRaise()) {
-                        if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise() ||
-                            game.listRaiseAmount.contains(coinsToRaise - game.getCoinsInPot())) {
-                            game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                            self.checkGameState()
-                            humanTurn = false
-                        } else {
-                            showInvalidRaise()
-                            print("Invalid raise")
-                        }
-                    } else {
-                        showInvalidRaise()
-                        print("Invalid raise")
-                    }
+                    showInvalidRaise()
+                    print("Invalid raise")
+                    return
                 }
             } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
                 // Button animation
@@ -640,10 +649,10 @@ class MainGameScene: SKScene {
             let wait2 = SKAction.wait(forDuration:3)
             let action2 = SKAction.run {
                 self.checkGameState()
+                self.showYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))
             humanTurn = true
-            showYourTurn()
         }
     }
 }
