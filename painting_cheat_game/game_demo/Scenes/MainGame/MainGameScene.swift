@@ -277,7 +277,7 @@ class MainGameScene: SKScene {
                         // print(self.children.count)
                         // Run animation
                         spriteNode.run(moveAction)
-                        run(soundCoins2)
+                        run(soundCoins)
                     }
                 }
             }
@@ -601,6 +601,7 @@ class MainGameScene: SKScene {
                 if (location.y > -115 || location.x < -self.scene!.size.width / 2 + 90 || location.x > self.scene!.size.width / 2 - 90) {
                     movableNode?.position = originalPosition
                 } else {
+                    run(soundCoins2)
                     movableNode?.position = location
                 }
             }
@@ -632,6 +633,7 @@ class MainGameScene: SKScene {
                 let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
                 print("AI raised coins: ", String(AIRaiseAmount))
                 self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
+                self.run(self.soundCoins2)
             }
             run(SKAction.sequence([wait,action]))
             
