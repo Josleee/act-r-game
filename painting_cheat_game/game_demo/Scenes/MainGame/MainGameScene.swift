@@ -33,6 +33,7 @@ class MainGameScene: SKScene {
     
     private var humanTurn : Bool = true
     private var newGame : Bool = false
+    private var gameWinner : Int!
     
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
@@ -313,6 +314,7 @@ class MainGameScene: SKScene {
                         moveAction.timingMode = SKActionTimingMode.easeInEaseOut
                         // Run animation
                         spriteNode.run(moveAction)
+                        self.run(soundCoins2)
                     }
                 }
             }
@@ -374,15 +376,13 @@ class MainGameScene: SKScene {
     
     func checkWinner() -> Bool {
         let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
-        let gameWinner : Int = game.checkIsThereAWiner()
-        GameData.shared.winner = gameWinner
-        
-        if (gameWinner == 1) {
+
+        if (GameData.shared.winner == 1) {
             print("Human wins!!!")
             self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
             return true
             
-        } else if (gameWinner == -1) {
+        } else if (GameData.shared.winner == -1) {
             print("AI wins!!!")
             self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
             return true
@@ -397,7 +397,7 @@ class MainGameScene: SKScene {
         label.isHidden = false
     }
     
-    func checkGameState() {
+    func checkGameState(showPocker : Bool = false) -> Bool {
         if (game.isFinished()) {
             let winner : Int = game.endGame()
             if (winner == 1) {
@@ -407,13 +407,28 @@ class MainGameScene: SKScene {
             } else {
                 // End in draw
             }
+            GameData.shared.winner = game.checkIsThereAWiner()
             game.printPaintingValues()
-            endOneRound()
-            if checkWinner() {
-                return
+            
+            if showPocker {
+                self.loadPocker()
+                if (game.getHumanCoins() > 0 && game.getAICoins() > 0) {
+                    let wait = SKAction.wait(forDuration:1)
+                    let action = SKAction.run {
+                        self.loadPocker()
+                        self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+                        self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+                    }
+                    run(SKAction.sequence([wait,action]))
+                }
             }
+            endOneRound()
+
             game.newRandomGame()
             newGame = true
+            return true
+        } else {
+            return false
         }
     }
     
@@ -421,6 +436,14 @@ class MainGameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Tap to start new game
         if newGame {
+            if checkWinner() {
+                return
+            }
+            
+            if checkGameState(showPocker: true) {
+                return
+            }
+
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
                 self.loadPocker()
@@ -455,11 +478,17 @@ class MainGameScene: SKScene {
                         }
                     }
                 }
+                // When human doesn't has any coin
+                if (game.getAICoins() == 0) {
+                    _ = self.checkGameState()
+                    humanTurn = false
+                    return
+                }
                 // When opponent doesn't has coins
                 if (game.getAICoins() == 0) {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        self.checkGameState()
+                        _ = self.checkGameState()
                         humanTurn = false
                         return
                     } else {
@@ -472,7 +501,7 @@ class MainGameScene: SKScene {
                 if (game.getHumanCoins() < game.getLastRaise()) {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        self.checkGameState()
+                        _ = self.checkGameState()
                         humanTurn = false
                         return
                     } else {
@@ -486,7 +515,7 @@ class MainGameScene: SKScene {
                     if ((((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) && game.getLastRaise() != 0) ||
                         game.listRaiseAmount.contains(coinsToRaise - game.getCoinsInPot())) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        self.checkGameState()
+                        _ = self.checkGameState()
                         humanTurn = false
                         return
                     } else {
@@ -511,12 +540,10 @@ class MainGameScene: SKScene {
                 game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
                 
+                GameData.shared.winner = game.checkIsThereAWiner()
                 game.printPaintingValues()
                 endOneRound()
-                if checkWinner() {
-                    return
-                }
-            
+
                 game.newRandomGame()
                 humanTurn = false
                 newGame = true
@@ -610,7 +637,7 @@ class MainGameScene: SKScene {
                 if (location.y > -115 || location.x < -self.scene!.size.width / 2 + 90 || location.x > self.scene!.size.width / 2 - 90) {
                     movableNode?.position = originalPosition
                 } else {
-                    run(soundCoins2)
+                    self.run(soundCoins2)
                     movableNode?.position = location
                 }
             }
@@ -642,13 +669,12 @@ class MainGameScene: SKScene {
                 let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
                 print("AI raised coins: ", String(AIRaiseAmount))
                 self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
-                self.run(self.soundCoins2)
             }
             run(SKAction.sequence([wait,action]))
             
             let wait2 = SKAction.wait(forDuration:3)
             let action2 = SKAction.run {
-                self.checkGameState()
+                _ = self.checkGameState()
                 self.showYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))

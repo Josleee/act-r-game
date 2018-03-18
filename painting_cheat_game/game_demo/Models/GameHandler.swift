@@ -28,7 +28,10 @@ class GameHandler: BaseGame {
     }
     
     func isFinished() -> Bool {
-        if (raiseCount == 3 || (raiseCount == 2 && lastRaise == 0)) {
+        print("Last raise is \(lastRaise), raise count is \(raiseCount), getAICoins is \(getAICoins()) and getHumanCoins is \(getHumanCoins())")
+        if (raiseCount == 3 || (raiseCount == 2 && lastRaise <= 0) ||
+            (getAICoins() <= 0 && lastRaise == 0) || (getHumanCoins() <= 0 && lastRaise == 0)) {
+            print("Finish in last raise \(lastRaise) and raise count is \(raiseCount)")
             return true
         } else {
             return false
@@ -66,11 +69,17 @@ class GameHandler: BaseGame {
         print("lastRaise: " + String(lastRaise))
 
         do {
+            if getAICoins() == 0 {
+                raiseCount += 1
+                return 0
+            }
+            
             if lastRaise > getAICoins() {
                 lastRaise = getAICoins() - lastRaise
+                let restCoins : Int = getAICoins()
                 try raise(amountCoins: getAICoins(), isHumanPlayer: false)
                 raiseCount += 1
-                return getAICoins()
+                return restCoins
             }
             
             if raiseCount == 2 {
@@ -78,7 +87,6 @@ class GameHandler: BaseGame {
                     raiseCount += 1
                     return 0
                 }
-                lastRaise = 0
                 try raise(amountCoins: lastRaise, isHumanPlayer: false)
                 raiseCount += 1
                 return lastRaise

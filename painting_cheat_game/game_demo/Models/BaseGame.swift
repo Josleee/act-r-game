@@ -34,9 +34,12 @@ class BaseGame {
     func setPainting(humanPainting : Int, AIPainintg : Int) {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
-        humanCoinsAmount! -= 1
-        AICoinsAmount! -= 1
-        coinsAmountInPot += 2
+        
+        if (humanCoinsAmount >= 1 && AICoinsAmount >= 1) {
+            humanCoinsAmount! -= 1
+            AICoinsAmount! -= 1
+            coinsAmountInPot += 2
+        }
     }
     
     func getHumanCoins() -> Int {
@@ -107,9 +110,9 @@ class BaseGame {
      No winer: return 0
      */
     func checkIsThereAWiner() -> Int {
-        if (humanCoinsAmount == 0 && getCoinsInPot() == 0) {
+        if (humanCoinsAmount <= 0 && getCoinsInPot() == 0) {
             return -1
-        } else if (AICoinsAmount == 0 && getCoinsInPot() == 0) {
+        } else if (AICoinsAmount <= 0 && getCoinsInPot() == 0) {
             return 1
         } else {
             return 0
