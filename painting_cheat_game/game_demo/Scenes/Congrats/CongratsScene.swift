@@ -20,6 +20,7 @@ class CongratsScene: SKScene {
     private var backgroundMusic : SKAudioNode!
     
     private var character : SKSpriteNode!
+    private var hint : SKSpriteNode!
     
     
     override func didMove(to view: SKView) {
@@ -59,11 +60,16 @@ class CongratsScene: SKScene {
     func createCharacter() {
         if GameData.shared.winner == 1 {
             character = SKSpriteNode(imageNamed: "BoyJump")
+            hint = SKSpriteNode(imageNamed: "HumanWins")
         } else {
             character = SKSpriteNode(imageNamed: "GirlJump")
+            hint = SKSpriteNode(imageNamed: "GirlWins")
         }
         character.size = CGSize(width: (character.size.width / 2), height: (character.size.height / 2))
+        hint.size = CGSize(width: (hint.size.width / 2), height: (hint.size.height / 2))
         character.zPosition = 1
+        hint.zPosition = 3
+        hint.position = CGPoint(x: 0, y: 130)
         
         if GameData.shared.winner == 1 {
             character.position = CGPoint(x: -50, y: -20)
@@ -73,6 +79,7 @@ class CongratsScene: SKScene {
             playPartyPoppers(xCenter: 50)
         }
         self.addChild(character)
+        self.addChild(hint)
     }
     
     
