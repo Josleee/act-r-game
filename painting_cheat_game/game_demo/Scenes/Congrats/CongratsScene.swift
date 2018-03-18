@@ -91,7 +91,7 @@ class CongratsScene: SKScene {
             // Load colorful pieces
             for i in 1...11 {
                 let cp = SKSpriteNode(imageNamed: "ppb" + String(i))
-                let randomPosition = GKRandomDistribution(lowestValue: xCenter - 30, highestValue: xCenter + 30)
+                let randomPosition = GKRandomDistribution(lowestValue: xCenter - 50, highestValue: xCenter + 50)
                 let xPosition = CGFloat(randomPosition.nextInt())
                 cp.name = "PartyPoppers"
                 cp.position = CGPoint(x: xPosition, y: 130)
@@ -104,7 +104,7 @@ class CongratsScene: SKScene {
             // Load riband
             for i in 1...3 {
                 let lb = SKSpriteNode(imageNamed: "ppl" + String(i))
-                let randomPosition = GKRandomDistribution(lowestValue: -30, highestValue: 30)
+                let randomPosition = GKRandomDistribution(lowestValue: xCenter - 50, highestValue: xCenter + 50)
                 let xPosition = CGFloat(randomPosition.nextInt())
                 lb.name = "PartyPoppers"
                 lb.position = CGPoint(x: xPosition, y: 130)
