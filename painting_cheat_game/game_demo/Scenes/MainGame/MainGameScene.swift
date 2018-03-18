@@ -37,6 +37,9 @@ class MainGameScene: SKScene {
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
     
+    private var hintYourTurn : SKSpriteNode!
+    private var hintInvalidRaise : SKSpriteNode!
+    
     private var game : GameHandler!
     private var backgroundMusic: SKAudioNode!
     private var soundCoins : SKAction!
@@ -93,6 +96,7 @@ class MainGameScene: SKScene {
         btnFold.name = "btn_fold"
         btnFold.zPosition = 1
         self.addChild(btnFold)
+        
         btnRaise = SKSpriteNode(imageNamed: "raise")
         btnRaise.size = CGSize(width: (btnRaise.size.width / 2), height: (btnRaise.size.height / 2))
         btnRaise.position = CGPoint(x: 210, y: -145)
@@ -104,11 +108,28 @@ class MainGameScene: SKScene {
         loadPics()
         loadPocker()
         
+        // Load hints
+        hintYourTurn = SKSpriteNode(imageNamed: "YourTurn")
+        hintYourTurn.size = CGSize(width: (hintYourTurn.size.width / 2), height: (hintYourTurn.size.height / 2))
+        hintYourTurn.zPosition = 3
+        hintYourTurn.position = CGPoint(x: 0, y: 145)
+        hintYourTurn.isHidden = true
+        self.addChild(hintYourTurn)
+        
+        hintInvalidRaise = SKSpriteNode(imageNamed: "InvalidRaise")
+        hintInvalidRaise.size = CGSize(width: (hintInvalidRaise.size.width / 2), height: (hintInvalidRaise.size.height / 2))
+        hintInvalidRaise.zPosition = 3
+        hintInvalidRaise.position = CGPoint(x: 0, y: 145)
+        hintInvalidRaise.isHidden = true
+        self.addChild(hintInvalidRaise)
+        
+        // Add coins generator
         gameTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(addCoins), userInfo: nil, repeats: true)
         let wait = SKAction.wait(forDuration: 2)
         let action = SKAction.run {
             self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+            self.showYourTurn()
         }
         run(SKAction.sequence([wait,action]))
     }
@@ -440,6 +461,7 @@ class MainGameScene: SKScene {
                         self.checkGameState()
                         humanTurn = false
                     } else {
+                        showInvalidRaise()
                         print("Invalid raise")
                     }
                 }
@@ -449,6 +471,7 @@ class MainGameScene: SKScene {
                         self.checkGameState()
                         humanTurn = false
                     } else {
+                        showInvalidRaise()
                         print("Invalid raise")
                     }
                 } else {
@@ -459,9 +482,11 @@ class MainGameScene: SKScene {
                             self.checkGameState()
                             humanTurn = false
                         } else {
+                            showInvalidRaise()
                             print("Invalid raise")
                         }
                     } else {
+                        showInvalidRaise()
                         print("Invalid raise")
                     }
                 }
@@ -510,6 +535,42 @@ class MainGameScene: SKScene {
                 }
             }
         }
+    }
+    
+    func showInvalidRaise() {
+        var isOpShow : Bool = false
+        if hintYourTurn.isHidden == false {
+            hintYourTurn.isHidden = true
+            isOpShow = true
+        }
+        
+        hintInvalidRaise.isHidden = false
+        let wait = SKAction.wait(forDuration:2)
+        let action = SKAction.run {
+            self.hintInvalidRaise.isHidden = true
+            if isOpShow {
+                self.showYourTurn()
+            }
+        }
+        run(SKAction.sequence([wait,action]))
+    }
+    
+    func showYourTurn() {
+        var isOpShow : Bool = false
+        if hintInvalidRaise.isHidden == false {
+            hintInvalidRaise.isHidden = true
+            isOpShow = true
+        }
+        
+        hintYourTurn.isHidden = false
+        let wait = SKAction.wait(forDuration:5)
+        let action = SKAction.run {
+            self.hintYourTurn.isHidden = true
+            if isOpShow {
+                self.showInvalidRaise()
+            }
+        }
+        run(SKAction.sequence([wait,action]))
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -580,6 +641,7 @@ class MainGameScene: SKScene {
             }
             run(SKAction.sequence([wait2,action2]))
             humanTurn = true
+            showYourTurn()
         }
     }
 }
