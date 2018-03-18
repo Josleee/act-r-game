@@ -17,7 +17,9 @@ class CongratsScene: SKScene {
     private var backgroundCloudNoTwo : SKSpriteNode!
     private var backgroundMontains : SKSpriteNode!
     private var backgroundPlayers : SKSpriteNode!
-    private var backgroundMusic: SKAudioNode!
+    private var backgroundMusic : SKAudioNode!
+    
+    private var character : SKSpriteNode!
     
     
     override func didMove(to view: SKView) {
@@ -38,13 +40,7 @@ class CongratsScene: SKScene {
         backgroundMontains.position = CGPoint(x: 0, y: 0)
         backgroundMontains.zPosition = -2
         self.addChild(backgroundMontains)
-        
-        backgroundPlayers = SKSpriteNode(imageNamed: "Players")
-        backgroundPlayers.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
-        backgroundPlayers.position = CGPoint(x: 0, y: 0)
-        backgroundPlayers.zPosition = -1
-        self.addChild(backgroundPlayers)
-        
+
         // Add background music
         if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
             backgroundMusic = SKAudioNode(url: musicURL)
@@ -52,7 +48,7 @@ class CongratsScene: SKScene {
             self.addChild(backgroundMusic)
         }
         
-        playPartyPoppers()
+        createCharacter()
     }
 
     
@@ -60,12 +56,29 @@ class CongratsScene: SKScene {
     }
     
     
-    func playPartyPoppers() {
-        for _ in 1...2 {
+    func createCharacter() {
+        if GameData.shared.winner == 1 {
+            character = SKSpriteNode(imageNamed: "BoyJump")
+        } else {
+            character = SKSpriteNode(imageNamed: "GirlJump")
+        }
+        character.size = CGSize(width: (character.size.width / 2), height: (character.size.height / 2))
+        character.zPosition = 1
+        
+        if GameData.shared.winner == 1 {
+            
+        }
+        
+        self.addChild(character)
+    }
+    
+    
+    func playPartyPoppers(xCenter : Int) {
+        for _ in 1...1 {
             // Load colorful pieces
             for i in 1...11 {
                 let cp = SKSpriteNode(imageNamed: "ppb" + String(i))
-                let randomPosition = GKRandomDistribution(lowestValue: -30, highestValue: 30)
+                let randomPosition = GKRandomDistribution(lowestValue: xCenter - 30, highestValue: xCenter + 30)
                 let xPosition = CGFloat(randomPosition.nextInt())
                 cp.name = "PartyPoppers"
                 cp.position = CGPoint(x: xPosition, y: 100)
