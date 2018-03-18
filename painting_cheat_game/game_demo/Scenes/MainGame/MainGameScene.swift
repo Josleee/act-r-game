@@ -354,6 +354,7 @@ class MainGameScene: SKScene {
     func checkWinner() -> Bool {
         let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
         let gameWinner : Int = game.checkIsThereAWiner()
+        GameData.shared.winner = gameWinner
         
         if (gameWinner == 1) {
             print("Human wins!!!")

@@ -29,9 +29,7 @@ class GameScene: SKScene {
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
-        let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
-        GameData.shared.winner = 1
+        let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
         self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
     }
     

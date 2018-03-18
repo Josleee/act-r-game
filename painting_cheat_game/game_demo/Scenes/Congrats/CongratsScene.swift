@@ -54,6 +54,9 @@ class CongratsScene: SKScene {
 
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        GameData.shared.winner = 0
+        let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
+        self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
     }
     
     
@@ -63,7 +66,7 @@ class CongratsScene: SKScene {
             hint = SKSpriteNode(imageNamed: "HumanWins")
         } else {
             character = SKSpriteNode(imageNamed: "GirlJump")
-            hint = SKSpriteNode(imageNamed: "GirlWins")
+            hint = SKSpriteNode(imageNamed: "AIWins")
         }
         character.size = CGSize(width: (character.size.width / 2), height: (character.size.height / 2))
         hint.size = CGSize(width: (hint.size.width / 2), height: (hint.size.height / 2))
@@ -91,7 +94,7 @@ class CongratsScene: SKScene {
                 let randomPosition = GKRandomDistribution(lowestValue: xCenter - 30, highestValue: xCenter + 30)
                 let xPosition = CGFloat(randomPosition.nextInt())
                 cp.name = "PartyPoppers"
-                cp.position = CGPoint(x: xPosition, y: 120)
+                cp.position = CGPoint(x: xPosition, y: 130)
                 cp.size = CGSize(width: (cp.size.width / 3), height: (cp.size.height / 3))
                 cp.physicsBody = SKPhysicsBody(texture: cp.texture!, size: cp.texture!.size())
                 cp.zPosition = 2
@@ -104,7 +107,7 @@ class CongratsScene: SKScene {
                 let randomPosition = GKRandomDistribution(lowestValue: -30, highestValue: 30)
                 let xPosition = CGFloat(randomPosition.nextInt())
                 lb.name = "PartyPoppers"
-                lb.position = CGPoint(x: xPosition, y: 120)
+                lb.position = CGPoint(x: xPosition, y: 130)
                 lb.size = CGSize(width: (lb.size.width / 2), height: (lb.size.height / 2))
                 lb.physicsBody = SKPhysicsBody(texture: lb.texture!, size: lb.texture!.size())
                 lb.zPosition = 2
