@@ -66,9 +66,12 @@ class CongratsScene: SKScene {
         character.zPosition = 1
         
         if GameData.shared.winner == 1 {
-            
+            character.position = CGPoint(x: -50, y: -20)
+            playPartyPoppers(xCenter: -50)
+        } else {
+            character.position = CGPoint(x: 50, y: -20)
+            playPartyPoppers(xCenter: 50)
         }
-        
         self.addChild(character)
     }
     
@@ -81,7 +84,7 @@ class CongratsScene: SKScene {
                 let randomPosition = GKRandomDistribution(lowestValue: xCenter - 30, highestValue: xCenter + 30)
                 let xPosition = CGFloat(randomPosition.nextInt())
                 cp.name = "PartyPoppers"
-                cp.position = CGPoint(x: xPosition, y: 100)
+                cp.position = CGPoint(x: xPosition, y: 120)
                 cp.size = CGSize(width: (cp.size.width / 3), height: (cp.size.height / 3))
                 cp.physicsBody = SKPhysicsBody(texture: cp.texture!, size: cp.texture!.size())
                 cp.zPosition = 2
@@ -94,7 +97,7 @@ class CongratsScene: SKScene {
                 let randomPosition = GKRandomDistribution(lowestValue: -30, highestValue: 30)
                 let xPosition = CGFloat(randomPosition.nextInt())
                 lb.name = "PartyPoppers"
-                lb.position = CGPoint(x: xPosition, y: 100)
+                lb.position = CGPoint(x: xPosition, y: 120)
                 lb.size = CGSize(width: (lb.size.width / 2), height: (lb.size.height / 2))
                 lb.physicsBody = SKPhysicsBody(texture: lb.texture!, size: lb.texture!.size())
                 lb.zPosition = 2
