@@ -1,0 +1,479 @@
+;;; TEST
+
+(add-dm
+    (c1 isa game-experience hcat low hvalue 1 maction raisehigh)
+    (c2 isa game-experience hcat low hvalue 2 maction raisehigh)
+    (c3 isa game-experience hcat mid hvalue 3 maction raisemid)
+    (c4 isa game-experience hcat mid hvalue 4 maction raisemid)
+    (c5 isa game-experience hcat mid hvalue 9 maction raiselow)
+    (c6 isa game-experience hcat high hvalue 6 maction raiselow)
+    (c7 isa game-experience hcat high hvalue 7 maction fold)
+    (b1 isa behaviour human bluff)
+    (goal isa goal state setup round nil hvalue nil hcat nil haction nil maction nil result nil)
+)
+
+(set-all-baselevels -100 10) ;; time offset and number of references
+
+;; Should I save human action patterns? like call, raise 6?
+
+;; TO DO:
+;; DRAW PRODUCTIONS
+;; NO SECOND TURN AFTER FOLD
+
+;; -----------------------
+
+(p setup
+    =goal>
+        isa goal
+        state setup
+==>
+    =goal>
+        isa goal
+        state start
+    +action>
+        round fill
+        cat fill
+        hvalue fill
+        haction fill
+        maction fill
+)
+
+;; ---------------------------------------------
+;; Receive info from swift
+
+(p start-even-turn-first            ;; chooses even after first
+    =goal>
+        isa goal
+        state start
+    =action>
+        round even
+        cat =b
+        hvalue =c
+        haction fill
+==>
+    =goal>
+        isa goal
+        state try-retrieve-value
+        hcat =b
+        hvalue =c
+	    round even
+    +retrieval>
+        isa game-experience
+        hvalue	=c
+)
+
+(p start-uneven-turn
+    =goal>
+        isa goal
+        state start
+    =action>
+        round uneven
+        hcat =b
+        hvalue =c
+        haction =d
+==>
+    =goal>
+        isa goal
+        state try-retrieve-value
+        hcat =b
+        hvalue =c
+;;     haction =d
+	    round uneven
+    +retrieval>
+        isa game-experience
+        hvalue	=c
+)
+;; ---------------------------------------------
+;;      Retrieving (attempts)
+
+(p retrieve-value-success
+    =goal>
+	    isa goal
+        state try-retrieve-value
+        hvalue =c
+    =retrieval>
+        hvalue =c
+        maction =e
+==>
+    =goal>
+	    isa goal
+        state doit
+        maction =e
+	+action>
+		maction =e
+		secondturn question
+)
+
+(p retrieve-value-fail
+    =goal>
+	    isa goal
+        state try-retrieve-value
+        hcat =b
+    ?retrieval>
+        state  error
+==>
+    =goal>
+	    isa goal
+        state try-retrieve-cat
+    +retrieval>
+        isa game-experience
+        hcat =b
+)
+
+(p retrieve-cat-success
+    =goal>
+	    isa goal
+        state try-retrieve-cat
+    =retrieval>
+        hcat =b
+        maction =e
+==>
+    =goal>
+	    isa goal
+        state doit
+        maction =e
+	+action>
+		maction =e
+		secondturn question
+)
+
+(p retrieve-cat-fail-uneven-turn
+    =goal>
+        isa goal
+        state try-retrieve-cat
+        round uneven
+    ?retrieval>
+        state error
+==>
+    =goal>
+        isa goal
+        state try-random
+)
+
+(p retrieve-cat-fail-even-turn-first
+    =goal>
+        isa goal
+        state try-retrieve-cat
+        round even
+    ?retrieval>
+        state error
+==>
+    =goal>
+        isa goal
+        state try-random
+)
+
+(p retrieve-cat-fail-even-turn-later
+    =goal>
+        isa goal
+        state try-retrieve-cat
+        round even
+    ?retrieval>
+        state error
+    =action>
+        haction =d
+==>
+    =goal>
+        isa goal
+        state try-random-limited
+)
+
+;; ---------------------------------------------
+;;      Random Actions First Turn
+
+(p try-random-raiselow
+    =goal>
+        isa goal
+        state try-random
+==>
+    =goal>
+        isa goal
+        state doit
+        maction raiselow
+    +action>
+        maction raiselow
+		secondturn question
+)
+
+(p try-random-raisemid
+    =goal>
+        isa goal
+        state try-random
+==>
+    =goal>
+        isa goal
+        state doit
+        maction raisemid
+    +action>
+        maction raisemid
+		secondturn question
+)
+
+(p try-random-raisehigh
+    =goal>
+        isa goal
+        state try-random
+==>
+    =goal>
+        isa goal
+        state doit
+        maction raisehigh
+    +action>
+        maction raisehigh
+		secondturn question
+)
+
+(p try-random-fold
+    =goal>
+        isa goal
+        state try-random
+==>
+    =goal>
+        isa goal
+        state doit
+        maction fold
+    +action>
+        maction fold
+		secondturn question
+
+)
+
+;; ---------------------------------------------
+;;      Switching Possible Second Turn (after swift pass)
+
+(p need-second-turn
+	=goal>
+		isa goal
+		state doit
+        round even               ;;    FOR TESTING PURPOSES, DISABLE!!
+	=action>
+		secondturn yes
+==>
+	=goal>
+		isa goal
+        state secondturn        ;; try-random-limited before
+)
+
+(p dont-need-second-turn
+	=goal>
+		isa goal
+		state doit
+	=action>
+		secondturn no
+==>
+	=goal>
+		isa goal
+		state request-results
+	+action>
+		results question
+)
+
+;; ---------------------------------------------
+;; Starting Second Turn
+
+(p start-even-turn-second
+    =goal>
+        isa goal
+        state secondturn
+==>
+    =goal>
+        isa goal
+        state try-random-limited
+    +action>
+        haction nothing
+)
+
+;; ---------------------------------------------
+;;      Random Actions Limited (Second Turn)                                                ;; WHY DO THE ACTION BUFFERS NOT WORK???! I just modified them
+
+;;                  ---------------- Options Human raised mid
+
+(p try-random-limited-human-raisedmid-model-raisemid
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+		haction raisemid
+==>
+    =goal>
+        isa goal
+        state request-results
+        maction raisemid
+    +action>
+        maction raisemid
+		secondturn no
+)
+
+(p try-random-limited-human-raisedmid-model-raisehigh
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+		haction raisemid
+==>
+    =goal>
+        isa goal
+        state request-results
+        maction raisehigh
+    +action>
+        maction raisehigh
+		secondturn no
+)
+
+;;                  ---------------- Options Human raised high
+
+(p try-random-limited-human-raisedhigh-model-raisehigh
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+		haction raisehigh
+==>
+    =goal>
+        isa goal
+        state request-results
+        maction raisehigh
+    +action>
+        maction raisehigh
+		secondturn no
+)
+
+;;                  ---------------- Fold
+
+(p try-random-limited-fold
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+        haction BULLSHIT            ;;              !!!
+==>
+ =goal>
+        isa goal
+        state request-results
+        maction fold
+    +action>
+        maction fold
+		secondturn no
+)
+
+;; ---------------------------------------------
+;;      Processing Results & Reset
+
+(p won-by-raiselow
+	=goal>
+		isa goal
+		state request-results
+		hcat =b
+		hvalue =c
+		maction raiselow
+	=action>
+		results win
+==>
+	=goal>
+		isa goal
+		state reset
+	+imaginal>
+		isa game-experience
+		hcat =b
+		hvalue =c
+		maction raisehigh
+)
+
+(p won-by-raisemid
+	=goal>
+		isa goal
+		state request-results
+		hcat =b
+		hvalue =c
+		maction raisemid
+	=action>
+		results win
+==>
+	=goal>
+		isa goal
+		state reset
+	+imaginal>
+		isa game-experience
+		hcat =b
+		hvalue =c
+		maction raisehigh
+)
+
+(p won-by-raisehigh
+	=goal>
+		isa goal
+		state request-results
+		hcat =b
+		hvalue =c
+		maction raisehigh
+	=action>
+		results win
+==>
+	=goal>
+		isa goal
+		state reset
+	+imaginal>
+		isa game-experience
+		hcat =b
+		hvalue =c
+		maction raisehigh
+)
+
+(p lost-by-fold
+	=goal>
+		isa goal
+		state request-results
+		hcat =b
+		hvalue =c
+		maction fold
+	=action>
+		results lose
+==>
+	=goal>
+		isa goal
+		state reset
+	+imaginal>
+		isa game-experience
+		hcat =b
+		hvalue =c
+		maction raiselow
+)
+
+(p lost-by-raise
+	=goal>
+		isa goal
+		state request-results
+		hcat =b
+		hvalue =c
+		- maction fold
+	=action>
+		results lose
+==>
+	=goal>
+		isa goal
+		state reset
+	+imaginal>
+		isa game-experience
+		hcat =b
+		hvalue =c
+		maction fold
+)
+
+(p reset
+	=goal>
+		isa goal
+		state reset
+==>
+	=goal>
+		isa goal
+		state setup
+		round nil
+		hvalue nil
+		hcat nil
+		haction nil
+		maction nil
+		result nil
+	-action>
+)
+
+(goal-focus goal)

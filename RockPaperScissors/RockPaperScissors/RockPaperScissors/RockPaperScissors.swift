@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RockPaperScissors: NSObject {
+class RockPaperScissors: Model {
     var playerScore = 0
     var modelScore = 0
     
@@ -40,7 +40,6 @@ class RockPaperScissors: NSObject {
             break
         }
         return result
-        
     }
     
     func passPlayerScore() -> Int {
@@ -51,10 +50,9 @@ class RockPaperScissors: NSObject {
         return modelScore
     }
     
-    func reset() {
+    func resetGame() {
         playerScore = 0
         modelScore = 0
-        
     }
     
 }
