@@ -16,7 +16,7 @@ class GameHandler: BaseGame {
     private var lastRaise : Int = 0
     
     func newRandomGame() {
-        setPainting(humanPainting: Int(arc4random_uniform(2) + 1), AIPainintg: Int(arc4random_uniform(2) + 1))
+        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1))
         lastRaise = 0
         raiseCount = 0
     }

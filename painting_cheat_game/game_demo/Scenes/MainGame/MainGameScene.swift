@@ -479,7 +479,7 @@ class MainGameScene: SKScene {
                     }
                 }
                 // When human doesn't has any coin
-                if (game.getAICoins() == 0) {
+                if (game.getHumanCoins() == 0) {
                     _ = self.checkGameState()
                     humanTurn = false
                     return
