@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7CA71FDB206A6CFA004AA05C /* RulesScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA71FDA206A6CFA004AA05C /* RulesScene.swift */; };
 		7CA71FE1206A6E7C004AA05C /* RulesScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7CA71FE0206A6E7C004AA05C /* RulesScene.sks */; };
+		7CA71FF9206AAE4C004AA05C /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA71FF8206AAE4C004AA05C /* File.swift */; };
 		850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850DFD7B205B56D700CFE8F9 /* BaseGame.swift */; };
 		85199506205C0554003FEB0C /* GameHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85199505205C0554003FEB0C /* GameHandler.swift */; };
 		8519950B205C5595003FEB0C /* bgmusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85199508205C5594003FEB0C /* bgmusic.mp3 */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		7CA71FDA206A6CFA004AA05C /* RulesScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesScene.swift; sourceTree = "<group>"; };
 		7CA71FE0206A6E7C004AA05C /* RulesScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RulesScene.sks; sourceTree = "<group>"; };
+		7CA71FF8206AAE4C004AA05C /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		850DFD7B205B56D700CFE8F9 /* BaseGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGame.swift; sourceTree = "<group>"; };
 		85199505205C0554003FEB0C /* GameHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHandler.swift; sourceTree = "<group>"; };
 		85199508205C5594003FEB0C /* bgmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgmusic.mp3; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 			children = (
 				7CA71FE0206A6E7C004AA05C /* RulesScene.sks */,
 				7CA71FDA206A6CFA004AA05C /* RulesScene.swift */,
+				7CA71FF8206AAE4C004AA05C /* File.swift */,
 			);
 			path = RulesScene;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				855A34E9205ABEA900360891 /* MainGameScene.swift in Sources */,
 				85B14EF6205D8EF300E9B407 /* CongratsScene.swift in Sources */,
 				85199506205C0554003FEB0C /* GameHandler.swift in Sources */,
+				7CA71FF9206AAE4C004AA05C /* File.swift in Sources */,
 				850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */,
 				85E6BC38205DE883003D927C /* GameData.swift in Sources */,
 				855A34D7205AB47700360891 /* GameViewController.swift in Sources */,
