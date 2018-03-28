@@ -92,6 +92,8 @@ class GameHandler: BaseGame {
                 return lastRaise
             }
             
+            
+            
             while true {
                 let randomIndex = Int(arc4random_uniform(UInt32(listRaiseAmount.count)))
                 if (listRaiseAmount[randomIndex] >= lastRaise && listRaiseAmount[randomIndex] <= getAICoins()) {
@@ -108,6 +110,7 @@ class GameHandler: BaseGame {
     }
     
     func printPaintingValues() {
+        print("")
         print("Human painting value: " + String(getHumanPaintingValue()))
         print("AI painting value: " + String(getAIPaintingValue()))
         print("Human coins: " + String(getHumanCoins()))
