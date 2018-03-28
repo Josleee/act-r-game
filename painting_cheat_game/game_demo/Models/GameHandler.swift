@@ -108,8 +108,8 @@ class GameHandler: BaseGame {
     }
     
     func printPaintingValues() {
-        print("Human painting value: " + String(getHumanPainting()))
-        print("AI painting value: " + String(getAIPainting()))
+        print("Human painting value: " + String(getHumanPaintingValue()))
+        print("AI painting value: " + String(getAIPaintingValue()))
         print("Human coins: " + String(getHumanCoins()))
         print("AI coins: " + String(getAICoins()))
         print()

@@ -23,12 +23,21 @@ class CongratsScene: SKScene {
     private var hint : SKSpriteNode!
     
     
+    fileprivate func addViewElement(name: String, width: CGFloat, height: CGFloat, xposition: Int, yposition: Int, zposition: CGFloat) {
+        var node : SKSpriteNode!
+        node = SKSpriteNode(imageNamed: name)
+        node.size = CGSize(width: width, height: height)
+        node.position = CGPoint(x: xposition, y: yposition)
+        node.zPosition = zposition
+        self.addChild(node)
+    }
+    
     override func didMove(to view: SKView) {
         // Set gravity
         self.physicsWorld.gravity = CGVector(dx: 0, dy: -1)
         
         // Add background
-        createBackground()
+        addClouds()
         
         background = SKSpriteNode(imageNamed: "Background")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
@@ -54,14 +63,14 @@ class CongratsScene: SKScene {
 
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        GameData.shared.winner = 0
+        GameData.shared.winner = .NoOne
         let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
         self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
     }
     
     
     func createCharacter() {
-        if GameData.shared.winner == 1 {
+        if GameData.shared.winner == .HumanPlayer {
             character = SKSpriteNode(imageNamed: "BoyJump")
             hint = SKSpriteNode(imageNamed: "HumanWins")
         } else {
@@ -74,7 +83,7 @@ class CongratsScene: SKScene {
         hint.zPosition = 3
         hint.position = CGPoint(x: 0, y: 130)
         
-        if GameData.shared.winner == 1 {
+        if GameData.shared.winner == .HumanPlayer {
             character.position = CGPoint(x: -50, y: -20)
             playPartyPoppers(xCenter: -50)
         } else {
@@ -117,7 +126,7 @@ class CongratsScene: SKScene {
     }
     
     
-    func createBackground() {
+    func addClouds() {
         for i in 0...2 {
             let backgroundCloudNoOneLocal = SKSpriteNode(imageNamed: "CloudNoOne")
             backgroundCloudNoOneLocal.name = "CloudNoOne"

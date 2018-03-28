@@ -28,12 +28,15 @@ class MainGameScene: SKScene {
     
     private var picture1 : SKSpriteNode!
     private var picture2 : SKSpriteNode!
+    private var pictureHumanValueLabel : SKLabelNode!
+    private var pictureAIValueLabel : SKLabelNode!
+    
     private var movableNode : SKNode?
     private var originalPosition : CGPoint!
     
     private var humanTurn : Bool = true
     private var newGame : Bool = false
-    private var gameWinner : Int!
+   // private var gameWinner : Int!
     
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
@@ -46,8 +49,7 @@ class MainGameScene: SKScene {
     private var soundCoins : SKAction!
     private var soundCoins2 : SKAction!
 
-    private var label : SKLabelNode!
-    private var label2 : SKLabelNode!
+
 
     private let moveNodeUp = SKAction.moveBy(x: 0, y: 10, duration: 0.2)
     private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
@@ -55,6 +57,11 @@ class MainGameScene: SKScene {
     private let scaleDownAlongY = SKAction.scaleY(to: 1.25, duration: 0.2)
     
     
+    
+    //***BACKGROUND-MAGIC*********************************************************************
+    //****************************************************************************************
+    
+    //Load everything (paintings, background, players,..)
     override func didMove(to view: SKView) {
         // Initialize game
         game = GameHandler()
@@ -106,8 +113,8 @@ class MainGameScene: SKScene {
         self.addChild(btnRaise)
         
         // Load paintings
-        loadPics()
-        loadPocker()
+        loadPaintings()
+        loadPaintingValueLabels()
         
         // Load hints
         hintYourTurn = SKSpriteNode(imageNamed: "YourTurn")
@@ -130,7 +137,7 @@ class MainGameScene: SKScene {
         let action = SKAction.run {
             self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             self.moveCoins(numberOfCoins: 1, humanPlayer: true)
-            self.showYourTurn()
+            self.showHintYourTurn()
         }
         run(SKAction.sequence([wait,action]))
     }
@@ -170,42 +177,34 @@ class MainGameScene: SKScene {
         }))
     }
     
-    func flipCard (node: SKNode){
-        node.run(SKAction.sequence(
-            [SKAction.fadeOut(withDuration: 0.1),
-             SKAction.scaleX(to: 0, duration: 0.35),
-             SKAction.scale(to: 1, duration: 0.0),
-             SKAction.setTexture(SKTexture(imageNamed: "pic3")),
-             SKAction.fadeIn(withDuration: 0.1),
-             ]
-        ))
-    }
     
-    func loadPocker() {
-        if label != nil {
-            label.removeFromParent()
+    func loadPaintingValueLabels() {
+        if pictureHumanValueLabel != nil {
+            pictureHumanValueLabel.removeFromParent()
         }
-        if label2 != nil {
-            label2.removeFromParent()
+        if pictureAIValueLabel != nil {
+            pictureAIValueLabel.removeFromParent()
         }
 
-        label = SKLabelNode(fontNamed: "Chalkduster")
-        label.fontSize = 50
-        label.position = CGPoint(x: -60, y: 70)
-        label.text = String(game.getHumanPainting())
-        label.zPosition = 2
-        label.isHidden = true
-        self.addChild(label)
+        //get humanpainting value, but hide it
+        pictureHumanValueLabel = SKLabelNode(fontNamed: "Chalkduster")
+        pictureHumanValueLabel.fontSize = 50
+        pictureHumanValueLabel.position = CGPoint(x: -60, y: 70)
+        pictureHumanValueLabel.text = String(game.getHumanPaintingValue())
+        pictureHumanValueLabel.zPosition = 2
+        pictureHumanValueLabel.isHidden = true
+        self.addChild(pictureHumanValueLabel)
         
-        label2 = SKLabelNode(fontNamed: "Chalkduster")
-        label2.fontSize = 50
-        label2.position = CGPoint(x: 60, y: 70)
-        label2.text = String(game.getAIPainting())
-        label2.zPosition = 2
-        self.addChild(label2)
+        //get AI painting value
+        pictureAIValueLabel = SKLabelNode(fontNamed: "Chalkduster")
+        pictureAIValueLabel.fontSize = 50
+        pictureAIValueLabel.position = CGPoint(x: 60, y: 70)
+        pictureAIValueLabel.text = String(game.getAIPaintingValue())
+        pictureAIValueLabel.zPosition = 2
+        self.addChild(pictureAIValueLabel)
     }
     
-    func loadPics() {
+    func loadPaintings() {
         picture1 = SKSpriteNode(imageNamed: "pic1")
         picture2 = SKSpriteNode(imageNamed: "pic2")
         picture1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
@@ -252,6 +251,9 @@ class MainGameScene: SKScene {
         coinSize = lCoin.size
     }
     
+    //***GAME (coins, card, hint, ...) *********************************************************************
+    //****************************************************************************************
+    
     
     func resetCoins(humanPlayerWin : Bool) {
         for child in self.children {
@@ -261,9 +263,9 @@ class MainGameScene: SKScene {
                         (spriteNode.position.x <= self.scene!.size.width / 2 - 90)) {
                         var position : CGPoint
                         if (humanPlayerWin) {
-                            position = findAvailablePosition(x1: -self.scene!.size.width / 2 + 35, x2: -self.scene!.size.width / 2 + 60)
+                            position = findAvailablePositionForCoins(x1: -self.scene!.size.width / 2 + 35, x2: -self.scene!.size.width / 2 + 60)
                         } else {
-                            position = findAvailablePosition(x1: self.scene!.size.width / 2 - 35, x2: self.scene!.size.width / 2 - 60)
+                            position = findAvailablePositionForCoins(x1: self.scene!.size.width / 2 - 35, x2: self.scene!.size.width / 2 - 60)
                         }
                         let moveAction = SKAction.move(to: position, duration: 0.35)
                         moveAction.timingMode = SKActionTimingMode.easeInEaseOut
@@ -321,7 +323,7 @@ class MainGameScene: SKScene {
         }
     }
     
-    func findAvailablePosition(x1 : CGFloat, x2 : CGFloat) -> CGPoint {
+    func findAvailablePositionForCoins(x1 : CGFloat, x2 : CGFloat) -> CGPoint {
         var count : Int = 0
         while true {
             var position : CGPoint
@@ -345,7 +347,6 @@ class MainGameScene: SKScene {
             count += 1
         }
     }
-    
     
     func checkWhetherHasCoin(position : CGPoint) -> Bool {
         var isContain : Bool = true
@@ -374,15 +375,66 @@ class MainGameScene: SKScene {
     }
     
     
+    func flipCard (node: SKNode){
+        node.run(SKAction.sequence(
+            [SKAction.fadeOut(withDuration: 0.1),
+             SKAction.scaleX(to: 0, duration: 0.35),
+             SKAction.scale(to: 1, duration: 0.0),
+             SKAction.setTexture(SKTexture(imageNamed: "pic3")),
+             SKAction.fadeIn(withDuration: 0.1),
+             ]
+        ))
+    }
+    
+
+    func showHintInvalidRaise() {
+        var isOpShow : Bool = false
+        if hintYourTurn.isHidden == false {
+            hintYourTurn.isHidden = true
+            isOpShow = true
+        }
+        
+        hintInvalidRaise.isHidden = false
+        let wait = SKAction.wait(forDuration:2)
+        let action = SKAction.run {
+            self.hintInvalidRaise.isHidden = true
+            if isOpShow {
+                self.showHintYourTurn()
+            }
+        }
+        run(SKAction.sequence([wait,action]))
+    }
+    
+    func showHintYourTurn() {
+        var isOpShow : Bool = false
+        if hintInvalidRaise.isHidden == false {
+            hintInvalidRaise.isHidden = true
+            isOpShow = true
+        }
+        
+        hintYourTurn.isHidden = false
+        let wait = SKAction.wait(forDuration:5)
+        let action = SKAction.run {
+            self.hintYourTurn.isHidden = true
+            if isOpShow {
+                self.showHintInvalidRaise()
+            }
+        }
+        run(SKAction.sequence([wait,action]))
+    }
+    
+
+    
+    
     func checkWinner() -> Bool {
         let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
 
-        if (GameData.shared.winner == 1) {
+        if (GameData.shared.winner == .HumanPlayer) {
             print("Human wins!!!")
             self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
             return true
             
-        } else if (GameData.shared.winner == -1) {
+        } else if (GameData.shared.winner == .AIPlayer) {
             print("AI wins!!!")
             self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
             return true
@@ -394,28 +446,30 @@ class MainGameScene: SKScene {
     
     func endOneRound() {
         flipCard(node: picture1)
-        label.isHidden = false
+        pictureHumanValueLabel.isHidden = false
     }
     
     func checkGameState(showPocker : Bool = false) -> Bool {
         if (game.isFinished()) {
-            let winner : Int = game.endGame()
-            if (winner == 1) {
+            //let winner : Int = game.endGame()
+            game.endGameAndSetWinner()
+            
+            if (GameData.shared.winner == .HumanPlayer) {
                 resetCoins(humanPlayerWin: true)
-            } else if (winner == -1) {
+            } else if (GameData.shared.winner == .AIPlayer) {
                 resetCoins(humanPlayerWin: false)
             } else {
                 // End in draw
             }
-            GameData.shared.winner = game.checkIsThereAWiner()
+            game.setWinnerAccordingToCoins()
             game.printPaintingValues()
             
             if showPocker {
-                self.loadPocker()
+                self.loadPaintingValueLabels()
                 if (game.getHumanCoins() > 0 && game.getAICoins() > 0) {
                     let wait = SKAction.wait(forDuration:1)
                     let action = SKAction.run {
-                        self.loadPocker()
+                        self.loadPaintingValueLabels()
                         self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                         self.moveCoins(numberOfCoins: 1, humanPlayer: false)
                     }
@@ -432,6 +486,9 @@ class MainGameScene: SKScene {
         }
     }
     
+    //***BACKGROUND-MAGIC*********************************************************************
+    //****************************************************************************************
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Tap to start new game
@@ -446,7 +503,7 @@ class MainGameScene: SKScene {
 
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
-                self.loadPocker()
+                self.loadPaintingValueLabels()
                 self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             }
@@ -492,7 +549,7 @@ class MainGameScene: SKScene {
                         humanTurn = false
                         return
                     } else {
-                        showInvalidRaise()
+                        showHintInvalidRaise()
                         print("Invalid raise")
                         return
                     }
@@ -505,7 +562,7 @@ class MainGameScene: SKScene {
                         humanTurn = false
                         return
                     } else {
-                        showInvalidRaise()
+                        showHintInvalidRaise()
                         print("Invalid raise")
                         return
                     }
@@ -519,12 +576,12 @@ class MainGameScene: SKScene {
                         humanTurn = false
                         return
                     } else {
-                        showInvalidRaise()
+                        showHintInvalidRaise()
                         print("Invalid raise")
                         return
                     }
                 } else {
-                    showInvalidRaise()
+                    showHintInvalidRaise()
                     print("Invalid raise")
                     return
                 }
@@ -540,7 +597,7 @@ class MainGameScene: SKScene {
                 game.fold(isHumanPlayer: true)
                 resetCoins(humanPlayerWin: false)
                 
-                GameData.shared.winner = game.checkIsThereAWiner()
+                game.setWinnerAccordingToCoins()
                 game.printPaintingValues()
                 endOneRound()
 
@@ -550,6 +607,7 @@ class MainGameScene: SKScene {
                 return
             }
         }
+        
         
         for touch in touches {
             let location = touch.location(in: self)
@@ -573,41 +631,7 @@ class MainGameScene: SKScene {
         }
     }
     
-    func showInvalidRaise() {
-        var isOpShow : Bool = false
-        if hintYourTurn.isHidden == false {
-            hintYourTurn.isHidden = true
-            isOpShow = true
-        }
-        
-        hintInvalidRaise.isHidden = false
-        let wait = SKAction.wait(forDuration:2)
-        let action = SKAction.run {
-            self.hintInvalidRaise.isHidden = true
-            if isOpShow {
-                self.showYourTurn()
-            }
-        }
-        run(SKAction.sequence([wait,action]))
-    }
-    
-    func showYourTurn() {
-        var isOpShow : Bool = false
-        if hintInvalidRaise.isHidden == false {
-            hintInvalidRaise.isHidden = true
-            isOpShow = true
-        }
-        
-        hintYourTurn.isHidden = false
-        let wait = SKAction.wait(forDuration:5)
-        let action = SKAction.run {
-            self.hintYourTurn.isHidden = true
-            if isOpShow {
-                self.showInvalidRaise()
-            }
-        }
-        run(SKAction.sequence([wait,action]))
-    }
+
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
@@ -675,7 +699,7 @@ class MainGameScene: SKScene {
             let wait2 = SKAction.wait(forDuration:3)
             let action2 = SKAction.run {
                 _ = self.checkGameState()
-                self.showYourTurn()
+                self.showHintYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))
             humanTurn = true

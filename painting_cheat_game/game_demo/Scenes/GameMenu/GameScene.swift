@@ -50,7 +50,7 @@ class GameScene: SKScene {
             
             //selected rules
             if (nodeArray.first?.name == "btn_rules") {
-                print("RULES selected")
+                print("selected RulesScene")
                 // Button animation
                 nodeArray.first?.run(moveNodeUp)
                 let wait = SKAction.wait(forDuration:0.25)

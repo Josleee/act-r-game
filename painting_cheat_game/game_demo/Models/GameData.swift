@@ -10,7 +10,22 @@ import Foundation
 
 class GameData {
     static let shared = GameData()
-    var winner = 0
+    /**
+     Human is the winer: return 1
+     AI is the winer: return -1
+     No winer: return 0
+     */
+    var winner = Winner.NoOne
     
     private init() { }
+}
+
+enum Winner: Int {
+    case HumanPlayer = 1
+    case AIPlayer = -1
+    case NoOne = 0
+    
+    init() {
+        self = .NoOne
+    }
 }
