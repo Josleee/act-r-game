@@ -470,7 +470,7 @@ class MainGameScene: SKScene {
 
     
     
-    func checkWinner() -> Bool {
+    func endGameAndGoToCongratsScene() -> Bool {
         let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
 
         if (GameData.shared.winner == .HumanPlayer) {
@@ -538,24 +538,28 @@ class MainGameScene: SKScene {
         if (game.getHumanCoins() == 0) {
             _ = self.checkGameState()
             humanTurn = false
-            //TODO: in this case the human looses the game and we go to the congratulation scene
+            //In this case the human looses the game and we go to the congratulation scene //TODO check if it works
+            GameData.shared.winner == .AIPlayer
+            endGameAndGoToCongratsScene()
             //TODO: We need to show a hint here, that the game ends because there are not enough coins
             return false
         }
         // When opponent doesn't has coins
         if (game.getAICoins() == 0) {
-            //TODO: in this case the AI looses the game and we go to the congratulation scene
+            //In this case the AI looses the game and we go to the congratulation scene //TODO check if it works
             //TODO: We need to show a hint here, that the game ends because there are not enough coins
             if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
                 game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                 _ = self.checkGameState()
                 humanTurn = false
-                return false
+//                return false
             } else {
                 showHintInvalidRaise()
                 print("Invalid raise")
-                return false
+//                return false
             }
+            GameData.shared.winner == .HumanPlayer
+            endGameAndGoToCongratsScene()
             
         }
         // When human player doesn't have enought coins
@@ -600,7 +604,7 @@ class MainGameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Tap to start new game
         if GameData.shared.newGame {
-            if checkWinner() {
+            if endGameAndGoToCongratsScene() {
                 return
             }
             
