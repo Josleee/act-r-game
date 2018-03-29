@@ -16,6 +16,7 @@ class GameData {
      No winer: return 0
      */
     var winner = Winner.NoOne
+    var newGame : Bool = false
     
     private init() { }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C459539206D2DE500D38305 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C459538206D2DE500D38305 /* Coin.swift */; };
 		7CA71FDB206A6CFA004AA05C /* RulesScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA71FDA206A6CFA004AA05C /* RulesScene.swift */; };
 		7CA71FE1206A6E7C004AA05C /* RulesScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7CA71FE0206A6E7C004AA05C /* RulesScene.sks */; };
 		850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850DFD7B205B56D700CFE8F9 /* BaseGame.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7C459538206D2DE500D38305 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		7CA71FDA206A6CFA004AA05C /* RulesScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesScene.swift; sourceTree = "<group>"; };
 		7CA71FE0206A6E7C004AA05C /* RulesScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RulesScene.sks; sourceTree = "<group>"; };
 		850DFD7B205B56D700CFE8F9 /* BaseGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGame.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			children = (
 				855A34E6205ABD8400360891 /* MainGameScene.sks */,
 				855A34E8205ABEA900360891 /* MainGameScene.swift */,
+				7C459538206D2DE500D38305 /* Coin.swift */,
 			);
 			path = MainGame;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */,
 				85E6BC38205DE883003D927C /* GameData.swift in Sources */,
 				855A34D7205AB47700360891 /* GameViewController.swift in Sources */,
+				7C459539206D2DE500D38305 /* Coin.swift in Sources */,
 				855A34CF205AB47600360891 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

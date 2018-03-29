@@ -12,6 +12,13 @@ enum RunTimeError: Error {
     case invalidAmount(Int)
 }
 
+//enum Turn: Bool {
+//    typealias RawValue = Bool
+//    case HumanPlayer = true
+//    case AIPlayer = false
+//}
+
+
 class BaseGame {
     
     private var humanCoinsAmount : Int!
@@ -20,11 +27,11 @@ class BaseGame {
     
     private var humanPaintingValue : Int = 0
     private var AIPaintingValue : Int = 0
+    //private var turn : Turn =
     
     init() {
         humanCoinsAmount = 20
         AICoinsAmount = 20
-        
     }
     
     func getCoinsInPot() -> Int {

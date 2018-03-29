@@ -35,7 +35,7 @@ class MainGameScene: SKScene {
     private var originalPosition : CGPoint!
     
     private var humanTurn : Bool = true
-    private var newGame : Bool = false
+//    private var newGame : Bool = false
    // private var gameWinner : Int!
     
     private var btnFold : SKSpriteNode!
@@ -49,7 +49,7 @@ class MainGameScene: SKScene {
     private var soundCoins : SKAction!
     private var soundCoins2 : SKAction!
 
-
+    var coinsParent : SKNode?
 
     private let moveNodeUp = SKAction.moveBy(x: 0, y: 10, duration: 0.2)
     private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
@@ -68,7 +68,7 @@ class MainGameScene: SKScene {
         game.newRandomGame()
 
         // Add background
-        createBackground()
+        createClouds()
         
         background = SKSpriteNode(imageNamed: "Background")
         background.size = CGSize(width: (self.scene!.size.width), height: (self.scene!.size.height))
@@ -140,9 +140,12 @@ class MainGameScene: SKScene {
             self.showHintYourTurn()
         }
         run(SKAction.sequence([wait,action]))
+        
+        
+        
     }
     
-    func createBackground() {
+    func createClouds() {
         for i in 0...2 {
             let backgroundCloudNoOneLocal = SKSpriteNode(imageNamed: "CloudNoOne")
             backgroundCloudNoOneLocal.name = "CloudNoOne"
@@ -191,14 +194,16 @@ class MainGameScene: SKScene {
         pictureHumanValueLabel.fontSize = 50
         pictureHumanValueLabel.position = CGPoint(x: -60, y: 70)
         pictureHumanValueLabel.text = String(game.getHumanPaintingValue())
+//TODO: get value from deck of cards/cards
         pictureHumanValueLabel.zPosition = 2
         pictureHumanValueLabel.isHidden = true
         self.addChild(pictureHumanValueLabel)
         
-        //get AI painting value
+        //get AI painting value, show it
         pictureAIValueLabel = SKLabelNode(fontNamed: "Chalkduster")
         pictureAIValueLabel.fontSize = 50
         pictureAIValueLabel.position = CGPoint(x: 60, y: 70)
+//TODO: get value from deck of cards/cards
         pictureAIValueLabel.text = String(game.getAIPaintingValue())
         pictureAIValueLabel.zPosition = 2
         self.addChild(pictureAIValueLabel)
@@ -223,10 +228,10 @@ class MainGameScene: SKScene {
             return
         }
         // Add coins
-        let lCoin = SKSpriteNode(imageNamed: "bc")
-        let l2Coin = SKSpriteNode(imageNamed: "bc")
-        let rCoin = SKSpriteNode(imageNamed: "bc")
-        let r2Coin = SKSpriteNode(imageNamed: "bc")
+        let lCoin = Coin(imageNamed: "bc")
+        let l2Coin = Coin(imageNamed: "bc")
+        let rCoin = Coin(imageNamed: "bc")
+        let r2Coin = Coin(imageNamed: "bc")
         // Set size
         lCoin.size = CGSize(width: (lCoin.size.width / 2), height: (lCoin.size.height / 2))
         l2Coin.size = CGSize(width: (l2Coin.size.width / 2), height: (l2Coin.size.height / 2))
@@ -237,6 +242,16 @@ class MainGameScene: SKScene {
         l2Coin.position = CGPoint(x: -self.scene!.size.width / 2 + 60, y: (lCoin.size.height * CGFloat(self.numberOfCoinsExist) / 4 - 30))
         rCoin.position = CGPoint(x: self.scene!.size.width / 2 - 35, y: (lCoin.size.height * CGFloat(self.numberOfCoinsExist) / 4 - 30))
         r2Coin.position = CGPoint(x: self.scene!.size.width / 2 - 60, y: (lCoin.size.height * CGFloat(self.numberOfCoinsExist) / 4 - 30))
+        
+        
+        //en-/disable coins
+        lCoin.isUserInteractionEnabled = false //all nonmoveable
+        l2Coin.isUserInteractionEnabled = false
+        rCoin.isUserInteractionEnabled = true
+        r2Coin.isUserInteractionEnabled = true
+        
+        coinsParent = lCoin.parent
+        
         // Name the coins
         lCoin.name = "coin_l1_" + String(numberOfCoinsExist/2)
         l2Coin.name = "coin_l2_" + String(numberOfCoinsExist/2)
@@ -249,6 +264,35 @@ class MainGameScene: SKScene {
         self.addChild(r2Coin)
         // Set size
         coinSize = lCoin.size
+        
+        coinsParent = lCoin.parent!
+     
+       
+    }
+    
+    //could be later used to find coins and then to disable all coins which have the ai as a owner
+    func updateAllCoinsInScene(parentNode: SKNode?){
+        //find all coins in scene AND update their moveability etc.
+        print(coinsParent!)
+        for child in (coinsParent!.children) {
+            if let coin = child as? Coin {
+                if let nodename = coin.name {
+                    if nodename.contains("coin"){
+                        print(coin.name!)
+                        coin.updateCoin(xposition: coin.position.x, yposition: coin.position.y)
+        
+                        //if its the human turn than he is allowed to choose his coins
+//                        if humanTurn && coin.isCoinMoveable() && !GameData.shared.newGame{
+//                            coin.isUserInteractionEnabled = false
+//                        }else{
+//                            coin.isUserInteractionEnabled = true
+//                        }
+                    }
+                }
+            }
+        }
+        
+        
     }
     
     //***GAME (coins, card, hint, ...) *********************************************************************
@@ -375,7 +419,7 @@ class MainGameScene: SKScene {
     }
     
     
-    func flipCard (node: SKNode){
+    func revealPicture (node: SKNode){
         node.run(SKAction.sequence(
             [SKAction.fadeOut(withDuration: 0.1),
              SKAction.scaleX(to: 0, duration: 0.35),
@@ -445,7 +489,7 @@ class MainGameScene: SKScene {
     }
     
     func endOneRound() {
-        flipCard(node: picture1)
+        revealPicture(node: picture1)
         pictureHumanValueLabel.isHidden = false
     }
     
@@ -479,20 +523,83 @@ class MainGameScene: SKScene {
             endOneRound()
 
             game.newRandomGame()
-            newGame = true
+            GameData.shared.newGame = true
             return true
         } else {
             return false
         }
     }
     
-    //***BACKGROUND-MAGIC*********************************************************************
+    //***THE GAME*********************************************************************
     //****************************************************************************************
     
+    func humanHasEnoughCoins(coinsToRaise: Int) -> Bool{
+        // When human doesn't has any coins
+        if (game.getHumanCoins() == 0) {
+            _ = self.checkGameState()
+            humanTurn = false
+            //TODO: in this case the human looses the game and we go to the congratulation scene
+            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+            return false
+        }
+        // When opponent doesn't has coins
+        if (game.getAICoins() == 0) {
+            //TODO: in this case the AI looses the game and we go to the congratulation scene
+            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+            if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
+                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                _ = self.checkGameState()
+                humanTurn = false
+                return false
+            } else {
+                showHintInvalidRaise()
+                print("Invalid raise")
+                return false
+            }
+            
+        }
+        // When human player doesn't have enought coins
+        if (game.getHumanCoins() < game.getLastRaise()) {
+            //TODO: in this case the human looses the game and we go to the congratulation scene
+            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+            if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
+                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                _ = self.checkGameState()
+                humanTurn = false
+                return false
+            } else {
+                showHintInvalidRaise()
+                print("Invalid raise")
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    func aiHasEnoughCoins(coinsToRaise: Int) -> Bool{
+    // When opponent doesn't has coins
+        if (game.getAICoins() == 0) {
+            //TODO: in this case the AI looses the game and we go to the congratulation scene
+            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+            if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
+                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+                _ = self.checkGameState()
+                humanTurn = false
+                return false
+            } else {
+                showHintInvalidRaise()
+                print("Invalid raise")
+                return false
+            }
+            
+        }
+        return true
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Tap to start new game
-        if newGame {
+        if GameData.shared.newGame {
             if checkWinner() {
                 return
             }
@@ -501,6 +608,7 @@ class MainGameScene: SKScene {
                 return
             }
 
+            //Move 1 coin from each player to table and load painting values
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
                 self.loadPaintingValueLabels()
@@ -508,13 +616,16 @@ class MainGameScene: SKScene {
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             }
             run(SKAction.sequence([wait,action]))
-            newGame = false
+            GameData.shared.newGame = false
             return
         }
 
+        //new game, get touch
         let touch = touches.first
         if let location = touch?.location(in: self) {
             let nodeArray = self.nodes(at: location)
+            
+            //Raise button pressed
             if (nodeArray.first?.name == "btn_raise" && humanTurn) {
                 // Button animation
                 nodeArray.first?.run(moveNodeUp)
@@ -524,6 +635,7 @@ class MainGameScene: SKScene {
                 }
                 run(SKAction.sequence([wait,action]))
 
+                //count buttons?
                 var coinsToRaise : Int = 0
                 for child in self.children {
                     if let spriteNode = child as? SKSpriteNode {
@@ -535,38 +647,12 @@ class MainGameScene: SKScene {
                         }
                     }
                 }
-                // When human doesn't has any coin
-                if (game.getHumanCoins() == 0) {
-                    _ = self.checkGameState()
-                    humanTurn = false
+                
+                //if eighter the human or the ai has not enough coins -> end of game
+                if !humanHasEnoughCoins(coinsToRaise: coinsToRaise) || !aiHasEnoughCoins(coinsToRaise: coinsToRaise){
                     return
                 }
-                // When opponent doesn't has coins
-                if (game.getAICoins() == 0) {
-                    if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
-                        game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        _ = self.checkGameState()
-                        humanTurn = false
-                        return
-                    } else {
-                        showHintInvalidRaise()
-                        print("Invalid raise")
-                        return
-                    }
-                }
-                // When human player doesn't have enought coins
-                if (game.getHumanCoins() < game.getLastRaise()) {
-                    if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
-                        game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        _ = self.checkGameState()
-                        humanTurn = false
-                        return
-                    } else {
-                        showHintInvalidRaise()
-                        print("Invalid raise")
-                        return
-                    }
-                }
+                
                 // Normal condition
                 if ((coinsToRaise - game.getCoinsInPot()) >= game.getLastRaise()) {
                     if ((((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) && game.getLastRaise() != 0) ||
@@ -585,7 +671,11 @@ class MainGameScene: SKScene {
                     print("Invalid raise")
                     return
                 }
+                
+            //fold button pressed
             } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
+//TODO: if human has 7 but folded then minus poins!
+//TODO: also have to check wheather or not it is possible to raise again(maybe thats already cleared by the begintouch method?
                 // Button animation
                 nodeArray.first?.run(scaleUpAlongY)
                 let wait = SKAction.wait(forDuration:0.25)
@@ -603,7 +693,7 @@ class MainGameScene: SKScene {
 
                 game.newRandomGame()
                 humanTurn = false
-                newGame = true
+                GameData.shared.newGame = true
                 return
             }
         }
@@ -611,11 +701,9 @@ class MainGameScene: SKScene {
         
         for touch in touches {
             let location = touch.location(in: self)
+
             
-            if (picture1.contains(location)) {
-                resetCoins(humanPlayerWin: true)
-            }
-            
+            //set touched coin as a moveable node
             for child in self.children {
                 if let spriteNode = child as? SKSpriteNode {
                     if (spriteNode.name?.range(of:"coin") != nil) {
@@ -654,6 +742,7 @@ class MainGameScene: SKScene {
         }
     }
     
+    //move moveable nodes
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (movableNode != nil) {
             for touch in touches {
@@ -675,6 +764,7 @@ class MainGameScene: SKScene {
     }
     
     
+    //runns all the time
     override func update(_ currentTime: TimeInterval) {
         // Move clouds
         moveClouds()
@@ -687,7 +777,14 @@ class MainGameScene: SKScene {
             }
         }
         
-        if (!humanTurn && !newGame) {
+        if coinsParent != nil{
+            updateAllCoinsInScene(parentNode: coinsParent)
+        }
+        
+        //Ai turn in running game: raise & hint
+        if (!humanTurn && !GameData.shared.newGame) {
+//TODO: Ai raises here
+            //Ai raises
             let wait = SKAction.wait(forDuration:2)
             let action = SKAction.run {
                 let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
@@ -696,6 +793,7 @@ class MainGameScene: SKScene {
             }
             run(SKAction.sequence([wait,action]))
             
+            //hint for player that its his turn
             let wait2 = SKAction.wait(forDuration:3)
             let action2 = SKAction.run {
                 _ = self.checkGameState()
