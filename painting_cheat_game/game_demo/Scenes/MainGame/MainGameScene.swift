@@ -26,8 +26,9 @@ class MainGameScene: SKScene {
     private var backgroundMontains : SKSpriteNode!
     private var backgroundPlayers : SKSpriteNode!
     
-    private var picture1 : SKSpriteNode!
-    private var picture2 : SKSpriteNode!
+    private var card1 : Card!
+    private var card2 : Card!
+    
     private var pictureHumanValueLabel : SKLabelNode!
     private var pictureAIValueLabel : SKLabelNode!
     
@@ -113,8 +114,8 @@ class MainGameScene: SKScene {
         self.addChild(btnRaise)
         
         // Load paintings
-        loadPaintings()
-        loadPaintingValueLabels()
+        loadCards()
+        loadCardValues()
         
         // Load hints
         hintYourTurn = SKSpriteNode(imageNamed: "YourTurn")
@@ -181,7 +182,8 @@ class MainGameScene: SKScene {
     }
     
     
-    func loadPaintingValueLabels() {
+    //Loads the pictures (now the labels still resemble the pictures)
+    func loadCardValues() {
         if pictureHumanValueLabel != nil {
             pictureHumanValueLabel.removeFromParent()
         }
@@ -204,20 +206,23 @@ class MainGameScene: SKScene {
         pictureAIValueLabel.fontSize = 50
         pictureAIValueLabel.position = CGPoint(x: 60, y: 70)
 //TODO: get value from deck of cards/cards
-        pictureAIValueLabel.text = String(game.getAIPaintingValue())
+        pictureAIValueLabel.text = String(card2.getCardValue())// game.getAIPaintingValue())
         pictureAIValueLabel.zPosition = 2
         self.addChild(pictureAIValueLabel)
     }
     
-    func loadPaintings() {
-        picture1 = SKSpriteNode(imageNamed: "pic1")
-        picture2 = SKSpriteNode(imageNamed: "pic2")
-        picture1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
-        picture2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
-        picture1.position = CGPoint(x: -60, y: 70)
-        picture2.position = CGPoint(x: 60, y: 70)
-        self.addChild(picture1)
-        self.addChild(picture2)
+    func loadCards() {
+        card1 = Card(imageNamed: "pic1")
+        card2 = Card(imageNamed: "pic1")
+        //picture1 = SKSpriteNode(imageNamed: "pic1")
+//        picture2 = SKSpriteNode(imageNamed: "pic2")
+        card1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        card2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        card1.position = CGPoint(x: -60, y: 70)
+        card2.position = CGPoint(x: 60, y: 70)
+        card2.texture = SKTexture(imageNamed: card2.getCardName()) //Show the opponents card
+        self.addChild(card1)
+        self.addChild(card2)
     }
     
     @objc func addCoins() {
@@ -418,13 +423,13 @@ class MainGameScene: SKScene {
         }
     }
     
-    
-    func revealPicture (node: SKNode){
+    //Show the cards real picture
+    func revealCard (node: Card){
         node.run(SKAction.sequence(
             [SKAction.fadeOut(withDuration: 0.1),
              SKAction.scaleX(to: 0, duration: 0.35),
              SKAction.scale(to: 1, duration: 0.0),
-             SKAction.setTexture(SKTexture(imageNamed: "pic3")),
+             SKAction.setTexture(SKTexture(imageNamed: node.getCardName())),
              SKAction.fadeIn(withDuration: 0.1),
              ]
         ))
@@ -488,15 +493,15 @@ class MainGameScene: SKScene {
         }
     }
     
-    func endOneRound() {
-        revealPicture(node: picture1)
+    func revealCardsAndEndOneRound() {
+        revealCard(node: card1)
         pictureHumanValueLabel.isHidden = false
     }
     
     func checkGameState(showPocker : Bool = false) -> Bool {
         if (game.isFinished()) {
             //let winner : Int = game.endGame()
-            game.endGameAndSetWinner()
+            game.evaluateCardsAndSetWinner(cardHuman: card1, cardAI: card2)
             
             if (GameData.shared.winner == .HumanPlayer) {
                 resetCoins(humanPlayerWin: true)
@@ -509,18 +514,18 @@ class MainGameScene: SKScene {
             game.printPaintingValues()
             
             if showPocker {
-                self.loadPaintingValueLabels()
+                self.loadCardValues()
                 if (game.getHumanCoins() > 0 && game.getAICoins() > 0) {
                     let wait = SKAction.wait(forDuration:1)
                     let action = SKAction.run {
-                        self.loadPaintingValueLabels()
+                        self.loadCardValues()
                         self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                         self.moveCoins(numberOfCoins: 1, humanPlayer: false)
                     }
                     run(SKAction.sequence([wait,action]))
                 }
             }
-            endOneRound()
+            revealCardsAndEndOneRound()
 
             game.newRandomGame()
             GameData.shared.newGame = true
@@ -539,7 +544,7 @@ class MainGameScene: SKScene {
             _ = self.checkGameState()
             humanTurn = false
             //In this case the human looses the game and we go to the congratulation scene //TODO check if it works
-            GameData.shared.winner == .AIPlayer
+            GameData.shared.winner = .AIPlayer
             endGameAndGoToCongratsScene()
             //TODO: We need to show a hint here, that the game ends because there are not enough coins
             return false
@@ -547,6 +552,7 @@ class MainGameScene: SKScene {
         // When opponent doesn't has coins
         if (game.getAICoins() == 0) {
             //In this case the AI looses the game and we go to the congratulation scene //TODO check if it works
+            GameData.shared.winner = .HumanPlayer
             //TODO: We need to show a hint here, that the game ends because there are not enough coins
             if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
                 game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
@@ -558,13 +564,13 @@ class MainGameScene: SKScene {
                 print("Invalid raise")
 //                return false
             }
-            GameData.shared.winner == .HumanPlayer
             endGameAndGoToCongratsScene()
             
         }
         // When human player doesn't have enought coins
         if (game.getHumanCoins() < game.getLastRaise()) {
-            //TODO: in this case the human looses the game and we go to the congratulation scene
+            //In this case the human looses the game and we go to the congratulation scene
+            GameData.shared.winner =  .AIPlayer
             //TODO: We need to show a hint here, that the game ends because there are not enough coins
             if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
                 game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
@@ -615,7 +621,7 @@ class MainGameScene: SKScene {
             //Move 1 coin from each player to table and load painting values
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
-                self.loadPaintingValueLabels()
+                self.loadCardValues()
                 self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             }
@@ -693,7 +699,7 @@ class MainGameScene: SKScene {
                 
                 game.setWinnerAccordingToCoins()
                 game.printPaintingValues()
-                endOneRound()
+                revealCardsAndEndOneRound()
 
                 game.newRandomGame()
                 humanTurn = false

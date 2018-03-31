@@ -96,7 +96,10 @@ class BaseGame {
      AI wins: return -1
      End in draw: return 0
      */
-    func endGameAndSetWinner(){
+    func evaluateCardsAndSetWinner(cardHuman: Card, cardAI: Card){
+        humanPaintingValue = cardHuman.getCardValue()
+        AIPaintingValue = cardAI.getCardValue()
+        
         print("Coins in pot: " + String(coinsAmountInPot))
         if (humanPaintingValue > AIPaintingValue) {
             humanCoinsAmount! += coinsAmountInPot
