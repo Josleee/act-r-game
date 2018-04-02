@@ -96,7 +96,7 @@ class CongratsScene: SKScene {
     
     
     func playPartyPoppers(xCenter : Int) {
-        for _ in 1...1 {
+        for _ in 1...3 {
             // Load colorful pieces
             for i in 1...11 {
                 let cp = SKSpriteNode(imageNamed: "ppb" + String(i))

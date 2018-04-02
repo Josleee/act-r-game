@@ -14,8 +14,8 @@ class GameScene: SKScene {
     private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
     
     override func didMove(to view: SKView) {
-        // print(self.frame.size.width)
-        // print(self.frame.size.height)
+        self.backgroundColor = UIColor.black
+        
         let myLabel = SKLabelNode(fontNamed: "Chalkduster")
         myLabel.text = "Welcome to Painting Bluff @~@"
         myLabel.fontSize = 28
