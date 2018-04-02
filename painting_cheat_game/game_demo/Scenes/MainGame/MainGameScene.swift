@@ -284,7 +284,7 @@ class MainGameScene: SKScene {
                 if let nodename = coin.name {
                     if nodename.contains("coin"){
                         print(coin.name!)
-                        coin.updateCoin(xposition: coin.position.x, yposition: coin.position.y)
+                        _ = coin.updateCoin(xposition: coin.position.x, yposition: coin.position.y)
         
                         //if its the human turn than he is allowed to choose his coins
 //                        if humanTurn && coin.isCoinMoveable() && !GameData.shared.newGame{
@@ -545,7 +545,7 @@ class MainGameScene: SKScene {
             humanTurn = false
             //In this case the human looses the game and we go to the congratulation scene //TODO check if it works
             GameData.shared.winner = .AIPlayer
-            endGameAndGoToCongratsScene()
+            _ = endGameAndGoToCongratsScene()
             //TODO: We need to show a hint here, that the game ends because there are not enough coins
             return false
         }
@@ -564,7 +564,7 @@ class MainGameScene: SKScene {
                 print("Invalid raise")
 //                return false
             }
-            endGameAndGoToCongratsScene()
+            _ = endGameAndGoToCongratsScene()
             
         }
         // When human player doesn't have enought coins

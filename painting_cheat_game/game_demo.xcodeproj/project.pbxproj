@@ -39,7 +39,7 @@
 		85199508205C5594003FEB0C /* bgmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgmusic.mp3; sourceTree = "<group>"; };
 		85199513205C5D54003FEB0C /* Coin2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Coin2.mp3; sourceTree = "<group>"; };
 		85199514205C5D54003FEB0C /* Coin1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Coin1.mp3; sourceTree = "<group>"; };
-		855A34CB205AB47600360891 /* game_demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = game_demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		855A34CB205AB47600360891 /* PaintingBluff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaintingBluff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		855A34CE205AB47600360891 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		855A34D0205AB47600360891 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		855A34D4205AB47700360891 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 		855A34CC205AB47600360891 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				855A34CB205AB47600360891 /* game_demo.app */,
+				855A34CB205AB47600360891 /* PaintingBluff.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -179,9 +179,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		855A34CA205AB47600360891 /* game_demo */ = {
+		855A34CA205AB47600360891 /* PaintingBluff */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 855A34E3205AB47700360891 /* Build configuration list for PBXNativeTarget "game_demo" */;
+			buildConfigurationList = 855A34E3205AB47700360891 /* Build configuration list for PBXNativeTarget "PaintingBluff" */;
 			buildPhases = (
 				855A34C7205AB47600360891 /* Sources */,
 				855A34C8205AB47600360891 /* Frameworks */,
@@ -191,9 +191,9 @@
 			);
 			dependencies = (
 			);
-			name = game_demo;
+			name = PaintingBluff;
 			productName = game_demo;
-			productReference = 855A34CB205AB47600360891 /* game_demo.app */;
+			productReference = 855A34CB205AB47600360891 /* PaintingBluff.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -203,7 +203,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Jed;
 				TargetAttributes = {
 					855A34CA205AB47600360891 = {
@@ -225,7 +225,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				855A34CA205AB47600360891 /* game_demo */,
+				855A34CA205AB47600360891 /* PaintingBluff */,
 			);
 		};
 /* End PBXProject section */
@@ -440,7 +440,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		855A34E3205AB47700360891 /* Build configuration list for PBXNativeTarget "game_demo" */ = {
+		855A34E3205AB47700360891 /* Build configuration list for PBXNativeTarget "PaintingBluff" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				855A34E4205AB47700360891 /* Debug */,

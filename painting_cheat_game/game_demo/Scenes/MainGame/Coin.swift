@@ -36,7 +36,6 @@ class Coin : SKSpriteNode {
 //        print(isMoveable)
 //    }
     
-    
     //update moveability, owner, access
     func updateCoin(xposition: CGFloat, yposition: CGFloat) -> Bool{
         self.xposition = xposition
