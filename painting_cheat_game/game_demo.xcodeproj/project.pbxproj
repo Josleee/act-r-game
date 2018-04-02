@@ -10,7 +10,7 @@
 		7C459539206D2DE500D38305 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C459538206D2DE500D38305 /* Coin.swift */; };
 		7CA71FDB206A6CFA004AA05C /* RulesScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA71FDA206A6CFA004AA05C /* RulesScene.swift */; };
 		850643672072CC0E00BCC55D /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850643662072CC0E00BCC55D /* ImageProcessor.swift */; };
-		850643692072D9AF00BCC55D /* Classifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 850643682072D9AF00BCC55D /* Classifier.mlmodel */; };
+		8506436F2072F0A600BCC55D /* Classifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 8506436E2072F0A600BCC55D /* Classifier.mlmodel */; };
 		850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850DFD7B205B56D700CFE8F9 /* BaseGame.swift */; };
 		85199506205C0554003FEB0C /* GameHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85199505205C0554003FEB0C /* GameHandler.swift */; };
 		8519950B205C5595003FEB0C /* bgmusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85199508205C5594003FEB0C /* bgmusic.mp3 */; };
@@ -36,7 +36,7 @@
 		7C459538206D2DE500D38305 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		7CA71FDA206A6CFA004AA05C /* RulesScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesScene.swift; sourceTree = "<group>"; };
 		850643662072CC0E00BCC55D /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
-		850643682072D9AF00BCC55D /* Classifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Classifier.mlmodel; sourceTree = "<group>"; };
+		8506436E2072F0A600BCC55D /* Classifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Classifier.mlmodel; sourceTree = "<group>"; };
 		850DFD7B205B56D700CFE8F9 /* BaseGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGame.swift; sourceTree = "<group>"; };
 		85199505205C0554003FEB0C /* GameHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHandler.swift; sourceTree = "<group>"; };
 		85199508205C5594003FEB0C /* bgmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgmusic.mp3; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 		8586DC132072C98D00BE2C08 /* Machine learning utilities */ = {
 			isa = PBXGroup;
 			children = (
-				850643682072D9AF00BCC55D /* Classifier.mlmodel */,
+				8506436E2072F0A600BCC55D /* Classifier.mlmodel */,
 				850643662072CC0E00BCC55D /* ImageProcessor.swift */,
 			);
 			path = "Machine learning utilities";
@@ -271,7 +271,7 @@
 			files = (
 				855A34D5205AB47700360891 /* GameScene.swift in Sources */,
 				7CA71FDB206A6CFA004AA05C /* RulesScene.swift in Sources */,
-				850643692072D9AF00BCC55D /* Classifier.mlmodel in Sources */,
+				8506436F2072F0A600BCC55D /* Classifier.mlmodel in Sources */,
 				855A34E9205ABEA900360891 /* MainGameScene.swift in Sources */,
 				85B14EF6205D8EF300E9B407 /* CongratsScene.swift in Sources */,
 				850643672072CC0E00BCC55D /* ImageProcessor.swift in Sources */,

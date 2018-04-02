@@ -12,7 +12,7 @@ struct ImageProcessor {
         
         let frameSize = CGSize(width: image.width, height: image.height)
         
-        var pixelBuffer:CVPixelBuffer? = nil
+        var pixelBuffer : CVPixelBuffer? = nil
         let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(frameSize.width), Int(frameSize.height), kCVPixelFormatType_32BGRA , nil, &pixelBuffer)
         
         if status != kCVReturnSuccess {
