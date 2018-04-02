@@ -10,8 +10,10 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene {
+    
     private let moveNodeUp = SKAction.moveBy(x: 0, y: 10, duration: 0.2)
     private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
+    private let model = Classifier()
     
     override func didMove(to view: SKView) {
         self.backgroundColor = UIColor.black
@@ -37,7 +39,22 @@ class GameScene: SKScene {
         self.addChild(ruleLabel)
     }
     
-
+    func convertUIImageToCGImage(uiImage:UIImage) -> CGImage {
+        var cgImage = uiImage.cgImage
+        
+        if cgImage == nil {
+            let ciImage = uiImage.ciImage
+            cgImage = self.convertCIImageToCGImage(ciImage: ciImage!)
+        }
+        return cgImage!
+    }
+    
+    func convertCIImageToCGImage(ciImage:CIImage) -> CGImage{
+        let ciContext = CIContext.init()
+        let cgImage:CGImage = ciContext.createCGImage(ciImage, from: ciImage.extent)!
+        return cgImage
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
         let rulesSceneTemp = RulesScene(fileNamed: "RulesScene")
@@ -52,7 +69,12 @@ class GameScene: SKScene {
                 self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
 
             } else if (nodeArray.first?.name == "rule") {
-                self.scene?.view?.presentScene(rulesSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
+                let testImage = UIImage(named: "pic")
+                if let pixelBuffer = ImageProcessor.pixelBuffer(forImage: convertUIImageToCGImage(uiImage: testImage!)) {
+                    guard let scene = try? model.prediction(input__0: pixelBuffer) else {fatalError("Unexpected runtime error")}
+                    print(scene.classLabel)
+                }
+//                self.scene?.view?.presentScene(rulesSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
             }
         }
     }
