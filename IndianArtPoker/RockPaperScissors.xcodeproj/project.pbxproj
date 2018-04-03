@@ -70,10 +70,10 @@
 		A11061E02044A31A00590850 /* Temporal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Temporal.swift; sourceTree = "<group>"; };
 		A11061E12044A31A00590850 /* Production.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Production.swift; sourceTree = "<group>"; };
 		A11061F02044A34A00590850 /* rps.actr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rps.actr; sourceTree = "<group>"; };
-		A160B582204EF71500FB9810 /* RockPaperScissors.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RockPaperScissors.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A160B582204EF71500FB9810 /* RockPaperScissors.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = RockPaperScissors.app; path = "/Users/liyikun/Documents/_Graduate University/Y2B1/Cognitive Modelling - Complex Behaviour (KIM.CMC11.2017-2018.2A)/Project/act-r-game/IndianArtPoker/build/Debug-iphoneos/RockPaperScissors.app"; sourceTree = "<absolute>"; };
 		A1D6DF9920506C3700825EAB /* DMViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DMViewController.swift; sourceTree = "<group>"; };
-		A1FDDFA82059AF3C00E5EC74 /* RockPaperScissorsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RockPaperScissorsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1FDDFA92059AF3C00E5EC74 /* RockPaperScissorsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RockPaperScissorsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1FDDFA82059AF3C00E5EC74 /* RockPaperScissorsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RockPaperScissorsTests.xctest; path = "/Users/liyikun/Documents/_Graduate University/Y2B1/Cognitive Modelling - Complex Behaviour (KIM.CMC11.2017-2018.2A)/Project/act-r-game/IndianArtPoker/build/Debug-iphoneos/RockPaperScissorsTests.xctest"; sourceTree = "<absolute>"; };
+		A1FDDFA92059AF3C00E5EC74 /* RockPaperScissorsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = RockPaperScissorsUITests.xctest; path = "/Users/liyikun/Documents/_Graduate University/Y2B1/Cognitive Modelling - Complex Behaviour (KIM.CMC11.2017-2018.2A)/Project/act-r-game/IndianArtPoker/build/Debug-iphoneos/RockPaperScissorsUITests.xctest"; sourceTree = "<absolute>"; };
 		EB066C82204009B80093D62F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EB066C84204009B80093D62F /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		EB066C86204009B80093D62F /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -118,9 +118,6 @@
 			isa = PBXGroup;
 			children = (
 				EB066C81204009B80093D62F /* RockPaperScissors */,
-				A160B582204EF71500FB9810 /* RockPaperScissors.app */,
-				A1FDDFA82059AF3C00E5EC74 /* RockPaperScissorsTests.xctest */,
-				A1FDDFA92059AF3C00E5EC74 /* RockPaperScissorsUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};

@@ -15,7 +15,7 @@ class GameScene: SKScene {
     
     private let moveNodeUp = SKAction.moveBy(x: 0, y: 10, duration: 0.2)
     private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
-    private let model = Classifier()
+    private let machineLearningClassifier = Classifier()
     
     override func didMove(to view: SKView) {
         self.backgroundColor = UIColor.black
@@ -61,10 +61,13 @@ class GameScene: SKScene {
             let nodeArray = self.nodes(at: location)
             
             if (nodeArray.first?.name == "start") {
-                self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
+                var poker = Model()
+                poker.loadModel(fileName: "test")
+                poker.run()
+//                self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.flipVertical(withDuration: 1))
 
             } else if (nodeArray.first?.name == "rule") {
-                let testImage = UIImage(named: "s6")
+                let testImage = UIImage(named: "S1P (1)")
 
                 DispatchQueue.global(qos: .userInitiated).async {
                     // Resnet50 expects an image 224 x 224, so we should resize and crop the source image
@@ -76,7 +79,7 @@ class GameScene: SKScene {
                     guard let pixelBuffer = cropedToSquareImage?.pixelBuffer() else {
                         fatalError()
                     }
-                    guard let classifierOutput = try? self.model.prediction(input__0: pixelBuffer) else {
+                    guard let classifierOutput = try? self.machineLearningClassifier.prediction(input__0: pixelBuffer) else {
                         fatalError()
                     }
 

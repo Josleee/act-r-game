@@ -16,6 +16,23 @@
 		8519950B205C5595003FEB0C /* bgmusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85199508205C5594003FEB0C /* bgmusic.mp3 */; };
 		85199515205C5D55003FEB0C /* Coin2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85199513205C5D54003FEB0C /* Coin2.mp3 */; };
 		85199516205C5D55003FEB0C /* Coin1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85199514205C5D54003FEB0C /* Coin1.mp3 */; };
+		854AFE542073CDF5002403E3 /* SlotAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E12073CB1C00310C65 /* SlotAction.swift */; };
+		854AFE552073CDF5002403E3 /* BufferCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E22073CB1C00310C65 /* BufferCondition.swift */; };
+		854AFE562073CDF5002403E3 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E32073CB1C00310C65 /* Model.swift */; };
+		854AFE572073CDF5002403E3 /* Procedural.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E42073CB1C00310C65 /* Procedural.swift */; };
+		854AFE582073CDF5002403E3 /* Instantiation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E52073CB1C00310C65 /* Instantiation.swift */; };
+		854AFE592073CDF5002403E3 /* Temporal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E62073CB1C00310C65 /* Temporal.swift */; };
+		854AFE5A2073CDF5002403E3 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E72073CB1C00310C65 /* Tokenizer.swift */; };
+		854AFE5B2073CDF5002403E3 /* SlotCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E82073CB1C00310C65 /* SlotCondition.swift */; };
+		854AFE5C2073CDF5002403E3 /* BufferAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0E92073CB1C00310C65 /* BufferAction.swift */; };
+		854AFE5D2073CDF5002403E3 /* Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0EA2073CB1C00310C65 /* Support.swift */; };
+		854AFE5E2073CDF5002403E3 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0EB2073CB1C00310C65 /* Parser.swift */; };
+		854AFE5F2073CDF5002403E3 /* Declarative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0EC2073CB1C00310C65 /* Declarative.swift */; };
+		854AFE602073CDF5002403E3 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0ED2073CB1C00310C65 /* Chunk.swift */; };
+		854AFE612073CDF5002403E3 /* Production.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8571B0EE2073CB1C00310C65 /* Production.swift */; };
+		854AFE652073CFAF002403E3 /* test.actr in Resources */ = {isa = PBXBuildFile; fileRef = 854AFE622073CFAD002403E3 /* test.actr */; };
+		854AFE662073CFAF002403E3 /* rps.actr in Resources */ = {isa = PBXBuildFile; fileRef = 854AFE632073CFAE002403E3 /* rps.actr */; };
+		854AFE672073CFAF002403E3 /* indianArtPoker.actr in Resources */ = {isa = PBXBuildFile; fileRef = 854AFE642073CFAE002403E3 /* indianArtPoker.actr */; };
 		855A34CF205AB47600360891 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855A34CE205AB47600360891 /* AppDelegate.swift */; };
 		855A34D1205AB47600360891 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 855A34D0205AB47600360891 /* GameScene.sks */; };
 		855A34D5205AB47700360891 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855A34D4205AB47700360891 /* GameScene.swift */; };
@@ -42,6 +59,9 @@
 		85199508205C5594003FEB0C /* bgmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgmusic.mp3; sourceTree = "<group>"; };
 		85199513205C5D54003FEB0C /* Coin2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Coin2.mp3; sourceTree = "<group>"; };
 		85199514205C5D54003FEB0C /* Coin1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Coin1.mp3; sourceTree = "<group>"; };
+		854AFE622073CFAD002403E3 /* test.actr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.actr; sourceTree = "<group>"; };
+		854AFE632073CFAE002403E3 /* rps.actr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rps.actr; sourceTree = "<group>"; };
+		854AFE642073CFAE002403E3 /* indianArtPoker.actr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = indianArtPoker.actr; sourceTree = "<group>"; };
 		855A34CB205AB47600360891 /* PaintingBluff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaintingBluff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		855A34CE205AB47600360891 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		855A34D0205AB47600360891 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -53,6 +73,20 @@
 		855A34E0205AB47700360891 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		855A34E6205ABD8400360891 /* MainGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainGameScene.sks; sourceTree = "<group>"; };
 		855A34E8205ABEA900360891 /* MainGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGameScene.swift; sourceTree = "<group>"; };
+		8571B0E12073CB1C00310C65 /* SlotAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotAction.swift; sourceTree = "<group>"; };
+		8571B0E22073CB1C00310C65 /* BufferCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferCondition.swift; sourceTree = "<group>"; };
+		8571B0E32073CB1C00310C65 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		8571B0E42073CB1C00310C65 /* Procedural.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Procedural.swift; sourceTree = "<group>"; };
+		8571B0E52073CB1C00310C65 /* Instantiation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Instantiation.swift; sourceTree = "<group>"; };
+		8571B0E62073CB1C00310C65 /* Temporal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temporal.swift; sourceTree = "<group>"; };
+		8571B0E72073CB1C00310C65 /* Tokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
+		8571B0E82073CB1C00310C65 /* SlotCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotCondition.swift; sourceTree = "<group>"; };
+		8571B0E92073CB1C00310C65 /* BufferAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferAction.swift; sourceTree = "<group>"; };
+		8571B0EA2073CB1C00310C65 /* Support.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
+		8571B0EB2073CB1C00310C65 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		8571B0EC2073CB1C00310C65 /* Declarative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Declarative.swift; sourceTree = "<group>"; };
+		8571B0ED2073CB1C00310C65 /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
+		8571B0EE2073CB1C00310C65 /* Production.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Production.swift; sourceTree = "<group>"; };
 		8586DC0F207265FC00BE2C08 /* RulesScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RulesScene.sks; sourceTree = "<group>"; };
 		85B14EF3205D8EDE00E9B407 /* CongratsScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CongratsScene.sks; sourceTree = "<group>"; };
 		85B14EF5205D8EF300E9B407 /* CongratsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CongratsScene.swift; sourceTree = "<group>"; };
@@ -138,6 +172,17 @@
 			path = SoundEffect;
 			sourceTree = "<group>";
 		};
+		854AFE682073CFB5002403E3 /* ACT-R Models */ = {
+			isa = PBXGroup;
+			children = (
+				854AFE642073CFAE002403E3 /* indianArtPoker.actr */,
+				854AFE632073CFAE002403E3 /* rps.actr */,
+				854AFE622073CFAD002403E3 /* test.actr */,
+			);
+			name = "ACT-R Models";
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		855A34C2205AB47600360891 = {
 			isa = PBXGroup;
 			children = (
@@ -166,10 +211,33 @@
 				855A34DB205AB47700360891 /* Assets.xcassets */,
 				855A34E0205AB47700360891 /* Info.plist */,
 				855A34D6205AB47700360891 /* GameViewController.swift */,
+				854AFE682073CFB5002403E3 /* ACT-R Models */,
+				8571B0E02073CB1C00310C65 /* Core ACT-R */,
 				850DFD7A205B567800CFE8F9 /* Models */,
 				850DFD79205B55AF00CFE8F9 /* Scenes */,
 			);
 			path = game_demo;
+			sourceTree = "<group>";
+		};
+		8571B0E02073CB1C00310C65 /* Core ACT-R */ = {
+			isa = PBXGroup;
+			children = (
+				8571B0E12073CB1C00310C65 /* SlotAction.swift */,
+				8571B0E22073CB1C00310C65 /* BufferCondition.swift */,
+				8571B0E32073CB1C00310C65 /* Model.swift */,
+				8571B0E42073CB1C00310C65 /* Procedural.swift */,
+				8571B0E52073CB1C00310C65 /* Instantiation.swift */,
+				8571B0E62073CB1C00310C65 /* Temporal.swift */,
+				8571B0E72073CB1C00310C65 /* Tokenizer.swift */,
+				8571B0E82073CB1C00310C65 /* SlotCondition.swift */,
+				8571B0E92073CB1C00310C65 /* BufferAction.swift */,
+				8571B0EA2073CB1C00310C65 /* Support.swift */,
+				8571B0EB2073CB1C00310C65 /* Parser.swift */,
+				8571B0EC2073CB1C00310C65 /* Declarative.swift */,
+				8571B0ED2073CB1C00310C65 /* Chunk.swift */,
+				8571B0EE2073CB1C00310C65 /* Production.swift */,
+			);
+			path = "Core ACT-R";
 			sourceTree = "<group>";
 		};
 		8586DC132072C98D00BE2C08 /* Machine learning utilities */ = {
@@ -250,12 +318,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				8519950B205C5595003FEB0C /* bgmusic.mp3 in Resources */,
+				854AFE662073CFAF002403E3 /* rps.actr in Resources */,
 				85199515205C5D55003FEB0C /* Coin2.mp3 in Resources */,
 				8586DC10207265FC00BE2C08 /* RulesScene.sks in Resources */,
+				854AFE672073CFAF002403E3 /* indianArtPoker.actr in Resources */,
 				855A34DA205AB47700360891 /* Main.storyboard in Resources */,
 				855A34E7205ABD8400360891 /* MainGameScene.sks in Resources */,
 				85B14EF4205D8EDE00E9B407 /* CongratsScene.sks in Resources */,
 				855A34D1205AB47600360891 /* GameScene.sks in Resources */,
+				854AFE652073CFAF002403E3 /* test.actr in Resources */,
 				855A34DC205AB47700360891 /* Assets.xcassets in Resources */,
 				85199516205C5D55003FEB0C /* Coin1.mp3 in Resources */,
 				855A34DF205AB47700360891 /* LaunchScreen.storyboard in Resources */,
@@ -269,18 +340,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				854AFE5F2073CDF5002403E3 /* Declarative.swift in Sources */,
 				855A34D5205AB47700360891 /* GameScene.swift in Sources */,
+				854AFE5A2073CDF5002403E3 /* Tokenizer.swift in Sources */,
+				854AFE582073CDF5002403E3 /* Instantiation.swift in Sources */,
+				854AFE572073CDF5002403E3 /* Procedural.swift in Sources */,
+				854AFE612073CDF5002403E3 /* Production.swift in Sources */,
+				854AFE592073CDF5002403E3 /* Temporal.swift in Sources */,
+				854AFE542073CDF5002403E3 /* SlotAction.swift in Sources */,
 				7CA71FDB206A6CFA004AA05C /* RulesScene.swift in Sources */,
 				8506436F2072F0A600BCC55D /* Classifier.mlmodel in Sources */,
 				855A34E9205ABEA900360891 /* MainGameScene.swift in Sources */,
+				854AFE5D2073CDF5002403E3 /* Support.swift in Sources */,
+				854AFE5C2073CDF5002403E3 /* BufferAction.swift in Sources */,
+				854AFE552073CDF5002403E3 /* BufferCondition.swift in Sources */,
 				85B14EF6205D8EF300E9B407 /* CongratsScene.swift in Sources */,
+				854AFE562073CDF5002403E3 /* Model.swift in Sources */,
 				850643672072CC0E00BCC55D /* ImageProcessor.swift in Sources */,
 				85199506205C0554003FEB0C /* GameHandler.swift in Sources */,
 				850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */,
 				85E6BC38205DE883003D927C /* GameData.swift in Sources */,
 				855A34D7205AB47700360891 /* GameViewController.swift in Sources */,
 				7C459539206D2DE500D38305 /* Coin.swift in Sources */,
+				854AFE5E2073CDF5002403E3 /* Parser.swift in Sources */,
 				855A34CF205AB47600360891 /* AppDelegate.swift in Sources */,
+				854AFE602073CDF5002403E3 /* Chunk.swift in Sources */,
+				854AFE5B2073CDF5002403E3 /* SlotCondition.swift in Sources */,
 				9533F4C9206BBAB400BE940E /* Card.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
