@@ -424,7 +424,7 @@ class MainGameScene: SKScene {
             }
             endOneRound()
             
-            game.newRandomGame()
+            game.newRandomGame(winner: winner)
             newGame = true
             return true
         } else {
@@ -544,7 +544,7 @@ class MainGameScene: SKScene {
                 game.printPaintingValues()
                 endOneRound()
                 
-                game.newRandomGame()
+                game.newRandomGame(winner: Winner.AIPlayer)
                 game.setFirstPlayerAI(isAI: true)
                 
                 humanTurn = false
@@ -678,7 +678,7 @@ class MainGameScene: SKScene {
                     GameData.shared.winner = self.game.setWinnerAccordingToCoins()
                     self.game.printPaintingValues()
                     self.endOneRound()
-                    self.game.newRandomGame()
+                    self.game.newRandomGame(winner: Winner.HumanPlayer)
                     self.game.setFirstPlayerAI(isAI: false)
                     
                     self.humanTurn = true

@@ -25,6 +25,7 @@ enum Winner: Int {
     case HumanPlayer = 1
     case AIPlayer = -1
     case NoOne = 0
+    case Nil = -2
     
     init() {
         self = .NoOne

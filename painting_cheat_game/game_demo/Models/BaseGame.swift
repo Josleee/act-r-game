@@ -50,11 +50,25 @@ class BaseGame {
         return coinsAmountInPot
     }
     
-    func setPainting(humanPainting : Int, AIPainintg : Int, HPName : String, AIPName : String) {
+    func setPainting(humanPainting : Int, AIPainintg : Int, HPName : String, AIPName : String, wn : Winner) {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
         humanPaintingName = HPName
         AIPaintingName = AIPName
+        
+        if wn != Winner.Nil {
+            print("Conclude a round.")
+            if wn == Winner.AIPlayer {
+                poker.modifyLastAction(slot: "results", value: "win")
+                poker.run()
+            } else if wn == Winner.HumanPlayer {
+                poker.modifyLastAction(slot: "results", value: "loss")
+                poker.run()
+            } else {
+                poker.modifyLastAction(slot: "results", value: "draw")
+                poker.run()
+            }
+        }
         
         if (humanCoinsAmount >= 1 && AICoinsAmount >= 1) {
             humanCoinsAmount! -= 1

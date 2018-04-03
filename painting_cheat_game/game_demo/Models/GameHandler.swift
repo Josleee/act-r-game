@@ -20,17 +20,17 @@ class GameHandler: BaseGame {
         return "S" + String(value) + "P (" + String(arc4random_uniform(10) + 1) + ")"
     }
     
-    func newRandomGame() {
+    func newRandomGame(winner : Winner = Winner.Nil) {
         let humanPaintingName : String = randomlyGetPaintingName()
         let AIPaintingName : String = randomlyGetPaintingName()
-        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1), HPName: humanPaintingName, AIPName: AIPaintingName)
+        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1), HPName: humanPaintingName, AIPName: AIPaintingName, wn: winner)
         lastRaise = 0
         raiseCount = 0
     
     }
     
     func newGame(humanPainting: Int, AIPainintg: Int) {
-        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg, HPName: "", AIPName: "")
+        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg, HPName: "", AIPName: "", wn: Winner.Nil)
         lastRaise = 0
         raiseCount = 0
     }
