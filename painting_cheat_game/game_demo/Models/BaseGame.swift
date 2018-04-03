@@ -105,7 +105,7 @@ class BaseGame {
             poker.modifyLastAction(slot: "hcat", value: "mid")
         }
         
-        print("---poker.modifyLastAction(slot: "hvalue", value: " + String(evaluatedValue) + ")")
+        print("---poker.modifyLastAction(slot: \"hvalue\", value: " + String(evaluatedValue) + ")")
         poker.modifyLastAction(slot: "hvalue", value: String(evaluatedValue))
         
         print(poker.lastAction(slot: "round")!)
