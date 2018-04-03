@@ -58,6 +58,7 @@ class MainGameScene: SKScene {
         // Initialize game
         game = GameHandler()
         game.newRandomGame()
+        game.setFirstPlayerAI(isAI: false)
         
         // Add background
         createBackground()
@@ -396,7 +397,7 @@ class MainGameScene: SKScene {
         pictureHumanValueLabel.isHidden = false
     }
     
-    func checkGameState(showPocker : Bool = false) -> Bool {
+    func checkGameState(nextIsAITurn : Bool, showPocker : Bool = false) -> Bool {
         if (game.isFinished()) {
             let winner : Winner = game.evaluateCardsAndSetWinner()
             if (winner == Winner.HumanPlayer) {
@@ -438,8 +439,8 @@ class MainGameScene: SKScene {
             if checkWinner() {
                 return
             }
-            
-            if checkGameState(showPocker: true) {
+
+            if checkGameState(nextIsAITurn: true, showPocker: true) {
                 return
             }
             
@@ -479,7 +480,7 @@ class MainGameScene: SKScene {
                 }
                 // When human doesn't has any coin
                 if (game.getHumanCoins() == 0) {
-                    _ = self.checkGameState()
+                    _ = self.checkGameState(nextIsAITurn: true)
                     humanTurn = false
                     return
                 }
@@ -487,7 +488,7 @@ class MainGameScene: SKScene {
                 if (game.getAICoins() == 0) {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        _ = self.checkGameState()
+                        _ = self.checkGameState(nextIsAITurn: true)
                         humanTurn = false
                         return
                     } else {
@@ -500,7 +501,7 @@ class MainGameScene: SKScene {
                 if (game.getHumanCoins() < game.getLastRaise()) {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        _ = self.checkGameState()
+                        _ = self.checkGameState(nextIsAITurn: true)
                         humanTurn = false
                         return
                     } else {
@@ -514,7 +515,7 @@ class MainGameScene: SKScene {
                     if ((((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) && game.getLastRaise() != 0) ||
                         game.listRaiseAmount.contains(coinsToRaise - game.getCoinsInPot())) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-                        _ = self.checkGameState()
+                        _ = self.checkGameState(nextIsAITurn: true)
                         humanTurn = false
                         return
                     } else {
@@ -544,6 +545,8 @@ class MainGameScene: SKScene {
                 endOneRound()
                 
                 game.newRandomGame()
+                game.setFirstPlayerAI(isAI: true)
+                
                 humanTurn = false
                 newGame = true
                 return
@@ -665,7 +668,7 @@ class MainGameScene: SKScene {
         if (!humanTurn && !newGame) {
             let wait = SKAction.wait(forDuration:2)
             let action = SKAction.run {
-                let AIRaiseAmount : Int = self.game.AIrandomlyRaise()
+                let AIRaiseAmount : Int = self.game.ACTRRaise()
                 print("AI raised coins: ", String(AIRaiseAmount))
                 self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
             }
@@ -673,7 +676,7 @@ class MainGameScene: SKScene {
             
             let wait2 = SKAction.wait(forDuration:3)
             let action2 = SKAction.run {
-                _ = self.checkGameState()
+                _ = self.checkGameState(nextIsAITurn: false)
                 self.showHintYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))

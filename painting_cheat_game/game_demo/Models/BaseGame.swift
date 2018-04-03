@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import SpriteKit
+import CoreML
+
 
 enum RunTimeError: Error {
     case invalidAmount(Int)
@@ -26,10 +29,19 @@ class BaseGame {
     private var coinsAmountInPot : Int = 0
     
     private var humanPaintingValue : Int = 0
+    private var humanPaintingName : String!
+
     private var AIPaintingValue : Int = 0
-    //private var turn : Turn =
+    private var AIPaintingName : String!
     
+    public let poker = Model()
+    private var isFirstPlayAI : Bool = false
+    private let machineLearningClassifier = Classifier()
+
     init() {
+        poker.loadModel(fileName: "test")
+        poker.run()
+        
         humanCoinsAmount = 20
         AICoinsAmount = 20
     }
@@ -38,14 +50,76 @@ class BaseGame {
         return coinsAmountInPot
     }
     
-    func setPainting(humanPainting : Int, AIPainintg : Int) {
+    func setPainting(humanPainting : Int, AIPainintg : Int, HPName : String, AIPName : String) {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
+        humanPaintingName = HPName
+        AIPaintingName = AIPName
         
         if (humanCoinsAmount >= 1 && AICoinsAmount >= 1) {
             humanCoinsAmount! -= 1
             AICoinsAmount! -= 1
             coinsAmountInPot += 2
+        }
+        
+        print("Initialize ACTR model.")
+        if isFirstPlayAI {
+            print("Even")
+            poker.modifyLastAction(slot: "round", value: "even")
+        } else {
+            print("Uneven")
+            poker.modifyLastAction(slot: "round", value: "uneven")
+        }
+        
+        let evaluatedValue = evaluatePainting(name: HPName)
+        if evaluatedValue <= 2 {
+            print("Low")
+            poker.modifyLastAction(slot: "hcat", value: "low")
+        } else if evaluatedValue >= 6 {
+            print("High")
+            poker.modifyLastAction(slot: "hcat", value: "high")
+        } else {
+            print("Mid")
+            poker.modifyLastAction(slot: "hcat", value: "mid")
+        }
+        
+        print("Evalu: " + String(evaluatedValue))
+        poker.modifyLastAction(slot: "hvalue", value: String(evaluatedValue))
+        
+        print(poker.lastAction(slot: "round")!)
+    }
+    
+    func evaluatePainting(name : String) -> Int {
+        let testImage = UIImage(named: name)
+        
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            // Resnet50 expects an image 224 x 224, so we should resize and crop the source image
+//            let inputImageSize: CGFloat = 224.0
+//            let minLen = min((testImage?.size.width)!, (testImage?.size.height)!)
+//            let resizedImage = testImage?.resize(to: CGSize(width: inputImageSize * (testImage?.size.width)! / minLen, height: inputImageSize * (testImage?.size.height)! / minLen))
+//            let cropedToSquareImage = resizedImage?.cropToSquare()
+//
+//            guard let pixelBuffer = cropedToSquareImage?.pixelBuffer() else {
+//                fatalError()
+//            }
+//            guard let classifierOutput = try? self.machineLearningClassifier.prediction(input__0: pixelBuffer) else {
+//                fatalError()
+//            }
+//
+//            DispatchQueue.main.async {
+//                print(classifierOutput.classLabel)
+//            }
+//        }
+        
+        let sizedImage = ImageProcessor.resizeImage(image: testImage!, newLength: 224)
+        if let pixelBuffer = ImageProcessor.pixelBuffer(forImage: (sizedImage?.cgImage)!) {
+            guard let scene = try? machineLearningClassifier.prediction(input__0: pixelBuffer) else {fatalError("Unexpected runtime error")}
+            let value : String = scene.classLabel.substring(from: 1, to: 2)
+            print(scene.classLabel)
+            print(value)
+            return Int(value)!
+        } else {
+            return -1
         }
     }
     
@@ -63,6 +137,18 @@ class BaseGame {
     
     func getAIPaintingValue() -> Int {
         return AIPaintingValue
+    }
+    
+    func getHumanPaintingName() -> String {
+        return humanPaintingName
+    }
+    
+    func getAIPaintingName() -> String {
+        return AIPaintingName
+    }
+    
+    func setFirstPlayerAI(isAI : Bool) {
+        isFirstPlayAI = isAI
     }
     
     func raise(amountCoins : Int, isHumanPlayer : Bool) throws {
@@ -97,6 +183,7 @@ class BaseGame {
      End in draw: return 0
      */
     func evaluateCardsAndSetWinner() -> Winner {
+        
         print("Coins in pot: " + String(coinsAmountInPot))
         if (humanPaintingValue > AIPaintingValue) {
             humanCoinsAmount! += coinsAmountInPot

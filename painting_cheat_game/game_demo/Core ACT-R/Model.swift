@@ -87,7 +87,6 @@ class Model {
         //        println("\(modelText)")
         self.reset()
 
-        
         for (_,chunk) in dm.chunks {
             print("\(chunk)")
         }

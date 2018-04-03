@@ -45,7 +45,7 @@
 //    func getCardValue() -> Int {
 //        return cardValue
 //    }
-//    
+//
 //    //Returns the card name jpg string
 //    func getCardName() -> String {
 //        return cardName

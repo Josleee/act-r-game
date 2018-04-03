@@ -15,14 +15,22 @@ class GameHandler: BaseGame {
     
     private var lastRaise : Int = 0
     
+    private func randomlyGetPaintingName() -> String {
+        let value = Int(arc4random_uniform(7) + 1)
+        return "S" + String(value) + "P (" + String(arc4random_uniform(10) + 1) + ")"
+    }
+    
     func newRandomGame() {
-        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1))
+        let humanPaintingName : String = randomlyGetPaintingName()
+        let AIPaintingName : String = randomlyGetPaintingName()
+        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1), HPName: humanPaintingName, AIPName: AIPaintingName)
         lastRaise = 0
         raiseCount = 0
+    
     }
     
     func newGame(humanPainting: Int, AIPainintg: Int) {
-        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg)
+        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg, HPName: "", AIPName: "")
         lastRaise = 0
         raiseCount = 0
     }
@@ -48,6 +56,20 @@ class GameHandler: BaseGame {
             lastRaise = coinsAmount - lastRaise
             print("Last raise: " + String(lastRaise))
             raiseCount += 1
+            
+            if coinsAmount == 1 {
+                poker.modifyLastAction(slot: "haction", value: "raiselow")
+                poker.run()
+                poker.modifyLastAction(slot: "haction", value: "raiselow")
+            } else if coinsAmount >= 5 {
+                poker.modifyLastAction(slot: "haction", value: "raisehigh")
+                poker.run()
+                poker.modifyLastAction(slot: "haction", value: "raisehigh")
+            } else {
+                poker.modifyLastAction(slot: "haction", value: "raisemid")
+                poker.run()
+                poker.modifyLastAction(slot: "haction", value: "raisehigh")
+            }
         } catch let error {
             print(error.localizedDescription)
         }
@@ -62,6 +84,149 @@ class GameHandler: BaseGame {
         } catch let error {
             print(error.localizedDescription)
         }
+    }
+    
+    func ACTRRaise() -> Int {
+        print("raiseCount: " + String(raiseCount))
+        print("lastRaise: " + String(lastRaise))
+        
+        do {
+            if getAICoins() == 0 {
+                raiseCount += 1
+                return 0
+            }
+            
+            if lastRaise > getAICoins() {
+                lastRaise = getAICoins() - lastRaise
+                let restCoins : Int = getAICoins()
+                try raise(amountCoins: getAICoins(), isHumanPlayer: false)
+                raiseCount += 1
+                return restCoins
+            }
+            
+            if raiseCount == 2 {
+                if lastRaise < 0 {
+                    raiseCount += 1
+                    return 0
+                }
+                try raise(amountCoins: lastRaise, isHumanPlayer: false)
+                raiseCount += 1
+                return lastRaise
+            }
+            
+            print("AI turn !!!!!!!!!!!!!!")
+            poker.run()
+            let pokerModelAction = poker.lastAction(slot: "maction")!
+            
+            switch pokerModelAction {
+            case "raiselow":
+                print("AI decides to raiselow.")
+                var numberToRaise : Int = 1
+                if (lastRaise <= numberToRaise || lastRaise == 0) {
+                    if (numberToRaise <= getAICoins()) {
+                        numberToRaise = 1
+                    } else {
+                        numberToRaise = getAICoins()
+                    }
+                } else {
+                    if (lastRaise <= getAICoins()) {
+                        numberToRaise = lastRaise
+                    } else {
+                        numberToRaise = getAICoins()
+                    }
+                }
+                if lastRaise == numberToRaise {
+                    poker.modifyLastAction(slot: "secondturn", value: "yes")
+                    poker.run()
+                } else {
+                    poker.modifyLastAction(slot: "secondturn", value: "no")
+                    poker.run()
+                }
+                raiseCount += 1
+                try raise(amountCoins: numberToRaise, isHumanPlayer: false)
+                lastRaise = numberToRaise - lastRaise
+                print("- : " + String(numberToRaise))
+                return numberToRaise
+                
+            case "raisemid":
+                print("AI decides to raisemid.")
+                var numberToRaise : Int = 3
+                if (lastRaise <= numberToRaise || lastRaise == 0) {
+                    if (numberToRaise <= getAICoins()) {
+                        numberToRaise = 3
+                    } else {
+                        numberToRaise = getAICoins()
+                    }
+                } else {
+                    if (lastRaise <= getAICoins()) {
+                        numberToRaise = lastRaise
+                    } else {
+                        numberToRaise = getAICoins()
+                    }
+                }
+                if lastRaise == numberToRaise {
+                    poker.modifyLastAction(slot: "secondturn", value: "yes")
+                    poker.run()
+                } else {
+                    poker.modifyLastAction(slot: "secondturn", value: "no")
+                    poker.run()
+                }
+                raiseCount += 1
+                try raise(amountCoins: numberToRaise, isHumanPlayer: false)
+                lastRaise = numberToRaise - lastRaise
+                print("- : " + String(numberToRaise))
+                return numberToRaise
+
+            case "raisehigh":
+                print("AI decides to raisehigh.")
+                var numberToRaise : Int = 5
+                if (lastRaise <= numberToRaise || lastRaise == 0) {
+                    if (numberToRaise <= getAICoins()) {
+                        numberToRaise = 5
+                    } else {
+                        numberToRaise = getAICoins()
+                    }
+                } else {
+                    if (lastRaise <= getAICoins()) {
+                        numberToRaise = lastRaise
+                    } else {
+                        numberToRaise = getAICoins()
+                    }
+                }
+                if lastRaise == numberToRaise {
+                    poker.modifyLastAction(slot: "secondturn", value: "yes")
+                    poker.run()
+                } else {
+                    poker.modifyLastAction(slot: "secondturn", value: "no")
+                    poker.run()
+                }
+                raiseCount += 1
+                try raise(amountCoins: numberToRaise, isHumanPlayer: false)
+                lastRaise = numberToRaise - lastRaise
+                print("- : " + String(numberToRaise))
+                return numberToRaise
+
+            case "fold":
+                print("AI decides to fold.")
+                fold(isHumanPlayer: false)
+                poker.modifyLastAction(slot: "secondturn", value: "no")
+                poker.run()
+                return -1
+                
+            default:
+                print("ERROR")
+                poker.modifyLastAction(slot: "secondturn", value: "no")
+                poker.run()
+            }
+
+            poker.run()
+            print(pokerModelAction)
+            print("AI turn !!!!!!!!!!!!!!")
+
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        return 0
     }
     
     func AIrandomlyRaise() -> Int {

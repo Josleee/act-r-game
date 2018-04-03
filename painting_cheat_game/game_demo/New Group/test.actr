@@ -1,7 +1,6 @@
 ;;; TEST            WORK IN act-r game
 
 (add-dm
-    (c1 isa game-experience hvalue 4 hcat mid maction raisemid)
     (goal isa goal state setup round nil hvalue nil hcat nil haction nil maction nil results nil)
 )
 
