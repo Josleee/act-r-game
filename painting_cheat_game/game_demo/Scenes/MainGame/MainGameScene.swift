@@ -670,7 +670,23 @@ class MainGameScene: SKScene {
             let action = SKAction.run {
                 let AIRaiseAmount : Int = self.game.ACTRRaise()
                 print("AI raised coins: ", String(AIRaiseAmount))
-                self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
+                
+                // If AI fold
+                if AIRaiseAmount == -1 {
+                    // Button animation
+                    self.resetCoins(humanPlayerWin: true)
+                    GameData.shared.winner = self.game.setWinnerAccordingToCoins()
+                    self.game.printPaintingValues()
+                    self.endOneRound()
+                    self.game.newRandomGame()
+                    self.game.setFirstPlayerAI(isAI: false)
+                    
+                    self.humanTurn = true
+                    self.newGame = true
+                } else {
+                    self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
+                }
+                
             }
             run(SKAction.sequence([wait,action]))
             
