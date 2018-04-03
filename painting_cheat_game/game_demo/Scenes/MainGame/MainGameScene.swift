@@ -712,7 +712,6 @@ class MainGameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
 
-            
             //set touched coin as a moveable node
             for child in self.children {
                 if let spriteNode = child as? SKSpriteNode {
@@ -787,9 +786,9 @@ class MainGameScene: SKScene {
             }
         }
         
-        if coinsParent != nil{
-            updateAllCoinsInScene(parentNode: coinsParent)
-        }
+//        if coinsParent != nil{
+//            updateAllCoinsInScene(parentNode: coinsParent)
+//        }
         
         //Ai turn in running game: raise & hint
         if (!humanTurn && !GameData.shared.newGame) {
