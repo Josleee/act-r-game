@@ -96,24 +96,22 @@ class BaseGame {
      AI wins: return -1
      End in draw: return 0
      */
-    func evaluateCardsAndSetWinner(cardHuman: Card, cardAI: Card){
-        humanPaintingValue = cardHuman.getCardValue()
-        AIPaintingValue = cardAI.getCardValue()
-        
+    func evaluateCardsAndSetWinner() -> Winner {
         print("Coins in pot: " + String(coinsAmountInPot))
         if (humanPaintingValue > AIPaintingValue) {
             humanCoinsAmount! += coinsAmountInPot
             coinsAmountInPot = 0
-            GameData.shared.winner = .HumanPlayer
-//            return GameData.shared.winner
+            return Winner.HumanPlayer
+            
         } else if (humanPaintingValue < AIPaintingValue) {
             AICoinsAmount! += coinsAmountInPot
             coinsAmountInPot = 0
-            GameData.shared.winner = .AIPlayer
-//            return -1
+            return Winner.AIPlayer
+            
         } else {
             GameData.shared.winner = .NoOne
-//            return 0
+            return Winner.NoOne
+            
         }
     }
     
@@ -122,13 +120,13 @@ class BaseGame {
      AI is the winer: return -1
      No winer: return 0
      */
-    func setWinnerAccordingToCoins(){
+    func setWinnerAccordingToCoins() -> Winner {
         if (humanCoinsAmount <= 0 && getCoinsInPot() == 0) {
-            GameData.shared.winner = .AIPlayer
+            return Winner.AIPlayer
         } else if (AICoinsAmount <= 0 && getCoinsInPot() == 0) {
-            GameData.shared.winner = .HumanPlayer
+            return Winner.HumanPlayer
         } else {
-            return GameData.shared.winner = .NoOne
+            return Winner.NoOne
         }
     }
 }

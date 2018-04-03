@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7C459539206D2DE500D38305 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C459538206D2DE500D38305 /* Coin.swift */; };
 		7CA71FDB206A6CFA004AA05C /* RulesScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA71FDA206A6CFA004AA05C /* RulesScene.swift */; };
-		7CD3845B2073BA6000AF0ED0 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD3845A2073BA6000AF0ED0 /* Deck.swift */; };
 		850643672072CC0E00BCC55D /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850643662072CC0E00BCC55D /* ImageProcessor.swift */; };
 		8506436F2072F0A600BCC55D /* Classifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 8506436E2072F0A600BCC55D /* Classifier.mlmodel */; };
 		850DFD7C205B56D700CFE8F9 /* BaseGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850DFD7B205B56D700CFE8F9 /* BaseGame.swift */; };
@@ -36,7 +35,6 @@
 /* Begin PBXFileReference section */
 		7C459538206D2DE500D38305 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		7CA71FDA206A6CFA004AA05C /* RulesScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesScene.swift; sourceTree = "<group>"; };
-		7CD3845A2073BA6000AF0ED0 /* Deck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Deck.swift; path = "../../../../../../Desktop/act-r-game/painting_cheat_game/game_demo/Scenes/MainGame/Deck.swift"; sourceTree = "<group>"; };
 		850643662072CC0E00BCC55D /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
 		8506436E2072F0A600BCC55D /* Classifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Classifier.mlmodel; sourceTree = "<group>"; };
 		850DFD7B205B56D700CFE8F9 /* BaseGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGame.swift; sourceTree = "<group>"; };
@@ -88,7 +86,6 @@
 				855A34E6205ABD8400360891 /* MainGameScene.sks */,
 				855A34E8205ABEA900360891 /* MainGameScene.swift */,
 				9533F4C8206BBAB400BE940E /* Card.swift */,
-				7CD3845A2073BA6000AF0ED0 /* Deck.swift */,
 				7C459538206D2DE500D38305 /* Coin.swift */,
 			);
 			path = MainGame;
@@ -272,7 +269,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CD3845B2073BA6000AF0ED0 /* Deck.swift in Sources */,
 				855A34D5205AB47700360891 /* GameScene.swift in Sources */,
 				7CA71FDB206A6CFA004AA05C /* RulesScene.swift in Sources */,
 				8506436F2072F0A600BCC55D /* Classifier.mlmodel in Sources */,
