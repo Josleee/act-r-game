@@ -39,7 +39,9 @@ class BaseGame {
     private let machineLearningClassifier = Classifier()
 
     init() {
+        print("---poker.loadModel(fileName: \"test\")")
         poker.loadModel(fileName: "test")
+        print("---poker.run()")
         poker.run()
         
         humanCoinsAmount = 20
@@ -59,13 +61,19 @@ class BaseGame {
         if wn != Winner.Nil {
             print("Conclude a round.")
             if wn == Winner.AIPlayer {
+                print("---poker.modifyLastAction(slot: \"results\", value: \"win\")")
                 poker.modifyLastAction(slot: "results", value: "win")
+                print("---poker.run()")
                 poker.run()
             } else if wn == Winner.HumanPlayer {
+                print("---poker.modifyLastAction(slot: \"results\", value: \"loss\")")
                 poker.modifyLastAction(slot: "results", value: "loss")
+                print("---poker.run()")
                 poker.run()
             } else {
+                print("---poker.modifyLastAction(slot: \"results\", value: \"draw\")")
                 poker.modifyLastAction(slot: "results", value: "draw")
+                print("---poker.run()")
                 poker.run()
             }
         }
@@ -78,26 +86,26 @@ class BaseGame {
         
         print("Initialize ACTR model.")
         if isFirstPlayAI {
-            print("Even")
+            print("---poker.modifyLastAction(slot: \"round\", value: \"even\")")
             poker.modifyLastAction(slot: "round", value: "even")
         } else {
-            print("Uneven")
+            print("---poker.modifyLastAction(slot: \"round\", value: \"uneven\")")
             poker.modifyLastAction(slot: "round", value: "uneven")
         }
         
         let evaluatedValue = evaluatePainting(name: HPName)
         if evaluatedValue <= 2 {
-            print("Low")
+            print("---poker.modifyLastAction(slot: \"hcat\", value: \"low\")")
             poker.modifyLastAction(slot: "hcat", value: "low")
         } else if evaluatedValue >= 6 {
-            print("High")
+            print("---poker.modifyLastAction(slot: \"hcat\", value: \"high\")")
             poker.modifyLastAction(slot: "hcat", value: "high")
         } else {
-            print("Mid")
+            print("---poker.modifyLastAction(slot: \"hcat\", value: \"mid\")")
             poker.modifyLastAction(slot: "hcat", value: "mid")
         }
         
-        print("Evalu: " + String(evaluatedValue))
+        print("---poker.modifyLastAction(slot: "hvalue", value: " + String(evaluatedValue) + ")")
         poker.modifyLastAction(slot: "hvalue", value: String(evaluatedValue))
         
         print(poker.lastAction(slot: "round")!)

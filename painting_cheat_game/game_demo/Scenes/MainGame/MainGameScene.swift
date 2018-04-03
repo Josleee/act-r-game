@@ -81,12 +81,12 @@ class MainGameScene: SKScene {
         backgroundPlayers.zPosition = -1
         self.addChild(backgroundPlayers)
         
-        // Add background music
-        if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
-            backgroundMusic = SKAudioNode(url: musicURL)
-            backgroundMusic.autoplayLooped = true
-            self.addChild(backgroundMusic)
-        }
+//        // Add background music
+//        if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
+//            backgroundMusic = SKAudioNode(url: musicURL)
+//            backgroundMusic.autoplayLooped = true
+//            self.addChild(backgroundMusic)
+//        }
         soundCoins = SKAction.playSoundFileNamed("Coin1.mp3", waitForCompletion: false)
         soundCoins2 = SKAction.playSoundFileNamed("Coin2.mp3", waitForCompletion: false)
         

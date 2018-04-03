@@ -58,18 +58,38 @@ class GameHandler: BaseGame {
             raiseCount += 1
             
             if coinsAmount == 1 {
+                print("Human raise ACT-R low")
+                print("---poker.modifyLastAction(slot: \"haction\", value: \"raiselow\")")
                 poker.modifyLastAction(slot: "haction", value: "raiselow")
+                print("---poker.run()")
                 poker.run()
+                print("---poker.modifyLastAction(slot: \"haction\", value: \"raiselow\")")
                 poker.modifyLastAction(slot: "haction", value: "raiselow")
+                print("---poker.run()")
+                poker.run()
             } else if coinsAmount >= 5 {
+                print("Human raise ACT-R high")
+                print("---poker.modifyLastAction(slot: \"haction\", value: \"raisehigh\")")
                 poker.modifyLastAction(slot: "haction", value: "raisehigh")
+                print("---poker.run()")
                 poker.run()
+                print("---poker.modifyLastAction(slot: \"haction\", value: \"raisehigh\")")
                 poker.modifyLastAction(slot: "haction", value: "raisehigh")
+                print("---poker.run()")
+                poker.run()
             } else {
+                print("Human raise ACT-R mid")
+                print("---poker.modifyLastAction(slot: \"haction\", value: \"raisemid\")")
                 poker.modifyLastAction(slot: "haction", value: "raisemid")
+                print("---poker.run()")
                 poker.run()
-                poker.modifyLastAction(slot: "haction", value: "raisehigh")
+                print("---poker.modifyLastAction(slot: \"haction\", value: \"raisemid\")")
+                poker.modifyLastAction(slot: "haction", value: "raisemid")
+                print("---poker.run()")
+                poker.run()
             }
+            
+            
         } catch let error {
             print(error.localizedDescription)
         }
@@ -115,8 +135,11 @@ class GameHandler: BaseGame {
             }
             
             print("AI turn !!!!!!!!!!!!!!")
-            poker.run()
+            print("---poker.lastAction(slot: \"maction\")!")
             let pokerModelAction = poker.lastAction(slot: "maction")!
+//            poker.run()
+            print(pokerModelAction)
+            print("AI turn !!!!!!!!!!!!!!")
             
             switch pokerModelAction {
             case "raiselow":
@@ -136,10 +159,14 @@ class GameHandler: BaseGame {
                     }
                 }
                 if lastRaise == numberToRaise {
+                    print("---poker.modifyLastAction(slot: \"secondturn\", value: \"yes\")")
                     poker.modifyLastAction(slot: "secondturn", value: "yes")
+                    print("---poker.run()")
                     poker.run()
                 } else {
+                    print("---poker.modifyLastAction(slot: \"secondturn\", value: \"no\")")
                     poker.modifyLastAction(slot: "secondturn", value: "no")
+                    print("---poker.run()")
                     poker.run()
                 }
                 raiseCount += 1
@@ -165,10 +192,14 @@ class GameHandler: BaseGame {
                     }
                 }
                 if lastRaise == numberToRaise {
+                    print("---poker.modifyLastAction(slot: \"secondturn\", value: \"yes\")")
                     poker.modifyLastAction(slot: "secondturn", value: "yes")
+                    print("---poker.run()")
                     poker.run()
                 } else {
+                    print("---poker.modifyLastAction(slot: \"secondturn\", value: \"no\")")
                     poker.modifyLastAction(slot: "secondturn", value: "no")
+                    print("---poker.run()")
                     poker.run()
                 }
                 raiseCount += 1
@@ -194,10 +225,14 @@ class GameHandler: BaseGame {
                     }
                 }
                 if lastRaise == numberToRaise {
+                    print("---poker.modifyLastAction(slot: \"secondturn\", value: \"yes\")")
                     poker.modifyLastAction(slot: "secondturn", value: "yes")
+                    print("---poker.run()")
                     poker.run()
                 } else {
+                    print("---poker.modifyLastAction(slot: \"secondturn\", value: \"no\")")
                     poker.modifyLastAction(slot: "secondturn", value: "no")
+                    print("---poker.run()")
                     poker.run()
                 }
                 raiseCount += 1
@@ -209,19 +244,19 @@ class GameHandler: BaseGame {
             case "fold":
                 print("AI decides to fold.")
                 fold(isHumanPlayer: false)
+                print("---poker.modifyLastAction(slot: \"secondturn\", value: \"no\")")
                 poker.modifyLastAction(slot: "secondturn", value: "no")
+                print("---poker.run()")
                 poker.run()
                 return -1
                 
             default:
                 print("ERROR")
+                print("---poker.modifyLastAction(slot: \"secondturn\", value: \"no\")")
                 poker.modifyLastAction(slot: "secondturn", value: "no")
+                print("---poker.run()")
                 poker.run()
             }
-
-            poker.run()
-            print(pokerModelAction)
-            print("AI turn !!!!!!!!!!!!!!")
 
         } catch let error {
             print(error.localizedDescription)
