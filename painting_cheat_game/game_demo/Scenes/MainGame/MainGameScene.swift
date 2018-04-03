@@ -26,6 +26,7 @@ class MainGameScene: SKScene {
     private var backgroundMontains : SKSpriteNode!
     private var backgroundPlayers : SKSpriteNode!
     
+    private let deck : Deck = Deck.object
     private var card1 : Card!
     private var card2 : Card!
     
@@ -212,15 +213,17 @@ class MainGameScene: SKScene {
     }
     
     func loadCards() {
-        card1 = Card(imageNamed: "pic1")
-        card2 = Card(imageNamed: "pic1")
-        //picture1 = SKSpriteNode(imageNamed: "pic1")
-//        picture2 = SKSpriteNode(imageNamed: "pic2")
-        card1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
-        card2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        card1 = deck.pickCard()
+        card2 = deck.pickCard()
         card1.position = CGPoint(x: -60, y: 70)
         card2.position = CGPoint(x: 60, y: 70)
-        card2.texture = SKTexture(imageNamed: card2.getCardName()) //Show the opponents card
+        card1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        card2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        print(card2.getCardName())
+        card2.revealCardAndShowImage()
+        print(card2.getCardName())
+//        card2.texture = SKTexture(imageNamed: card2.getCardName()) //Show the opponents card
+//        card2.texture = [SKTexture textureWithImageNamed:@card2.getCardName()];
         self.addChild(card1)
         self.addChild(card2)
     }
@@ -425,10 +428,13 @@ class MainGameScene: SKScene {
     
     //Show the cards real picture
     func revealCard (node: Card){
+        
+        print(node.getCardName())
         node.run(SKAction.sequence(
             [SKAction.fadeOut(withDuration: 0.1),
              SKAction.scaleX(to: 0, duration: 0.35),
              SKAction.scale(to: 1, duration: 0.0),
+             
              SKAction.setTexture(SKTexture(imageNamed: node.getCardName())),
              SKAction.fadeIn(withDuration: 0.1),
              ]
@@ -496,6 +502,8 @@ class MainGameScene: SKScene {
     func revealCardsAndEndOneRound() {
         revealCard(node: card1)
         pictureHumanValueLabel.isHidden = false
+        card1.removeFromParent()
+        card2.removeFromParent()
     }
     
     func checkGameState(showPocker : Bool = false) -> Bool {
@@ -618,6 +626,9 @@ class MainGameScene: SKScene {
                 return
             }
 
+            loadCards()
+            loadCardValues()
+            
             //Move 1 coin from each player to table and load painting values
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
@@ -712,6 +723,7 @@ class MainGameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
 
+            
             //set touched coin as a moveable node
             for child in self.children {
                 if let spriteNode = child as? SKSpriteNode {
@@ -786,9 +798,9 @@ class MainGameScene: SKScene {
             }
         }
         
-//        if coinsParent != nil{
-//            updateAllCoinsInScene(parentNode: coinsParent)
-//        }
+        if coinsParent != nil{
+            updateAllCoinsInScene(parentNode: coinsParent)
+        }
         
         //Ai turn in running game: raise & hint
         if (!humanTurn && !GameData.shared.newGame) {

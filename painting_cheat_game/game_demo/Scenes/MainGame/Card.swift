@@ -9,15 +9,39 @@ import SpriteKit
 import Foundation
 
 
-let amountOfCategories = 3 //TODO: For simple testing 3, later 7
-let amountOfCardsInCategory = 2
+let amountOfCategories = 7 //TODO: For simple testing 3, later 7
+let amountOfCardsInCategory = 1
+
 
 //TODO: Some node magic required and image :D
 class Card : SKSpriteNode {
     var visible = false
-    let cardValue = Int(arc4random_uniform(UInt32(amountOfCategories))) + 1 //1-7
-    let cardName = "pic3"//TODO get cardname from 2D array of pictures maybe create class of pictures
+//    let cardValue : Int
+//    let cardName : String //TODO get cardname from 2D array of pictures maybe create class of pictures
+    let backgroundpicture = "pic1"
+    let pics = Paintings.paintings
+    
+    let cardValue = Int(arc4random_uniform(UInt32(amountOfCategories)))  //0-6
+    let cardName : String
+   // let cardName = pics.getFileName(category: cardValue, number: 1)
+    let sizeX : CGFloat = 122 //(self.scene!.size.width / 6)
+    let sizeY : CGFloat = 82 //(self.scene!.size.height / 5)
+    
 
+    init() {
+        print(pics)
+        self.cardName = pics.getFileName(category: cardValue, number: 0)
+        let texture = SKTexture(imageNamed: backgroundpicture)
+        super.init(texture: texture, color: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1), size: CGSize(width: 122, height: 82))
+//        self.cardValue = Int(arc4random_uniform(UInt32(amountOfCategories))) + 1 //1-7
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     func getCardValue() -> Int {
         return cardValue
     }
@@ -29,71 +53,13 @@ class Card : SKSpriteNode {
     
     //Make card visible
     func revealCardAndShowImage(){
+        print(self.getCardName())
+        self.texture = SKTexture(imageNamed: self.getCardName())
         self.visible = true
     }
-    
-    //Later for pictures:
-    //------------------
-    //var image = 0//TODO: image CGImage
-    //Get image
-    //func getImage()
-    
-    //Get a random cardValue
-    //    func getCardValue() -> Int {
-    //        return -1
-    //    }
-    
+
 }
 
 
-class Pictures {
-    let fm = FileManager.default
-    let path = Bundle.main.resourcePath!
-    
-    var storage = [[String]]()
-    init() {
-        //create 2d array with picnames
-        for x in 0..<amountOfCategories  {
-            var subArray = [String]()
-            for y in 0..<amountOfCategories {
-                subArray.append(String(x) + "pic" + String(y))
-            }
-            storage.append(subArray)
-        }
-    }
-    
-    //Returns a random filename of specific category
-    func getRandomFileNameOfCategory(category : Int) -> String {
-        let randomPicOfCategory = (Int(arc4random_uniform(UInt32(amountOfCardsInCategory))) + 1)
-        return storage[category][randomPicOfCategory]
-    }
-    
-    //Returns a specific filename of specific category
-    func getFileName(category : Int, number: Int) -> String {
-        return storage[category][number]
-    }
-    
-//    subscript(row: Int, column: Int ) -> String {
-//        get {
-//            // This could validate arguments.
-//            return storage[row][(Int(arc4random_uniform(UInt32(amountOfCardsInCategory))) + 1)] //Name of card = Categorynumber + pic + amountofcardsincategory]
-//        }
-//        set {
-//            // This could also validate.
-//            storage[row][column] = newValue
-//        }
-//    }
-    
-    
-    
-}
 
-class CardHelper {
-    
-    let cardPicture : [[String]] = [[]]
-    
-    func choosePicture(){
-        
-    }
-}
 

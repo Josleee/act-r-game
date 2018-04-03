@@ -41,8 +41,6 @@ class Coin : SKSpriteNode {
         self.xposition = xposition
         self.yposition = yposition
         
-        print(ismoveableXpos())
-        print(ismoveableYpos())
         if ismoveableXpos() && ismoveableYpos() {
             //then moveable
             print("moveable")
@@ -50,7 +48,7 @@ class Coin : SKSpriteNode {
             self.isUserInteractionEnabled = false
             coinOwner = .humanPlayer
             return true
-        } else {
+        }else{
             print("NOT moveable")
             self.isUserInteractionEnabled = true
             isMoveable = false
