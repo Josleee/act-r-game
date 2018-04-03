@@ -20,17 +20,17 @@ class GameHandler: BaseGame {
         return "S" + String(value) + "P (" + String(arc4random_uniform(10) + 1) + ")"
     }
     
-    func newRandomGame(winner : Winner = Winner.Nil) {
+    // isFold : whether AI player folds
+    func newRandomGame(isFold : Bool, winner : Winner = Winner.Nil) {
         let humanPaintingName : String = randomlyGetPaintingName()
         let AIPaintingName : String = randomlyGetPaintingName()
-        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1), HPName: humanPaintingName, AIPName: AIPaintingName, wn: winner)
+        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1), HPName: humanPaintingName, AIPName: AIPaintingName, wn: winner, isFold: isFold)
         lastRaise = 0
         raiseCount = 0
-    
     }
     
-    func newGame(humanPainting: Int, AIPainintg: Int) {
-        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg, HPName: "", AIPName: "", wn: Winner.Nil)
+    func newGame(humanPainting: Int, AIPainintg: Int, isFold : Bool) {
+        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg, HPName: "", AIPName: "", wn: Winner.Nil, isFold: isFold)
         lastRaise = 0
         raiseCount = 0
     }

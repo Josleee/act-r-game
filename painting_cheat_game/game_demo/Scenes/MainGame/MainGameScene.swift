@@ -57,7 +57,7 @@ class MainGameScene: SKScene {
     override func didMove(to view: SKView) {
         // Initialize game
         game = GameHandler()
-        game.newRandomGame()
+        game.newRandomGame(isFold: false)
         game.setFirstPlayerAI(isAI: false)
         
         // Add background
@@ -424,7 +424,7 @@ class MainGameScene: SKScene {
             }
             endOneRound()
             
-            game.newRandomGame(winner: winner)
+            game.newRandomGame(isFold: false ,winner: winner)
             newGame = true
             return true
         } else {
@@ -544,7 +544,7 @@ class MainGameScene: SKScene {
                 game.printPaintingValues()
                 endOneRound()
                 
-                game.newRandomGame(winner: Winner.AIPlayer)
+                game.newRandomGame(isFold: false, winner: Winner.AIPlayer)
                 game.setFirstPlayerAI(isAI: true)
                 
                 humanTurn = false
@@ -678,7 +678,7 @@ class MainGameScene: SKScene {
                     GameData.shared.winner = self.game.setWinnerAccordingToCoins()
                     self.game.printPaintingValues()
                     self.endOneRound()
-                    self.game.newRandomGame(winner: Winner.HumanPlayer)
+                    self.game.newRandomGame(isFold: true, winner: Winner.HumanPlayer)
                     self.game.setFirstPlayerAI(isAI: false)
                     
                     self.humanTurn = true

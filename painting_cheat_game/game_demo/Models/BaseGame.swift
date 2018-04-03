@@ -52,7 +52,7 @@ class BaseGame {
         return coinsAmountInPot
     }
     
-    func setPainting(humanPainting : Int, AIPainintg : Int, HPName : String, AIPName : String, wn : Winner) {
+    func setPainting(humanPainting : Int, AIPainintg : Int, HPName : String, AIPName : String, wn : Winner, isFold : Bool) {
         humanPaintingValue = humanPainting
         AIPaintingValue = AIPainintg
         humanPaintingName = HPName
@@ -66,10 +66,17 @@ class BaseGame {
                 print("---poker.run()")
                 poker.run()
             } else if wn == Winner.HumanPlayer {
-                print("---poker.modifyLastAction(slot: \"results\", value: \"loss\")")
-                poker.modifyLastAction(slot: "results", value: "loss")
-                print("---poker.run()")
-                poker.run()
+                if isFold {
+                    print("---poker.modifyLastAction(slot: \"results\", value: \"unnecessarylose\")")
+                    poker.modifyLastAction(slot: "results", value: "unnecessarylose")
+                    print("---poker.run()")
+                    poker.run()
+                } else {
+                    print("---poker.modifyLastAction(slot: \"results\", value: \"lose\")")
+                    poker.modifyLastAction(slot: "results", value: "lose")
+                    print("---poker.run()")
+                    poker.run()
+                }
             } else {
                 print("---poker.modifyLastAction(slot: \"results\", value: \"draw\")")
                 poker.modifyLastAction(slot: "results", value: "draw")
