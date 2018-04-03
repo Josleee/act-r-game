@@ -32,6 +32,7 @@
 		EB066C90204009B80093D62F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB066C8F204009B80093D62F /* Assets.xcassets */; };
 		EB066C93204009B80093D62F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB066C91204009B80093D62F /* LaunchScreen.storyboard */; };
 		EB066CBE204012AC0093D62F /* RockPaperScissors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB066CBD204012AC0093D62F /* RockPaperScissors.swift */; };
+		EB27A8B12073BB0500765614 /* Integration Guide.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB27A8B02073BB0500765614 /* Integration Guide.swift */; };
 		EB75EEA4206147A500D601DD /* indianArtPoker.actr in Resources */ = {isa = PBXBuildFile; fileRef = EB75EEA3206147A500D601DD /* indianArtPoker.actr */; };
 		EBAD4C9C2062669600190D0E /* test.actr in Resources */ = {isa = PBXBuildFile; fileRef = EBAD4C9B2062669600190D0E /* test.actr */; };
 /* End PBXBuildFile section */
@@ -83,6 +84,7 @@
 		EB066C92204009B80093D62F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB066C94204009B80093D62F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB066CBD204012AC0093D62F /* RockPaperScissors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPaperScissors.swift; sourceTree = "<group>"; };
+		EB27A8B02073BB0500765614 /* Integration Guide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Integration Guide.swift"; sourceTree = "<group>"; };
 		EB75EEA3206147A500D601DD /* indianArtPoker.actr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = indianArtPoker.actr; sourceTree = "<group>"; };
 		EBAD4C9B2062669600190D0E /* test.actr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.actr; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,6 +134,7 @@
 				A1D6DF9920506C3700825EAB /* DMViewController.swift */,
 				EB066C94204009B80093D62F /* Info.plist */,
 				EB066C8A204009B80093D62F /* GameViewController.swift */,
+				EB27A8B02073BB0500765614 /* Integration Guide.swift */,
 				EB066C8C204009B80093D62F /* Main.storyboard */,
 			);
 			path = RockPaperScissors;
@@ -336,6 +339,7 @@
 				A11061ED2044A31A00590850 /* Procedural.swift in Sources */,
 				A1D6DF9A20506C3700825EAB /* DMViewController.swift in Sources */,
 				A11061EC2044A31A00590850 /* Model.swift in Sources */,
+				EB27A8B12073BB0500765614 /* Integration Guide.swift in Sources */,
 				A11061EE2044A31A00590850 /* Temporal.swift in Sources */,
 				A11061E42044A31A00590850 /* Parser.swift in Sources */,
 				A11061E72044A31A00590850 /* Chunk.swift in Sources */,
