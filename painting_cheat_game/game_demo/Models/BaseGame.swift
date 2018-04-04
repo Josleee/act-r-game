@@ -194,6 +194,15 @@ class BaseGame {
         print("Coins in pot: " + String(coinsAmountInPot))
         if (isHumanPlayer) {
             AICoinsAmount! += coinsAmountInPot
+            print("Human folds")
+            print("---poker.modifyLastAction(slot: \"haction\", value: \"fold\")")
+            poker.modifyLastAction(slot: "haction", value: "fold")
+            print("---poker.run()")
+            poker.run()
+            print("---poker.modifyLastAction(slot: \"haction\", value: \"fold\")")
+            poker.modifyLastAction(slot: "haction", value: "fold")
+            print("---poker.run()")
+            poker.run()
         } else {
             humanCoinsAmount! += coinsAmountInPot
         }

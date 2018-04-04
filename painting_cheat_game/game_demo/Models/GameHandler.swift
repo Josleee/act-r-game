@@ -143,7 +143,6 @@ class GameHandler: BaseGame {
             print("AI turn !!!!!!!!!!!!!!")
             print("---poker.lastAction(slot: \"maction\")!")
             let pokerModelAction = poker.lastAction(slot: "maction")!
-//            poker.run()
             print(pokerModelAction)
             print("AI turn !!!!!!!!!!!!!!")
             
