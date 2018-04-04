@@ -21,6 +21,7 @@ class CongratsScene: SKScene {
     
     private var character : SKSpriteNode!
     private var hint : SKSpriteNode!
+    private var recyclePoppers : Bool = false
     
     
     fileprivate func addViewElement(name: String, width: CGFloat, height: CGFloat, xposition: Int, yposition: Int, zposition: CGFloat) {
@@ -52,7 +53,7 @@ class CongratsScene: SKScene {
         self.addChild(backgroundMontains)
 
         // Add background music
-        if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
+        if let musicURL = Bundle.main.url(forResource: "win", withExtension: "mp3") {
             backgroundMusic = SKAudioNode(url: musicURL)
             backgroundMusic.autoplayLooped = true
             self.addChild(backgroundMusic)
@@ -123,6 +124,8 @@ class CongratsScene: SKScene {
                 self.addChild(lb)
             }
         }
+        
+        recyclePoppers = true
     }
     
     
@@ -165,5 +168,22 @@ class CongratsScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Move clouds
         moveClouds()
+        
+        if recyclePoppers {
+            var findPoppers : Bool = true
+            for child in self.children {
+                if let spriteNode = child as? SKSpriteNode {
+                    if (spriteNode.name?.range(of:"PartyPoppers") != nil) {
+                        findPoppers = true
+                        if (spriteNode.position.y <= -self.scene!.size.width / 2) {
+                            spriteNode.removeFromParent()
+                        }
+                    }
+                }
+            }
+            if !findPoppers {
+                recyclePoppers = false
+            }
+        }
     }
 }
