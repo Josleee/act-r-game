@@ -81,12 +81,12 @@ class MainGameScene: SKScene {
         backgroundPlayers.zPosition = -1
         self.addChild(backgroundPlayers)
         
-//        // Add background music
-//        if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
-//            backgroundMusic = SKAudioNode(url: musicURL)
-//            backgroundMusic.autoplayLooped = true
-//            self.addChild(backgroundMusic)
-//        }
+        // Add background music
+        if let musicURL = Bundle.main.url(forResource: "bgmusic", withExtension: "mp3") {
+            backgroundMusic = SKAudioNode(url: musicURL)
+            backgroundMusic.autoplayLooped = true
+            self.addChild(backgroundMusic)
+        }
         soundCoins = SKAction.playSoundFileNamed("Coin1.mp3", waitForCompletion: false)
         soundCoins2 = SKAction.playSoundFileNamed("Coin2.mp3", waitForCompletion: false)
         
@@ -170,12 +170,12 @@ class MainGameScene: SKScene {
         }))
     }
     
-    func flipCard (node: SKNode){
-        node.run(SKAction.sequence(
+    func flipCard() {
+        picture1.run(SKAction.sequence(
             [SKAction.fadeOut(withDuration: 0.1),
              SKAction.scaleX(to: 0, duration: 0.35),
              SKAction.scale(to: 1, duration: 0.0),
-             SKAction.setTexture(SKTexture(imageNamed: "pic3")),
+             SKAction.setTexture(SKTexture(imageNamed: game.getHumanPaintingName())),
              SKAction.fadeIn(withDuration: 0.1),
              ]
         ))
@@ -206,8 +206,8 @@ class MainGameScene: SKScene {
     }
     
     func loadPaintings() {
-        picture1 = SKSpriteNode(imageNamed: "pic1")
-        picture2 = SKSpriteNode(imageNamed: "pic2")
+        picture1 = SKSpriteNode(imageNamed: "BG")
+        picture2 = SKSpriteNode(imageNamed: game.getAIPaintingName())
         picture1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
         picture2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
         picture1.position = CGPoint(x: -60, y: 70)
@@ -393,7 +393,7 @@ class MainGameScene: SKScene {
     }
     
     func endOneRound() {
-        flipCard(node: picture1)
+        flipCard()
         pictureHumanValueLabel.isHidden = false
     }
     
@@ -451,6 +451,7 @@ class MainGameScene: SKScene {
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             }
             run(SKAction.sequence([wait,action]))
+            loadPaintings()
             newGame = false
             return
         }

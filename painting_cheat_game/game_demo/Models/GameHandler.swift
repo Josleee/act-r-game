@@ -24,7 +24,13 @@ class GameHandler: BaseGame {
     func newRandomGame(isFold : Bool, winner : Winner = Winner.Nil) {
         let humanPaintingName : String = randomlyGetPaintingName()
         let AIPaintingName : String = randomlyGetPaintingName()
-        setPainting(humanPainting: Int(arc4random_uniform(7) + 1), AIPainintg: Int(arc4random_uniform(7) + 1), HPName: humanPaintingName, AIPName: AIPaintingName, wn: winner, isFold: isFold)
+        let humanPaintingValue : Int = Int(humanPaintingName.substring(from: 1, to: 2))!
+        let AIPaintingValue : Int = Int(AIPaintingName.substring(from: 1, to: 2))!
+        
+        setPainting(humanPainting: humanPaintingValue, AIPainintg: AIPaintingValue,
+                    HPName: humanPaintingName, AIPName: AIPaintingName,
+                    wn: winner, isFold: isFold)
+        
         lastRaise = 0
         raiseCount = 0
     }

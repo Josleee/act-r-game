@@ -15,12 +15,6 @@ enum RunTimeError: Error {
     case invalidAmount(Int)
 }
 
-//enum Turn: Bool {
-//    typealias RawValue = Bool
-//    case HumanPlayer = true
-//    case AIPlayer = false
-//}
-
 
 class BaseGame {
     
@@ -144,8 +138,8 @@ class BaseGame {
         if let pixelBuffer = ImageProcessor.pixelBuffer(forImage: (sizedImage?.cgImage)!) {
             guard let scene = try? machineLearningClassifier.prediction(input__0: pixelBuffer) else {fatalError("Unexpected runtime error")}
             let value : String = scene.classLabel.substring(from: 1, to: 2)
-            print(scene.classLabel)
-            print(value)
+            print("Evalueated class: " + scene.classLabel)
+            print("Evaluated painting value (by machine learning model): " + value)
             return Int(value)!
         } else {
             return -1
