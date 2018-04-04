@@ -194,18 +194,21 @@ class MainGameScene: SKScene {
         pictureHumanValueLabel.position = CGPoint(x: -60, y: 70)
         pictureHumanValueLabel.text = String(game.getHumanPaintingValue())
         pictureHumanValueLabel.zPosition = 2
-        pictureHumanValueLabel.isHidden = true
-        self.addChild(pictureHumanValueLabel)
-        
+
         pictureAIValueLabel = SKLabelNode(fontNamed: "Chalkduster")
         pictureAIValueLabel.fontSize = 50
         pictureAIValueLabel.position = CGPoint(x: 60, y: 70)
         pictureAIValueLabel.text = String(game.getAIPaintingValue())
         pictureAIValueLabel.zPosition = 2
-        self.addChild(pictureAIValueLabel)
     }
     
     func loadPaintings() {
+        if picture1 != nil {
+            picture1.removeFromParent()
+        }
+        if picture2 != nil {
+            picture2.removeFromParent()
+        }
         picture1 = SKSpriteNode(imageNamed: "BG")
         picture2 = SKSpriteNode(imageNamed: game.getAIPaintingName())
         picture1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
@@ -394,7 +397,8 @@ class MainGameScene: SKScene {
     
     func endOneRound() {
         flipCard()
-        pictureHumanValueLabel.isHidden = false
+        self.addChild(pictureHumanValueLabel)
+        self.addChild(pictureAIValueLabel)
     }
     
     func checkGameState(nextIsAITurn : Bool, showPocker : Bool = false) -> Bool {
@@ -415,7 +419,6 @@ class MainGameScene: SKScene {
                 if (game.getHumanCoins() > 0 && game.getAICoins() > 0) {
                     let wait = SKAction.wait(forDuration:1)
                     let action = SKAction.run {
-                        self.loadPaintingValueLabels()
                         self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                         self.moveCoins(numberOfCoins: 1, humanPlayer: false)
                     }
@@ -446,12 +449,12 @@ class MainGameScene: SKScene {
             
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
-                self.loadPaintingValueLabels()
                 self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             }
             run(SKAction.sequence([wait,action]))
             loadPaintings()
+            loadPaintingValueLabels()
             newGame = false
             return
         }
