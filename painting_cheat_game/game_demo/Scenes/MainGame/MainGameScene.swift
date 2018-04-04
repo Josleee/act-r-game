@@ -11,7 +11,6 @@ import Foundation
 import GameplayKit
 import CoreMotion
 
-
 class MainGameScene: SKScene {
     private var isInitializingCoins : Bool = true
     private var numberOfCoinsExist : Int = 0
@@ -237,10 +236,10 @@ class MainGameScene: SKScene {
             return
         }
         // Add coins
-        let lCoin = SKSpriteNode(imageNamed: "bc")
-        let l2Coin = SKSpriteNode(imageNamed: "bc")
-        let rCoin = SKSpriteNode(imageNamed: "bc")
-        let r2Coin = SKSpriteNode(imageNamed: "bc")
+        let lCoin = Coin(imageNamed: "bc")
+        let l2Coin = Coin(imageNamed: "bc")
+        let rCoin = Coin(imageNamed: "bc")
+        let r2Coin = Coin(imageNamed: "bc")
         // Set size
         lCoin.size = CGSize(width: (lCoin.size.width / 2), height: (lCoin.size.height / 2))
         l2Coin.size = CGSize(width: (l2Coin.size.width / 2), height: (l2Coin.size.height / 2))
@@ -424,6 +423,7 @@ class MainGameScene: SKScene {
     }
     
     
+    
     func checkGameState(nextIsAITurn : Bool, showPocker : Bool = false) -> Bool {
         if (game.isFinished()) {
             let winner : Winner = game.evaluateCardsAndSetWinner()
@@ -436,7 +436,7 @@ class MainGameScene: SKScene {
             }
             GameData.shared.winner = game.setWinnerAccordingToCoins()
             game.printPaintingValues()
-            
+
             if showPocker {
                 self.loadPaintingValueLabels()
                 if (game.getHumanCoins() > 0 && game.getAICoins() > 0) {
@@ -449,7 +449,7 @@ class MainGameScene: SKScene {
                 }
             }
             revealCardsAndEndOneRound()
-            
+
             game.newRandomGame(isFold: false ,winner: winner)
             newGame = true
             return true
@@ -457,6 +457,72 @@ class MainGameScene: SKScene {
             return false
         }
     }
+    
+    //TODO implement this part from previous push: "created Coins Class and disabled choosing coins if they are on the t.."
+//    func humanHasEnoughCoins(coinsToRaise: Int) -> Bool{
+//        // When human doesn't has any coins
+//        if (game.getHumanCoins() == 0) {
+//            _ = self.checkGameState()
+//            humanTurn = false
+//            //TODO: in this case the human looses the game and we go to the congratulation scene
+//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+//            return false
+//        }
+//        // When opponent doesn't has coins
+//        if (game.getAICoins() == 0) {
+//            //TODO: in this case the AI looses the game and we go to the congratulation scene
+//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+//            if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
+//                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+//                _ = self.checkGameState()
+//                humanTurn = false
+//                return false
+//            } else {
+//                showHintInvalidRaise()
+//                print("Invalid raise")
+//                return false
+//            }
+//
+//        }
+//        // When human player doesn't have enought coins
+//        if (game.getHumanCoins() < game.getLastRaise()) {
+//            //TODO: in this case the human looses the game and we go to the congratulation scene
+//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+//            if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
+//                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+//                _ = self.checkGameState()
+//                humanTurn = false
+//                return false
+//            } else {
+//                showHintInvalidRaise()
+//                print("Invalid raise")
+//                return false
+//            }
+//        }
+//
+//        return true
+//    }
+//
+//    func aiHasEnoughCoins(coinsToRaise: Int) -> Bool{
+//        // When opponent doesn't has coins
+//        if (game.getAICoins() == 0) {
+//            //TODO: in this case the AI looses the game and we go to the congratulation scene
+//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
+//            if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
+//                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
+//                _ = self.checkGameState()
+//                humanTurn = false
+//                return false
+//            } else {
+//                showHintInvalidRaise()
+//                print("Invalid raise")
+//                return false
+//            }
+//
+//        }
+//        return true
+//    }
+    
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
