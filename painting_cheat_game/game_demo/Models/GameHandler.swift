@@ -177,7 +177,7 @@ class GameHandler: BaseGame {
                 raiseCount += 1
                 try raise(amountCoins: numberToRaise, isHumanPlayer: false)
                 lastRaise = numberToRaise - lastRaise
-                print("- : " + String(numberToRaise))
+                print("last raise : " + String(lastRaise))
                 return numberToRaise
                 
             case "raisemid":
@@ -210,7 +210,7 @@ class GameHandler: BaseGame {
                 raiseCount += 1
                 try raise(amountCoins: numberToRaise, isHumanPlayer: false)
                 lastRaise = numberToRaise - lastRaise
-                print("- : " + String(numberToRaise))
+                print("last raise : " + String(lastRaise))
                 return numberToRaise
 
             case "raisehigh":
@@ -243,7 +243,7 @@ class GameHandler: BaseGame {
                 raiseCount += 1
                 try raise(amountCoins: numberToRaise, isHumanPlayer: false)
                 lastRaise = numberToRaise - lastRaise
-                print("- : " + String(numberToRaise))
+                print("last raise : " + String(lastRaise))
                 return numberToRaise
 
             case "fold":

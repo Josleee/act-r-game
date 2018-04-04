@@ -191,13 +191,13 @@ class MainGameScene: SKScene {
         
         pictureHumanValueLabel = SKLabelNode(fontNamed: "Chalkduster")
         pictureHumanValueLabel.fontSize = 50
-        pictureHumanValueLabel.position = CGPoint(x: -60, y: 70)
+        pictureHumanValueLabel.position = CGPoint(x: -150, y: 90)
         pictureHumanValueLabel.text = String(game.getHumanPaintingValue())
         pictureHumanValueLabel.zPosition = 2
 
         pictureAIValueLabel = SKLabelNode(fontNamed: "Chalkduster")
         pictureAIValueLabel.fontSize = 50
-        pictureAIValueLabel.position = CGPoint(x: 60, y: 70)
+        pictureAIValueLabel.position = CGPoint(x: 150, y: 90)
         pictureAIValueLabel.text = String(game.getAIPaintingValue())
         pictureAIValueLabel.zPosition = 2
     }
