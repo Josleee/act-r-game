@@ -41,9 +41,9 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
+        let gameSceneTemp = MainGameScene(fileNamed: "MainGameScene")
         let rulesSceneTemp = RulesScene(fileNamed: "RulesScene")
-        let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
+        // let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
 
         let touch = touches.first
         if let location = touch?.location(in: self) {
