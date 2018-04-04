@@ -273,6 +273,10 @@ class GameHandler: BaseGame {
                         numberToRaise = getAICoins()
                     }
                 }
+                raiseCount += 1
+                try raise(amountCoins: numberToRaise, isHumanPlayer: false)
+                lastRaise = numberToRaise - lastRaise
+                print("last raise : " + String(lastRaise))
                 return numberToRaise
             }
 

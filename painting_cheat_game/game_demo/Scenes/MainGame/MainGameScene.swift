@@ -257,6 +257,7 @@ class MainGameScene: SKScene {
     
     
     func resetCoins(humanPlayerWin : Bool) {
+        print("Reset coins.")
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
                 if (spriteNode.name?.range(of:"coin") != nil) {
@@ -447,15 +448,20 @@ class MainGameScene: SKScene {
                 return
             }
             
+            newGame = false
+            loadPaintings()
+            loadPaintingValueLabels()
+            
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
                 self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+                if self.humanTurn {
+                    self.showHintYourTurn()
+                }
             }
             run(SKAction.sequence([wait,action]))
-            loadPaintings()
-            loadPaintingValueLabels()
-            newGame = false
+
             return
         }
         
@@ -598,21 +604,23 @@ class MainGameScene: SKScene {
     }
     
     func showHintYourTurn() {
-        var isOpShow : Bool = false
-        if hintInvalidRaise.isHidden == false {
-            hintInvalidRaise.isHidden = true
-            isOpShow = true
-        }
-        
-        hintYourTurn.isHidden = false
-        let wait = SKAction.wait(forDuration:5)
-        let action = SKAction.run {
-            self.hintYourTurn.isHidden = true
-            if isOpShow {
-                self.showHintInvalidRaise()
+        if (game.getCoinsInPot() == 2 && !newGame) {
+            var isOpShow : Bool = false
+            if hintInvalidRaise.isHidden == false {
+                hintInvalidRaise.isHidden = true
+                isOpShow = true
             }
+            
+            hintYourTurn.isHidden = false
+            let wait = SKAction.wait(forDuration:5)
+            let action = SKAction.run {
+                self.hintYourTurn.isHidden = true
+                if isOpShow {
+                    self.showHintInvalidRaise()
+                }
+            }
+            run(SKAction.sequence([wait,action]))
         }
-        run(SKAction.sequence([wait,action]))
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -670,7 +678,11 @@ class MainGameScene: SKScene {
         }
         
         if (!humanTurn && !newGame) {
-            let wait = SKAction.wait(forDuration:2)
+            var wait = SKAction.wait(forDuration:2)
+            if game.getLastRaise() == 0 {
+                wait = SKAction.wait(forDuration:5)
+            }
+            
             let action = SKAction.run {
                 let AIRaiseAmount : Int = self.game.ACTRRaise()
                 print("AI raised coins: ", String(AIRaiseAmount))
@@ -694,7 +706,10 @@ class MainGameScene: SKScene {
             }
             run(SKAction.sequence([wait,action]))
             
-            let wait2 = SKAction.wait(forDuration:3)
+            var wait2 = SKAction.wait(forDuration:3)
+            if game.getLastRaise() == 0 {
+                wait2 = SKAction.wait(forDuration:6)
+            }
             let action2 = SKAction.run {
                 _ = self.checkGameState(nextIsAITurn: false)
                 self.showHintYourTurn()
