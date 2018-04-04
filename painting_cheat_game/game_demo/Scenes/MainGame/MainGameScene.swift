@@ -25,8 +25,9 @@ class MainGameScene: SKScene {
     private var backgroundMontains : SKSpriteNode!
     private var backgroundPlayers : SKSpriteNode!
     
-    private var picture1 : SKSpriteNode!
-    private var picture2 : SKSpriteNode!
+    private let deck : Deck = Deck.object
+    private var card1 : Card!
+    private var card2 : Card!
     private var movableNode : SKNode?
     private var originalPosition : CGPoint!
     
@@ -170,12 +171,27 @@ class MainGameScene: SKScene {
         }))
     }
     
-    func flipCard() {
-        picture1.run(SKAction.sequence(
+//    func flipCard() {
+//        card1.run(SKAction.sequence(
+//            [SKAction.fadeOut(withDuration: 0.1),
+//             SKAction.scaleX(to: 0, duration: 0.35),
+//             SKAction.scale(to: 1, duration: 0.0),
+//             SKAction.setTexture(SKTexture(imageNamed: game.getHumanPaintingName())),
+//             SKAction.fadeIn(withDuration: 0.1),
+//             ]
+//        ))
+//    }
+    
+    //Show the cards real picture
+    func revealCard (node: Card){
+        
+        print(node.getCardName())
+        node.run(SKAction.sequence(
             [SKAction.fadeOut(withDuration: 0.1),
              SKAction.scaleX(to: 0, duration: 0.35),
              SKAction.scale(to: 1, duration: 0.0),
-             SKAction.setTexture(SKTexture(imageNamed: game.getHumanPaintingName())),
+             
+             SKAction.setTexture(SKTexture(imageNamed: node.getCardName())),
              SKAction.fadeIn(withDuration: 0.1),
              ]
         ))
@@ -203,21 +219,25 @@ class MainGameScene: SKScene {
     }
     
     func loadPaintings() {
-        if picture1 != nil {
-            picture1.removeFromParent()
+        if card1 != nil {
+            card1.removeFromParent()
         }
-        if picture2 != nil {
-            picture2.removeFromParent()
+        if card2 != nil {
+            card2.removeFromParent()
         }
-        picture1 = SKSpriteNode(imageNamed: "BG")
-        picture2 = SKSpriteNode(imageNamed: game.getAIPaintingName())
-        picture1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
-        picture2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
-        picture1.position = CGPoint(x: -60, y: 70)
-        picture2.position = CGPoint(x: 60, y: 70)
-        self.addChild(picture1)
-        self.addChild(picture2)
+        card1 = deck.pickCard()
+        card2 = deck.pickCard()
+        card1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        card2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        card1.position = CGPoint(x: -60, y: 70)
+        card2.position = CGPoint(x: 60, y: 70)
+        print(card2.getCardName())
+        card2.revealCardAndShowImage()
+        print(card2.getCardName())
+        self.addChild(card1)
+        self.addChild(card2)
     }
+    
     
     @objc func addCoins() {
         // Count
@@ -396,11 +416,19 @@ class MainGameScene: SKScene {
         }
     }
     
-    func endOneRound() {
-        flipCard()
-        self.addChild(pictureHumanValueLabel)
-        self.addChild(pictureAIValueLabel)
+//    func revealCardsAndEndOneRound() {
+//        flipCard()
+//        self.addChild(pictureHumanValueLabel)
+//        self.addChild(pictureAIValueLabel)
+//    }
+    
+    func revealCardsAndEndOneRound() {
+        revealCard(node: card1)
+        pictureHumanValueLabel.isHidden = false
+        card1.removeFromParent()
+        card2.removeFromParent()
     }
+    
     
     func checkGameState(nextIsAITurn : Bool, showPocker : Bool = false) -> Bool {
         if (game.isFinished()) {
@@ -426,7 +454,7 @@ class MainGameScene: SKScene {
                     run(SKAction.sequence([wait,action]))
                 }
             }
-            endOneRound()
+            revealCardsAndEndOneRound()
             
             game.newRandomGame(isFold: false ,winner: winner)
             newGame = true
@@ -552,7 +580,7 @@ class MainGameScene: SKScene {
                 
                 GameData.shared.winner = game.setWinnerAccordingToCoins()
                 game.printPaintingValues()
-                endOneRound()
+                revealCardsAndEndOneRound()
                 
                 game.newRandomGame(isFold: false, winner: Winner.AIPlayer)
                 game.setFirstPlayerAI(isAI: true)
@@ -566,7 +594,7 @@ class MainGameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             
-            if (picture1.contains(location)) {
+            if (card1.contains(location)) {
                 resetCoins(humanPlayerWin: true)
             }
             
@@ -693,7 +721,7 @@ class MainGameScene: SKScene {
                     self.resetCoins(humanPlayerWin: true)
                     GameData.shared.winner = self.game.setWinnerAccordingToCoins()
                     self.game.printPaintingValues()
-                    self.endOneRound()
+                    self.revealCardsAndEndOneRound()
                     self.game.newRandomGame(isFold: true, winner: Winner.HumanPlayer)
                     self.game.setFirstPlayerAI(isAI: false)
                     

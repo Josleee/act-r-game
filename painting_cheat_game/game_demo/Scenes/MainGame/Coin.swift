@@ -5,6 +5,7 @@
 //  Created by BlaueBeere on 29/03/2018.
 //  Copyright © 2018 Jed. All rights reserved.
 //
+
 import SpriteKit
 import Foundation
 
@@ -27,20 +28,22 @@ class Coin : SKSpriteNode {
         return ismoveableYpos() && ismoveableXpos()
     }
     
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.xposition = (touches.first?.location(in: self).x)!
-//        self.yposition = (touches.first?.location(in: self).y)!
-//
-//        print(isMoveable)
-//        isCoinMoveable(xposition: Int(self.xposition), yposition: Int(self.yposition))
-//        print(isMoveable)
-//    }
+    //    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    //        self.xposition = (touches.first?.location(in: self).x)!
+    //        self.yposition = (touches.first?.location(in: self).y)!
+    //
+    //        print(isMoveable)
+    //        isCoinMoveable(xposition: Int(self.xposition), yposition: Int(self.yposition))
+    //        print(isMoveable)
+    //    }
     
     //update moveability, owner, access
     func updateCoin(xposition: CGFloat, yposition: CGFloat) -> Bool{
         self.xposition = xposition
         self.yposition = yposition
         
+        print(ismoveableXpos())
+        print(ismoveableYpos())
         if ismoveableXpos() && ismoveableYpos() {
             //then moveable
             print("moveable")
@@ -63,3 +66,4 @@ enum CoinOwner: Int{
     case aiPlayer = -1
     case none = 0
 }
+
