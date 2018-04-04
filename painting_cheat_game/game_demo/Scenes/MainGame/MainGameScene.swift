@@ -45,6 +45,7 @@ class MainGameScene: SKScene {
     private var backgroundMusic: SKAudioNode!
     private var soundCoins : SKAction!
     private var soundCoins2 : SKAction!
+    private var coinsParent : SKNode?
     
     private var pictureHumanValueLabel : SKLabelNode!
     private var pictureAIValueLabel : SKLabelNode!
@@ -171,17 +172,6 @@ class MainGameScene: SKScene {
         }))
     }
     
-//    func flipCard() {
-//        card1.run(SKAction.sequence(
-//            [SKAction.fadeOut(withDuration: 0.1),
-//             SKAction.scaleX(to: 0, duration: 0.35),
-//             SKAction.scale(to: 1, duration: 0.0),
-//             SKAction.setTexture(SKTexture(imageNamed: game.getHumanPaintingName())),
-//             SKAction.fadeIn(withDuration: 0.1),
-//             ]
-//        ))
-//    }
-    
     //Show the cards real picture
     func revealCard (node: Card){
         
@@ -266,6 +256,15 @@ class MainGameScene: SKScene {
         l2Coin.name = "coin_l2_" + String(numberOfCoinsExist/2)
         rCoin.name = "coin_r1_" + String(numberOfCoinsExist/2)
         r2Coin.name = "coin_r2_" + String(numberOfCoinsExist/2)
+        
+        //en-/disable coins
+        lCoin.isUserInteractionEnabled = false //all nonmoveable
+        l2Coin.isUserInteractionEnabled = false
+        rCoin.isUserInteractionEnabled = true
+        r2Coin.isUserInteractionEnabled = true
+        
+        coinsParent = lCoin.parent
+        
         // Add Children
         self.addChild(lCoin)
         self.addChild(rCoin)
@@ -416,11 +415,6 @@ class MainGameScene: SKScene {
         }
     }
     
-//    func revealCardsAndEndOneRound() {
-//        flipCard()
-//        self.addChild(pictureHumanValueLabel)
-//        self.addChild(pictureAIValueLabel)
-//    }
     
     func revealCardsAndEndOneRound() {
         revealCard(node: card1)
@@ -692,6 +686,22 @@ class MainGameScene: SKScene {
         }
     }
     
+    func updateAllCoinsInScene(parentNode: SKNode?){
+        //find all coins in scene AND update their moveability etc.
+        print(coinsParent!)
+        for child in (coinsParent!.children) {
+            if let coin = child as? Coin {
+                if let nodename = coin.name {
+                    if nodename.contains("coin"){
+                        print(coin.name!)
+                        _ = coin.updateCoin(xposition: coin.position.x, yposition: coin.position.y)
+                        
+                    }
+                }
+            }
+        }
+    }
+
     
     override func update(_ currentTime: TimeInterval) {
         // Move clouds
@@ -703,6 +713,10 @@ class MainGameScene: SKScene {
                 gameTimer.invalidate()
                 gameTimer = nil
             }
+        }
+        
+        if coinsParent != nil{
+            updateAllCoinsInScene(parentNode: coinsParent)
         }
         
         if (!humanTurn && !newGame) {

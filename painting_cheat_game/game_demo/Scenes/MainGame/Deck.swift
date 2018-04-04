@@ -8,13 +8,12 @@
 
 import Foundation
 
-let amountOfCategories = 7 //TODO: For simple testing 3, later 7
+let amountOfCategories = 7
 let amountOfCardsInCategory = 10
 
 class Deck{
     private let totalAmountOfCards = 52
     var deck: [Card] = [] //empty array
-    private let paintings = Paintings.paintObject
     
     static let object = Deck()
     
