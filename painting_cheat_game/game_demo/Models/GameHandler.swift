@@ -256,6 +256,19 @@ class GameHandler: BaseGame {
                 poker.modifyLastAction(slot: "secondturn", value: "no")
                 print("---poker.run()")
                 poker.run()
+                var numberToRaise : Int = Int(arc4random_uniform(3) + 1) * 3
+                if (lastRaise <= numberToRaise || lastRaise == 0) {
+                    if (numberToRaise > getAICoins()) {
+                        numberToRaise = getAICoins()
+                    }
+                } else {
+                    if (lastRaise <= getAICoins()) {
+                        numberToRaise = lastRaise
+                    } else {
+                        numberToRaise = getAICoins()
+                    }
+                }
+                return numberToRaise
             }
 
         } catch let error {
