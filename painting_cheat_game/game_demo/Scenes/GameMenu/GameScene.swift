@@ -36,6 +36,8 @@ class GameScene: SKScene {
         ruleLabel.fontSize = 17
         ruleLabel.position = CGPoint(x: 0, y: -75)
         self.addChild(ruleLabel)
+        
+        ruleLabel.isHidden = true
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
