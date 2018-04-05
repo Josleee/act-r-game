@@ -22,35 +22,33 @@ class GameHandler: BaseGame {
     
     // isFold : whether AI player folds
     func newRandomGame(isFold : Bool, winner : Winner = Winner.Nil) {
-        let humanPaintingName : String = randomlyGetPaintingName()
-        let AIPaintingName : String = randomlyGetPaintingName()
-        let humanPaintingValue : Int = Int(humanPaintingName.substring(from: 1, to: 2))!
-        let AIPaintingValue : Int = Int(AIPaintingName.substring(from: 1, to: 2))!
-        
-        setPainting(humanPainting: humanPaintingValue, AIPainintg: AIPaintingValue,
-                    HPName: humanPaintingName, AIPName: AIPaintingName,
-                    wn: winner, isFold: isFold)
+        currentNumberOfRounds = currentNumberOfRounds + 1
+        setPainting(wn: winner, isFold: isFold)
         
         lastRaise = 0
         raiseCount = 0
     }
     
     func newGame(humanPainting: Int, AIPainintg: Int, isFold : Bool) {
-        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg, HPName: "", AIPName: "", wn: Winner.Nil, isFold: isFold)
+        currentNumberOfRounds = currentNumberOfRounds + 1
+        setPainting( wn: Winner.Nil, isFold: isFold)
         lastRaise = 0
         raiseCount = 0
     }
     
+    //finished if 10 rounds
     func isFinished() -> Bool {
         print("Last raise is \(lastRaise), raise count is \(raiseCount), getAICoins is \(getAICoins()) and getHumanCoins is \(getHumanCoins())")
         if (raiseCount == 3 || (raiseCount == 2 && lastRaise <= 0) ||
-            (getAICoins() <= 0 && lastRaise == 0) || (getHumanCoins() <= 0 && lastRaise == 0)) {
+            (getAICoins() <= 0 && lastRaise == 0) || (getHumanCoins() <= 0 && lastRaise == 0)
+            || getAICoins() == 0 || getHumanCoins() == 0 || currentNumberOfRounds == totalNumberOfRounds) {
             print("Finish in last raise \(lastRaise) and raise count is \(raiseCount)")
             return true
         } else {
             return false
         }
     }
+    
     
     func getLastRaise() -> Int {
         return lastRaise

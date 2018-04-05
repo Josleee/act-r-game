@@ -16,6 +16,7 @@ class GameData {
      No winer: return 0
      */
     var winner = Winner.NoOne
+    var playersTurn: PlayersTurn = PlayersTurn.HumanPlayer
     var newGame : Bool = false
     
     private init() { }
@@ -27,6 +28,17 @@ enum Winner: Int {
     case NoOne = 0
     case Nil = -2
     
+    init() {
+        self = .NoOne
+    }
+}
+
+enum PlayersTurn: Int {
+    case HumanPlayer = 1
+    case AIPlayer = -1
+    case NoOne = 0
+    case Nil = -2
+        
     init() {
         self = .NoOne
     }

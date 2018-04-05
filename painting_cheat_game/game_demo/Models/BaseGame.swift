@@ -28,6 +28,9 @@ class BaseGame {
     private var AIPaintingValue : Int = 0
     private var AIPaintingName : String!
     
+    let totalNumberOfRounds : Int! = 10
+    var currentNumberOfRounds : Int! = 0
+    
     public let poker = Model()
     private var isFirstPlayAI : Bool = false
     private let machineLearningClassifier = Classifier()
@@ -46,11 +49,18 @@ class BaseGame {
         return coinsAmountInPot
     }
     
-    func setPainting(humanPainting : Int, AIPainintg : Int, HPName : String, AIPName : String, wn : Winner, isFold : Bool) {
-        humanPaintingValue = humanPainting
-        AIPaintingValue = AIPainintg
-        humanPaintingName = HPName
-        AIPaintingName = AIPName
+    let deck = Deck.object
+    var card1 : Card!
+    var card2 : Card!
+    
+    func setPainting(wn : Winner, isFold : Bool) {
+        card1 = deck.pickCard()
+        card2 = deck.pickCard()
+        
+        humanPaintingValue = card1.cardValue
+        humanPaintingName = card1.cardName
+        AIPaintingValue = card2.cardValue
+        AIPaintingName = card2.cardName
         
         if wn != Winner.Nil {
             print("Conclude a round.")
@@ -94,7 +104,7 @@ class BaseGame {
             poker.modifyLastAction(slot: "round", value: "uneven")
         }
         
-        let evaluatedValue = evaluatePainting(name: HPName)
+        let evaluatedValue = evaluatePainting(name: humanPaintingName)
         if evaluatedValue <= 2 {
             print("---poker.modifyLastAction(slot: \"hcat\", value: \"low\")")
             poker.modifyLastAction(slot: "hcat", value: "low")
@@ -156,6 +166,14 @@ class BaseGame {
 
     func getHumanPaintingValue() -> Int {
         return humanPaintingValue
+    }
+    
+    func getHumanCard() -> Card {
+        return card1
+    }
+    
+    func getAICard() -> Card {
+        return card2
     }
     
     func getAIPaintingValue() -> Int {

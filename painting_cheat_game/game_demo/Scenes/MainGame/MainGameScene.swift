@@ -24,15 +24,15 @@ class MainGameScene: SKScene {
     private var backgroundMontains : SKSpriteNode!
     private var backgroundPlayers : SKSpriteNode!
     
-    private let deck : Deck = Deck.object
     private var card1 : Card!
     private var card2 : Card!
     private var movableNode : SKNode?
     private var originalPosition : CGPoint!
     
-    private var humanTurn : Bool = true
-    private var newGame : Bool = false
+   // private var humanTurn : Bool = true
+    private var endOfRound : Bool = false
     private var gameWinner : Int!
+    private var endOfGame : Bool = false
     
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
@@ -214,8 +214,8 @@ class MainGameScene: SKScene {
         if card2 != nil {
             card2.removeFromParent()
         }
-        card1 = deck.pickCard()
-        card2 = deck.pickCard()
+        card1 = game.getHumanCard()
+        card2 = game.getAICard()
         card1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
         card2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
         card1.position = CGPoint(x: -60, y: 70)
@@ -451,7 +451,7 @@ class MainGameScene: SKScene {
             revealCardsAndEndOneRound()
 
             game.newRandomGame(isFold: false ,winner: winner)
-            newGame = true
+            endOfRound = true
             return true
         } else {
             return false
@@ -527,7 +527,8 @@ class MainGameScene: SKScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Tap to start new game
-        if newGame {
+        if endOfRound {
+            
             if checkWinner() {
                 return
             }
@@ -536,15 +537,23 @@ class MainGameScene: SKScene {
                 return
             }
             
-            newGame = false
+            //new round
+            endOfRound = false
             loadPaintings()
             loadPaintingValueLabels()
+            
+            //change turns
+            if GameData.shared.playersTurn == .HumanPlayer{
+                GameData.shared.playersTurn = .AIPlayer
+            }else{
+                GameData.shared.playersTurn = .HumanPlayer
+            }
             
             let wait = SKAction.wait(forDuration:1)
             let action = SKAction.run {
                 self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
-                if self.humanTurn {
+                if GameData.shared.playersTurn == .HumanPlayer {
                     self.showHintYourTurn()
                 }
             }
@@ -556,7 +565,7 @@ class MainGameScene: SKScene {
         let touch = touches.first
         if let location = touch?.location(in: self) {
             let nodeArray = self.nodes(at: location)
-            if (nodeArray.first?.name == "btn_raise" && humanTurn) {
+            if (nodeArray.first?.name == "btn_raise" && GameData.shared.playersTurn == .HumanPlayer) {
                 // Button animation
                 nodeArray.first?.run(moveNodeUp)
                 let wait = SKAction.wait(forDuration:0.25)
@@ -579,7 +588,7 @@ class MainGameScene: SKScene {
                 // When human doesn't has any coin
                 if (game.getHumanCoins() == 0) {
                     _ = self.checkGameState(nextIsAITurn: true)
-                    humanTurn = false
+                    GameData.shared.playersTurn = .AIPlayer
                     return
                 }
                 // When opponent doesn't has coins
@@ -587,7 +596,7 @@ class MainGameScene: SKScene {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         _ = self.checkGameState(nextIsAITurn: true)
-                        humanTurn = false
+                        GameData.shared.playersTurn = .AIPlayer
                         return
                     } else {
                         showHintInvalidRaise()
@@ -600,7 +609,7 @@ class MainGameScene: SKScene {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         _ = self.checkGameState(nextIsAITurn: true)
-                        humanTurn = false
+                        GameData.shared.playersTurn = .AIPlayer
                         return
                     } else {
                         showHintInvalidRaise()
@@ -614,7 +623,7 @@ class MainGameScene: SKScene {
                         game.listRaiseAmount.contains(coinsToRaise - game.getCoinsInPot())) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         _ = self.checkGameState(nextIsAITurn: true)
-                        humanTurn = false
+                        GameData.shared.playersTurn = .AIPlayer
                         return
                     } else {
                         showHintInvalidRaise()
@@ -626,7 +635,7 @@ class MainGameScene: SKScene {
                     print("Invalid raise")
                     return
                 }
-            } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
+            } else if (nodeArray.first?.name == "btn_fold" && GameData.shared.playersTurn == .HumanPlayer) {
                 // Button animation
                 nodeArray.first?.run(scaleUpAlongY)
                 let wait = SKAction.wait(forDuration:0.25)
@@ -645,8 +654,8 @@ class MainGameScene: SKScene {
                 game.newRandomGame(isFold: false, winner: Winner.AIPlayer)
                 game.setFirstPlayerAI(isAI: true)
                 
-                humanTurn = false
-                newGame = true
+                GameData.shared.playersTurn = .AIPlayer
+                endOfRound = true
                 return
             }
         }
@@ -675,7 +684,7 @@ class MainGameScene: SKScene {
     
     func showHintInvalidRaise() {
         var isOpShow : Bool = false
-        if hintYourTurn.isHidden == false {
+        if hintYourTurn.isHidden == false && GameData.shared.playersTurn == .HumanPlayer{
             hintYourTurn.isHidden = true
             isOpShow = true
         }
@@ -684,7 +693,7 @@ class MainGameScene: SKScene {
         let wait = SKAction.wait(forDuration:2)
         let action = SKAction.run {
             self.hintInvalidRaise.isHidden = true
-            if isOpShow {
+            if isOpShow && GameData.shared.playersTurn == .HumanPlayer{
                 self.showHintYourTurn()
             }
         }
@@ -692,7 +701,7 @@ class MainGameScene: SKScene {
     }
     
     func showHintYourTurn() {
-        if (game.getCoinsInPot() == 2 && !newGame) {
+        if (game.getCoinsInPot() == 2 && !endOfRound && GameData.shared.playersTurn == .HumanPlayer) {
             var isOpShow : Bool = false
             if hintInvalidRaise.isHidden == false {
                 hintInvalidRaise.isHidden = true
@@ -785,7 +794,7 @@ class MainGameScene: SKScene {
             updateAllCoinsInScene(parentNode: coinsParent)
         }
         
-        if (!humanTurn && !newGame) {
+        if (GameData.shared.playersTurn == .AIPlayer && !endOfRound) {
             var wait = SKAction.wait(forDuration:2)
             if game.getLastRaise() == 0 {
                 wait = SKAction.wait(forDuration:5)
@@ -805,8 +814,8 @@ class MainGameScene: SKScene {
                     self.game.newRandomGame(isFold: true, winner: Winner.HumanPlayer)
                     self.game.setFirstPlayerAI(isAI: false)
                     
-                    self.humanTurn = true
-                    self.newGame = true
+                    GameData.shared.playersTurn = .HumanPlayer
+                    self.endOfRound = true
                 } else {
                     self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
                 }
@@ -820,10 +829,10 @@ class MainGameScene: SKScene {
             }
             let action2 = SKAction.run {
                 _ = self.checkGameState(nextIsAITurn: false)
-                self.showHintYourTurn()
+ //               self.showHintYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))
-            humanTurn = true
+            GameData.shared.playersTurn = .HumanPlayer
         }
     }
 }
