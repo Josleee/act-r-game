@@ -590,7 +590,7 @@ class MainGameScene: SKScene {
             hintRaise.text = "Raise: " + String(raise)
            
 
-            if GameData.shared.playersTurn == .HumanPlayer{
+            if GameData.shared.playersTurn == .HumanPlayer || GameData.shared.playersTurn == .AIPlayer{
                 let wait = SKAction.wait(forDuration:1)
                 let action = SKAction.run {
                     self.moveCoins(numberOfCoins: 1, humanPlayer: true)
@@ -600,8 +600,6 @@ class MainGameScene: SKScene {
                     }
                 }
                 run(SKAction.sequence([wait,action]))
-            } else {
-                //show the user that its AIs turn
                 
             }
             return
@@ -830,7 +828,7 @@ class MainGameScene: SKScene {
             if let coin = child as? Coin {
                 if let nodename = coin.name {
                     if nodename.contains("coin"){
-                        print(coin.name!)
+                    
                         _ = coin.updateCoin(xposition: coin.position.x, yposition: coin.position.y)
                     }
                 }
@@ -845,7 +843,7 @@ class MainGameScene: SKScene {
             if let coin = child as? Coin {
                 if let nodename = coin.name {
                     if nodename.contains("coin"){
-                        print(coin.name!)
+                       
                         if disable{
                             coin.isUserInteractionEnabled = true
                         }else{
@@ -891,8 +889,13 @@ class MainGameScene: SKScene {
             
             disableAllCoinsInScene(parentNode: coinsParent, disable: true)
             
-            hintText.isHidden = false
-            hintText.text = String("wait...")
+       
+            let wait0 = SKAction.wait(forDuration:1)
+            let action0 = SKAction.run {
+                self.hintText.isHidden = false
+                self.hintText.text = "wait..."
+            }
+            run(SKAction.sequence([wait0,action0]))
             
             var aifolded = false
             var wait = SKAction.wait(forDuration:5)
