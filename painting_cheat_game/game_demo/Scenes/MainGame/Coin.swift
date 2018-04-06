@@ -19,12 +19,17 @@ class Coin : SKSpriteNode {
     private var originalPosition : CGPoint!
     
     func ismoveableXpos() -> Bool{
-        return (self.xposition <= -300)
+        return (self.xposition < -300)
     }
     func ismoveableYpos() -> Bool{
         return (self.yposition >= -115)
     }
     func isCoinMoveable() -> Bool {
+        print("xy")
+        print(self.xposition)
+        print(self.yposition)
+        print("moveable: " + String(ismoveableYpos()))
+        print("moveable: " + String(ismoveableXpos()))
         return ismoveableYpos() && ismoveableXpos()
     }
     
