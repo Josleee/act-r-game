@@ -11,6 +11,7 @@ import Foundation
 import GameplayKit
 import CoreMotion
 
+
 class MainGameScene: SKScene {
     private var isInitializingCoins : Bool = true
     private var numberOfCoinsExist : Int = 0
@@ -18,27 +19,24 @@ class MainGameScene: SKScene {
     private var coinSize: CGSize!
     private var gameTimer : Timer!
     
-    private var raise = 0
     private var background : SKSpriteNode!
     private var backgroundCloudNoOne : SKSpriteNode!
     private var backgroundCloudNoTwo : SKSpriteNode!
     private var backgroundMontains : SKSpriteNode!
     private var backgroundPlayers : SKSpriteNode!
     
-    private var card1 : Card!
-    private var card2 : Card!
+    private var picture1 : SKSpriteNode!
+    private var picture2 : SKSpriteNode!
     private var movableNode : SKNode?
     private var originalPosition : CGPoint!
     
-    private var endOfRound : Bool = false
+    private var humanTurn : Bool = true
+    private var newGame : Bool = false
     private var gameWinner : Int!
-    private var endOfGame : Bool = false
     
     private var btnFold : SKSpriteNode!
     private var btnRaise : SKSpriteNode!
     
-    private var hintText: SKLabelNode!
-    private var hintRaise: SKLabelNode!
     private var hintYourTurn : SKSpriteNode!
     private var hintInvalidRaise : SKSpriteNode!
     
@@ -46,7 +44,6 @@ class MainGameScene: SKScene {
     private var backgroundMusic: SKAudioNode!
     private var soundCoins : SKAction!
     private var soundCoins2 : SKAction!
-    private var coinsParent : SKNode?
     
     private var pictureHumanValueLabel : SKLabelNode!
     private var pictureAIValueLabel : SKLabelNode!
@@ -108,29 +105,11 @@ class MainGameScene: SKScene {
         btnRaise.zPosition = 1
         self.addChild(btnRaise)
         
-        hintRaise = SKLabelNode(fontNamed: "Chalkduster")
-        hintRaise.text = "Raise: " + String(0)
-        hintRaise.fontSize = 35
-        hintRaise.fontColor = SKColor.white
-        hintRaise.position = CGPoint(x: -200, y: -150)
-        hintRaise.isHidden = false
-        btnRaise.zPosition = 1
-        self.addChild(hintRaise)
-        
         // Load paintings
         loadPaintings()
         loadPaintingValueLabels()
-       
-        // Load hints
-        hintText = SKLabelNode(fontNamed: "Chalkduster")
-        hintText.zPosition = 3
-        hintText.text = "wait..."
-        hintText.fontSize = 35
-        hintText.fontColor = SKColor.white
-        hintText.position = CGPoint(x: 0, y: 145)
-        hintText.isHidden = true
-        self.addChild(hintText)
         
+        // Load hints
         hintYourTurn = SKSpriteNode(imageNamed: "YourTurn")
         hintYourTurn.size = CGSize(width: (hintYourTurn.size.width / 2), height: (hintYourTurn.size.height / 2))
         hintYourTurn.zPosition = 3
@@ -151,9 +130,9 @@ class MainGameScene: SKScene {
         let action = SKAction.run {
             self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+            self.showHintYourTurn()
         }
         run(SKAction.sequence([wait,action]))
-        self.showHintYourTurn(playersTurn: .NoOne)
     }
     
     func createBackground() {
@@ -191,16 +170,12 @@ class MainGameScene: SKScene {
         }))
     }
     
-    //Show the cards real picture
-    func revealCard (node: Card){
-        
-        print(node.getCardName())
-        node.run(SKAction.sequence(
+    func flipCard() {
+        picture1.run(SKAction.sequence(
             [SKAction.fadeOut(withDuration: 0.1),
              SKAction.scaleX(to: 0, duration: 0.35),
              SKAction.scale(to: 1, duration: 0.0),
-             
-             SKAction.setTexture(SKTexture(imageNamed: node.getCardName())),
+             SKAction.setTexture(SKTexture(imageNamed: game.getHumanPaintingName())),
              SKAction.fadeIn(withDuration: 0.1),
              ]
         ))
@@ -219,7 +194,7 @@ class MainGameScene: SKScene {
         pictureHumanValueLabel.position = CGPoint(x: -150, y: 90)
         pictureHumanValueLabel.text = String(game.getHumanPaintingValue())
         pictureHumanValueLabel.zPosition = 2
-
+        
         pictureAIValueLabel = SKLabelNode(fontNamed: "Chalkduster")
         pictureAIValueLabel.fontSize = 50
         pictureAIValueLabel.position = CGPoint(x: 150, y: 90)
@@ -228,25 +203,21 @@ class MainGameScene: SKScene {
     }
     
     func loadPaintings() {
-        if card1 != nil {
-            card1.removeFromParent()
+        if picture1 != nil {
+            picture1.removeFromParent()
         }
-        if card2 != nil {
-            card2.removeFromParent()
+        if picture2 != nil {
+            picture2.removeFromParent()
         }
-        card1 = game.getHumanCard()
-        card2 = game.getAICard()
-        card1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
-        card2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
-        card1.position = CGPoint(x: -60, y: 70)
-        card2.position = CGPoint(x: 60, y: 70)
-        print(card2.getCardName())
-        card2.revealCardAndShowImage()
-        print(card2.getCardName())
-        self.addChild(card1)
-        self.addChild(card2)
+        picture1 = SKSpriteNode(imageNamed: "BG")
+        picture2 = SKSpriteNode(imageNamed: game.getAIPaintingName())
+        picture1.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        picture2.size = CGSize(width: (self.scene!.size.width / 6), height: (self.scene!.size.height / 5))
+        picture1.position = CGPoint(x: -60, y: 70)
+        picture2.position = CGPoint(x: 60, y: 70)
+        self.addChild(picture1)
+        self.addChild(picture2)
     }
-    
     
     @objc func addCoins() {
         // Count
@@ -256,10 +227,10 @@ class MainGameScene: SKScene {
             return
         }
         // Add coins
-        let lCoin = Coin(imageNamed: "bc")
-        let l2Coin = Coin(imageNamed: "bc")
-        let rCoin = Coin(imageNamed: "bc")
-        let r2Coin = Coin(imageNamed: "bc")
+        let lCoin = SKSpriteNode(imageNamed: "bc")
+        let l2Coin = SKSpriteNode(imageNamed: "bc")
+        let rCoin = SKSpriteNode(imageNamed: "bc")
+        let r2Coin = SKSpriteNode(imageNamed: "bc")
         // Set size
         lCoin.size = CGSize(width: (lCoin.size.width / 2), height: (lCoin.size.height / 2))
         l2Coin.size = CGSize(width: (l2Coin.size.width / 2), height: (l2Coin.size.height / 2))
@@ -275,15 +246,6 @@ class MainGameScene: SKScene {
         l2Coin.name = "coin_l2_" + String(numberOfCoinsExist/2)
         rCoin.name = "coin_r1_" + String(numberOfCoinsExist/2)
         r2Coin.name = "coin_r2_" + String(numberOfCoinsExist/2)
-        
-        //en-/disable coins
-        lCoin.isUserInteractionEnabled = false //all nonmoveable
-        l2Coin.isUserInteractionEnabled = false
-        rCoin.isUserInteractionEnabled = true
-        r2Coin.isUserInteractionEnabled = true
-        
-        
-        
         // Add Children
         self.addChild(lCoin)
         self.addChild(rCoin)
@@ -291,7 +253,6 @@ class MainGameScene: SKScene {
         self.addChild(r2Coin)
         // Set size
         coinSize = lCoin.size
-        coinsParent = lCoin.parent!
     }
     
     
@@ -435,16 +396,12 @@ class MainGameScene: SKScene {
         }
     }
     
-    
-    func revealCardsAndEndOneRound() {
-        revealCard(node: card1)
-        pictureHumanValueLabel.isHidden = false
-
+    func endOneRound() {
+        flipCard()
+        self.addChild(pictureHumanValueLabel)
+        self.addChild(pictureAIValueLabel)
     }
     
-    
-    //Checks if game is finished
-    //sets a new round and paintings if the game is finished
     func checkGameState(nextIsAITurn : Bool, showPocker : Bool = false) -> Bool {
         if (game.isFinished()) {
             let winner : Winner = game.evaluateCardsAndSetWinner()
@@ -457,8 +414,6 @@ class MainGameScene: SKScene {
             }
             GameData.shared.winner = game.setWinnerAccordingToCoins()
             game.printPaintingValues()
-
-            disableHint()
             
             if showPocker {
                 self.loadPaintingValueLabels()
@@ -471,144 +426,49 @@ class MainGameScene: SKScene {
                     run(SKAction.sequence([wait,action]))
                 }
             }
-            revealCardsAndEndOneRound()
-
+            endOneRound()
+            
             game.newRandomGame(isFold: false ,winner: winner)
-            raise = 0
-            endOfRound = true
+            newGame = true
             return true
         } else {
             return false
         }
     }
     
-    //TODO implement this part from previous push: "created Coins Class and disabled choosing coins if they are on the t.."
-//    func humanHasEnoughCoins(coinsToRaise: Int) -> Bool{
-//        // When human doesn't has any coins
-//        if (game.getHumanCoins() == 0) {
-//            _ = self.checkGameState()
-//            humanTurn = false
-//            //TODO: in this case the human looses the game and we go to the congratulation scene
-//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
-//            return false
-//        }
-//        // When opponent doesn't has coins
-//        if (game.getAICoins() == 0) {
-//            //TODO: in this case the AI looses the game and we go to the congratulation scene
-//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
-//            if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
-//                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-//                _ = self.checkGameState()
-//                humanTurn = false
-//                return false
-//            } else {
-//                showHintInvalidRaise()
-//                print("Invalid raise")
-//                return false
-//            }
-//
-//        }
-//        // When human player doesn't have enought coins
-//        if (game.getHumanCoins() < game.getLastRaise()) {
-//            //TODO: in this case the human looses the game and we go to the congratulation scene
-//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
-//            if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
-//                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-//                _ = self.checkGameState()
-//                humanTurn = false
-//                return false
-//            } else {
-//                showHintInvalidRaise()
-//                print("Invalid raise")
-//                return false
-//            }
-//        }
-//
-//        return true
-//    }
-//
-//    func aiHasEnoughCoins(coinsToRaise: Int) -> Bool{
-//        // When opponent doesn't has coins
-//        if (game.getAICoins() == 0) {
-//            //TODO: in this case the AI looses the game and we go to the congratulation scene
-//            //TODO: We need to show a hint here, that the game ends because there are not enough coins
-//            if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
-//                game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
-//                _ = self.checkGameState()
-//                humanTurn = false
-//                return false
-//            } else {
-//                showHintInvalidRaise()
-//                print("Invalid raise")
-//                return false
-//            }
-//
-//        }
-//        return true
-//    }
-    
-    
-    
-    fileprivate func changeTurns() {
-        //change turns
-        if GameData.shared.playersTurn == .HumanPlayer{
-            GameData.shared.playersTurn = .AIPlayer
-        }else if GameData.shared.playersTurn == .AIPlayer{
-            GameData.shared.playersTurn = .HumanPlayer
-        }
-    }
-    func disableHint() {
-        hintText.isHidden = true
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        if coinsParent != nil{
-            updateAllCoinsInScene(parentNode: coinsParent)
-        }
-        
         // Tap to start new game
-        if endOfRound {
-            
+        if newGame {
             if checkWinner() {
                 return
             }
-
+            
             if checkGameState(nextIsAITurn: true, showPocker: true) {
                 return
             }
-       
-            changeTurns()
-           
             
-            //new round
-            endOfRound = false
-            //load new pics
+            newGame = false
             loadPaintings()
             loadPaintingValueLabels()
-             raise = 0
-            hintRaise.text = "Raise: " + String(raise)
-           
-
-            if GameData.shared.playersTurn == .HumanPlayer || GameData.shared.playersTurn == .AIPlayer{
-                let wait = SKAction.wait(forDuration:1)
-                let action = SKAction.run {
-                    self.moveCoins(numberOfCoins: 1, humanPlayer: true)
-                    self.moveCoins(numberOfCoins: 1, humanPlayer: false)
-                    if GameData.shared.playersTurn == .HumanPlayer {
-                        self.showHintYourTurn(playersTurn: .HumanPlayer)
-                    }
+            
+            let wait = SKAction.wait(forDuration:1)
+            let action = SKAction.run {
+                self.moveCoins(numberOfCoins: 1, humanPlayer: true)
+                self.moveCoins(numberOfCoins: 1, humanPlayer: false)
+                if self.humanTurn {
+                    self.showHintYourTurn()
                 }
-                run(SKAction.sequence([wait,action]))
-                
             }
+            run(SKAction.sequence([wait,action]))
+            
             return
         }
         
         let touch = touches.first
         if let location = touch?.location(in: self) {
             let nodeArray = self.nodes(at: location)
-            if (nodeArray.first?.name == "btn_raise" && GameData.shared.playersTurn == .HumanPlayer) {
+            if (nodeArray.first?.name == "btn_raise" && humanTurn) {
                 // Button animation
                 nodeArray.first?.run(moveNodeUp)
                 let wait = SKAction.wait(forDuration:0.25)
@@ -616,8 +476,6 @@ class MainGameScene: SKScene {
                     nodeArray.first?.run(self.moveNodeDown)
                 }
                 run(SKAction.sequence([wait,action]))
-                
-                hintText.isHidden = false
                 
                 var coinsToRaise : Int = 0
                 for child in self.children {
@@ -633,8 +491,7 @@ class MainGameScene: SKScene {
                 // When human doesn't has any coin
                 if (game.getHumanCoins() == 0) {
                     _ = self.checkGameState(nextIsAITurn: true)
-                    GameData.shared.playersTurn = .AIPlayer
-                    //endOfGame = true
+                    humanTurn = false
                     return
                 }
                 // When opponent doesn't has coins
@@ -642,12 +499,10 @@ class MainGameScene: SKScene {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getLastRaise()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         _ = self.checkGameState(nextIsAITurn: true)
-                        GameData.shared.playersTurn = .AIPlayer
-                        game.incrementTurnCount()
-                        print("turncount:" + String(self.game.getTurnCount()))
+                        humanTurn = false
                         return
                     } else {
-                        showHintInvalidRaise(playersTurn: .AIPlayer)
+                        showHintInvalidRaise()
                         print("Invalid raise")
                         return
                     }
@@ -657,12 +512,10 @@ class MainGameScene: SKScene {
                     if ((coinsToRaise - game.getCoinsInPot()) == game.getHumanCoins()) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         _ = self.checkGameState(nextIsAITurn: true)
-                        GameData.shared.playersTurn = .AIPlayer
-                        game.incrementTurnCount()
-                        print("turncount:" + String(self.game.getTurnCount()))
+                        humanTurn = false
                         return
                     } else {
-                        showHintInvalidRaise(playersTurn: .AIPlayer)
+                        showHintInvalidRaise()
                         print("Invalid raise")
                         return
                     }
@@ -673,24 +526,19 @@ class MainGameScene: SKScene {
                         game.listRaiseAmount.contains(coinsToRaise - game.getCoinsInPot())) {
                         game.humanRaise(coinsAmount: coinsToRaise - game.getCoinsInPot())
                         _ = self.checkGameState(nextIsAITurn: true)
-                        GameData.shared.playersTurn = .AIPlayer
-                        game.incrementTurnCount()
-                        print("turncount:" + String(self.game.getTurnCount()))
+                        humanTurn = false
                         return
                     } else {
-                        showHintInvalidRaise(playersTurn: .AIPlayer)
+                        showHintInvalidRaise()
                         print("Invalid raise")
                         return
                     }
                 } else {
-                    showHintInvalidRaise(playersTurn: .HumanPlayer)
+                    showHintInvalidRaise()
                     print("Invalid raise")
                     return
                 }
-                
-
-         
-            } else if (nodeArray.first?.name == "btn_fold" && GameData.shared.playersTurn == .HumanPlayer) {
+            } else if (nodeArray.first?.name == "btn_fold" && humanTurn) {
                 // Button animation
                 nodeArray.first?.run(scaleUpAlongY)
                 let wait = SKAction.wait(forDuration:0.25)
@@ -704,32 +552,32 @@ class MainGameScene: SKScene {
                 
                 GameData.shared.winner = game.setWinnerAccordingToCoins()
                 game.printPaintingValues()
-                revealCardsAndEndOneRound()
+                endOneRound()
                 
                 game.newRandomGame(isFold: false, winner: Winner.AIPlayer)
                 game.setFirstPlayerAI(isAI: true)
                 
-                GameData.shared.playersTurn = .AIPlayer
-                endOfRound = true
+                humanTurn = false
+                newGame = true
                 return
             }
         }
         
         for touch in touches {
             let location = touch.location(in: self)
-        
+            
+            if (picture1.contains(location)) {
+                resetCoins(humanPlayerWin: true)
+            }
             
             for child in self.children {
-                if let coin = child as? Coin {
-                    if (coin.name?.range(of:"coin") != nil) {
-                        if (coin.contains(location)) {
-                            print(location)
-                            originalPosition = coin.position
-                            if coin.isCoinMoveable() && GameData.shared.playersTurn == .HumanPlayer{
-                                movableNode = coin
-                                movableNode!.position = location
-                                return
-                            }
+                if let spriteNode = child as? SKSpriteNode {
+                    if (spriteNode.name?.range(of:"coin") != nil) {
+                        if (spriteNode.contains(location)) {
+                            originalPosition = spriteNode.position
+                            movableNode = spriteNode
+                            movableNode!.position = location
+                            return
                         }
                     }
                 }
@@ -737,9 +585,9 @@ class MainGameScene: SKScene {
         }
     }
     
-    func showHintInvalidRaise(playersTurn: PlayersTurn) {
+    func showHintInvalidRaise() {
         var isOpShow : Bool = false
-        if hintYourTurn.isHidden == false{
+        if hintYourTurn.isHidden == false {
             hintYourTurn.isHidden = true
             isOpShow = true
         }
@@ -748,15 +596,15 @@ class MainGameScene: SKScene {
         let wait = SKAction.wait(forDuration:2)
         let action = SKAction.run {
             self.hintInvalidRaise.isHidden = true
-            if isOpShow && playersTurn == .HumanPlayer{
-                self.showHintYourTurn(playersTurn: playersTurn)
+            if isOpShow {
+                self.showHintYourTurn()
             }
         }
         run(SKAction.sequence([wait,action]))
     }
     
-    func showHintYourTurn(playersTurn: PlayersTurn) {
-        if (game.getCoinsInPot() == 2 && !endOfRound || playersTurn == PlayersTurn.HumanPlayer) {
+    func showHintYourTurn() {
+        if (game.getCoinsInPot() == 2 && !newGame) {
             var isOpShow : Bool = false
             if hintInvalidRaise.isHidden == false {
                 hintInvalidRaise.isHidden = true
@@ -768,7 +616,7 @@ class MainGameScene: SKScene {
             let action = SKAction.run {
                 self.hintYourTurn.isHidden = true
                 if isOpShow {
-                    self.showHintInvalidRaise(playersTurn: playersTurn)
+                    self.showHintInvalidRaise()
                 }
             }
             run(SKAction.sequence([wait,action]))
@@ -795,9 +643,7 @@ class MainGameScene: SKScene {
             }
         }
     }
-  
     
-    //move moveable nodes
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if (movableNode != nil) {
             for touch in touches {
@@ -807,12 +653,9 @@ class MainGameScene: SKScene {
                 } else {
                     self.run(soundCoins2)
                     movableNode?.position = location
-                    raise = raise + 1
-                    hintRaise.text = "Raise: " + String(raise)
                 }
             }
         }
-        movableNode = nil
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -821,43 +664,6 @@ class MainGameScene: SKScene {
         }
     }
     
-    func updateAllCoinsInScene(parentNode: SKNode?){
-        //find all coins in scene AND update their moveability etc.
-        print(coinsParent!)
-        for child in (coinsParent!.children) {
-            if let coin = child as? Coin {
-                if let nodename = coin.name {
-                    if nodename.contains("coin"){
-                    
-                        _ = coin.updateCoin(xposition: coin.position.x, yposition: coin.position.y)
-                    }
-                }
-            }
-        }
-    }
-    
-    func disableAllCoinsInScene(parentNode: SKNode?, disable: Bool){
-        //find all coins in scene AND update their moveability etc.
-        print(coinsParent!)
-        for child in (coinsParent!.children) {
-            if let coin = child as? Coin {
-                if let nodename = coin.name {
-                    if nodename.contains("coin"){
-                       
-                        if disable{
-                            coin.isUserInteractionEnabled = true
-                        }else{
-                            coin.isUserInteractionEnabled = false
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-
-        
-
     
     override func update(_ currentTime: TimeInterval) {
         // Move clouds
@@ -871,35 +677,8 @@ class MainGameScene: SKScene {
             }
         }
         
-//        if GameData.shared.playersTurn == .HumanPlayer {
-//            hintText.isHidden = true
-//        }
-        
-        if (coinsParent != nil){
-            if GameData.shared.playersTurn == .HumanPlayer && !endOfRound{
-                disableAllCoinsInScene(parentNode: coinsParent, disable: false)
-            }else{
-                 disableAllCoinsInScene(parentNode: coinsParent, disable: true)
-            }
-        }else{
-           
-        }
-        
-        if (GameData.shared.playersTurn == .AIPlayer && !endOfRound) {
-            
-            disableAllCoinsInScene(parentNode: coinsParent, disable: true)
-            
-       
-            let wait0 = SKAction.wait(forDuration:1)
-            let action0 = SKAction.run {
-                self.hintText.isHidden = false
-                self.hintText.text = "wait..."
-            }
-            run(SKAction.sequence([wait0,action0]))
-            
-            var aifolded = false
-            var wait = SKAction.wait(forDuration:5)
-            
+        if (!humanTurn && !newGame) {
+            var wait = SKAction.wait(forDuration:2)
             if game.getLastRaise() == 0 {
                 wait = SKAction.wait(forDuration:5)
             }
@@ -907,24 +686,20 @@ class MainGameScene: SKScene {
             let action = SKAction.run {
                 let AIRaiseAmount : Int = self.game.ACTRRaise()
                 print("AI raised coins: ", String(AIRaiseAmount))
-                self.game.incrementTurnCount()
-                print("turncount:" + String(self.game.getTurnCount()))
+                
                 // If AI fold
                 if AIRaiseAmount == -1 {
                     // Button animation
-                    aifolded = true
                     self.resetCoins(humanPlayerWin: true)
                     GameData.shared.winner = self.game.setWinnerAccordingToCoins()
                     self.game.printPaintingValues()
-                    self.revealCardsAndEndOneRound()
+                    self.endOneRound()
                     self.game.newRandomGame(isFold: true, winner: Winner.HumanPlayer)
                     self.game.setFirstPlayerAI(isAI: false)
                     
-                    //Opponent folds //TODO:message for user so he knows what happens
-                    self.hintText.text = "opponent folded"
-                    self.endOfRound = true
+                    self.humanTurn = true
+                    self.newGame = true
                 } else {
-                    self.hintText.isHidden = true
                     self.moveCoins(numberOfCoins: AIRaiseAmount, humanPlayer: false)
                 }
                 
@@ -935,25 +710,12 @@ class MainGameScene: SKScene {
             if game.getLastRaise() == 0 {
                 wait2 = SKAction.wait(forDuration:6)
             }
-            hintText.isHidden = true
-            GameData.shared.playersTurn = .HumanPlayer
-            
-
-            
             let action2 = SKAction.run {
                 _ = self.checkGameState(nextIsAITurn: false)
-                //self.hintText.isHidden = false
-          
+                self.showHintYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))
-            
-            hintText.isHidden = true
-            
-            //3rd round show your turn hint
-            if (aifolded && game.getTurnCount() >= 2 && GameData.shared.playersTurn == .HumanPlayer && !endOfRound){
-                showHintYourTurn(playersTurn: .HumanPlayer)
-            }
-            
+            humanTurn = true
         }
     }
 }

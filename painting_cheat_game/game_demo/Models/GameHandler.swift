@@ -15,16 +15,6 @@ class GameHandler: BaseGame {
     
     private var lastRaise : Int = 0
     
-    private var turnCount = 0
-    
-    func getTurnCount() -> Int {
-        return turnCount
-    }
-    
-    func incrementTurnCount(){
-        turnCount = turnCount + 1
-    }
-    
     private func randomlyGetPaintingName() -> String {
         let value = Int(arc4random_uniform(7) + 1)
         return "S" + String(value) + "P (" + String(arc4random_uniform(10) + 1) + ")"
@@ -32,28 +22,35 @@ class GameHandler: BaseGame {
     
     // isFold : whether AI player folds
     func newRandomGame(isFold : Bool, winner : Winner = Winner.Nil) {
-        currentNumberOfRounds = currentNumberOfRounds + 1
-        setPainting(wn: winner, isFold: isFold)
+        let humanPaintingName : String = randomlyGetPaintingName()
+        let AIPaintingName : String = randomlyGetPaintingName()
+        let humanPaintingValue : Int = Int(humanPaintingName.substring(from: 1, to: 2))!
+        let AIPaintingValue : Int = Int(AIPaintingName.substring(from: 1, to: 2))!
         
-        turnCount = 0
+        setPainting(humanPainting: humanPaintingValue, AIPainintg: AIPaintingValue,
+                    HPName: humanPaintingName, AIPName: AIPaintingName,
+                    wn: winner, isFold: isFold)
+        
         lastRaise = 0
         raiseCount = 0
     }
-
     
-    //finished if 10 rounds
+    func newGame(humanPainting: Int, AIPainintg: Int, isFold : Bool) {
+        setPainting(humanPainting: humanPainting, AIPainintg: AIPainintg, HPName: "", AIPName: "", wn: Winner.Nil, isFold: isFold)
+        lastRaise = 0
+        raiseCount = 0
+    }
+    
     func isFinished() -> Bool {
         print("Last raise is \(lastRaise), raise count is \(raiseCount), getAICoins is \(getAICoins()) and getHumanCoins is \(getHumanCoins())")
         if (raiseCount == 3 || (raiseCount == 2 && lastRaise <= 0) ||
-            (getAICoins() <= 0 && lastRaise == 0) || (getHumanCoins() <= 0 && lastRaise == 0)
-            || getAICoins() == 0 || getHumanCoins() == 0 || currentNumberOfRounds == totalNumberOfRounds) {
+            (getAICoins() <= 0 && lastRaise == 0) || (getHumanCoins() <= 0 && lastRaise == 0)) {
             print("Finish in last raise \(lastRaise) and raise count is \(raiseCount)")
             return true
         } else {
             return false
         }
     }
-    
     
     func getLastRaise() -> Int {
         return lastRaise
@@ -115,8 +112,6 @@ class GameHandler: BaseGame {
         }
     }
     
-    //returnvalue -1 : AI folds
-    //             0 : 
     func ACTRRaise() -> Int {
         print("raiseCount: " + String(raiseCount))
         print("lastRaise: " + String(lastRaise))
@@ -142,7 +137,6 @@ class GameHandler: BaseGame {
                 }
                 try raise(amountCoins: lastRaise, isHumanPlayer: false)
                 raiseCount += 1
-
                 return lastRaise
             }
             
@@ -218,7 +212,7 @@ class GameHandler: BaseGame {
                 lastRaise = numberToRaise - lastRaise
                 print("last raise : " + String(lastRaise))
                 return numberToRaise
-
+                
             case "raisehigh":
                 print("AI decides to raisehigh.")
                 var numberToRaise : Int = 5
@@ -251,7 +245,7 @@ class GameHandler: BaseGame {
                 lastRaise = numberToRaise - lastRaise
                 print("last raise : " + String(lastRaise))
                 return numberToRaise
-
+                
             case "fold":
                 print("AI decides to fold.")
                 fold(isHumanPlayer: false)
@@ -285,13 +279,57 @@ class GameHandler: BaseGame {
                 print("last raise : " + String(lastRaise))
                 return numberToRaise
             }
-
+            
         } catch let error {
             print(error.localizedDescription)
         }
         return 0
     }
-
+    
+    func AIrandomlyRaise() -> Int {
+        print("raiseCount: " + String(raiseCount))
+        print("lastRaise: " + String(lastRaise))
+        
+        do {
+            if getAICoins() == 0 {
+                raiseCount += 1
+                return 0
+            }
+            
+            if lastRaise > getAICoins() {
+                lastRaise = getAICoins() - lastRaise
+                let restCoins : Int = getAICoins()
+                try raise(amountCoins: getAICoins(), isHumanPlayer: false)
+                raiseCount += 1
+                return restCoins
+            }
+            
+            if raiseCount == 2 {
+                if lastRaise < 0 {
+                    raiseCount += 1
+                    return 0
+                }
+                try raise(amountCoins: lastRaise, isHumanPlayer: false)
+                raiseCount += 1
+                return lastRaise
+            }
+            
+            
+            
+            while true {
+                let randomIndex = Int(arc4random_uniform(UInt32(listRaiseAmount.count)))
+                if (listRaiseAmount[randomIndex] >= lastRaise && listRaiseAmount[randomIndex] <= getAICoins()) {
+                    try raise(amountCoins: listRaiseAmount[randomIndex], isHumanPlayer: false)
+                    lastRaise = listRaiseAmount[randomIndex] - lastRaise
+                    raiseCount += 1
+                    return listRaiseAmount[randomIndex]
+                }
+            }
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        return 0
+    }
     
     func printPaintingValues() {
         print("")

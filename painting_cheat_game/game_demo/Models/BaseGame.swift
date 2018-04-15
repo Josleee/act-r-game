@@ -24,17 +24,14 @@ class BaseGame {
     
     private var humanPaintingValue : Int = 0
     private var humanPaintingName : String!
-
+    
     private var AIPaintingValue : Int = 0
     private var AIPaintingName : String!
-    
-    let totalNumberOfRounds : Int! = 10
-    var currentNumberOfRounds : Int! = 0
     
     public let poker = Model()
     private var isFirstPlayAI : Bool = false
     private let machineLearningClassifier = Classifier()
-
+    
     init() {
         print("---poker.loadModel(fileName: \"test\")")
         poker.loadModel(fileName: "test")
@@ -49,18 +46,11 @@ class BaseGame {
         return coinsAmountInPot
     }
     
-    let deck = Deck.object
-    var card1 : Card!
-    var card2 : Card!
-    
-    func setPainting(wn : Winner, isFold : Bool) {
-        card1 = deck.pickCard()
-        card2 = deck.pickCard()
-        
-        humanPaintingValue = card1.cardValue
-        humanPaintingName = card1.cardName
-        AIPaintingValue = card2.cardValue
-        AIPaintingName = card2.cardName
+    func setPainting(humanPainting : Int, AIPainintg : Int, HPName : String, AIPName : String, wn : Winner, isFold : Bool) {
+        humanPaintingValue = humanPainting
+        AIPaintingValue = AIPainintg
+        humanPaintingName = HPName
+        AIPaintingName = AIPName
         
         if wn != Winner.Nil {
             print("Conclude a round.")
@@ -104,7 +94,7 @@ class BaseGame {
             poker.modifyLastAction(slot: "round", value: "uneven")
         }
         
-        let evaluatedValue = evaluatePainting(name: humanPaintingName)
+        let evaluatedValue = evaluatePainting(name: HPName)
         if evaluatedValue <= 2 {
             print("---poker.modifyLastAction(slot: \"hcat\", value: \"low\")")
             poker.modifyLastAction(slot: "hcat", value: "low")
@@ -125,24 +115,24 @@ class BaseGame {
     func evaluatePainting(name : String) -> Int {
         let testImage = UIImage(named: name)
         
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            // Resnet50 expects an image 224 x 224, so we should resize and crop the source image
-//            let inputImageSize: CGFloat = 224.0
-//            let minLen = min((testImage?.size.width)!, (testImage?.size.height)!)
-//            let resizedImage = testImage?.resize(to: CGSize(width: inputImageSize * (testImage?.size.width)! / minLen, height: inputImageSize * (testImage?.size.height)! / minLen))
-//            let cropedToSquareImage = resizedImage?.cropToSquare()
-//
-//            guard let pixelBuffer = cropedToSquareImage?.pixelBuffer() else {
-//                fatalError()
-//            }
-//            guard let classifierOutput = try? self.machineLearningClassifier.prediction(input__0: pixelBuffer) else {
-//                fatalError()
-//            }
-//
-//            DispatchQueue.main.async {
-//                print(classifierOutput.classLabel)
-//            }
-//        }
+        //        DispatchQueue.global(qos: .userInitiated).async {
+        //            // Resnet50 expects an image 224 x 224, so we should resize and crop the source image
+        //            let inputImageSize: CGFloat = 224.0
+        //            let minLen = min((testImage?.size.width)!, (testImage?.size.height)!)
+        //            let resizedImage = testImage?.resize(to: CGSize(width: inputImageSize * (testImage?.size.width)! / minLen, height: inputImageSize * (testImage?.size.height)! / minLen))
+        //            let cropedToSquareImage = resizedImage?.cropToSquare()
+        //
+        //            guard let pixelBuffer = cropedToSquareImage?.pixelBuffer() else {
+        //                fatalError()
+        //            }
+        //            guard let classifierOutput = try? self.machineLearningClassifier.prediction(input__0: pixelBuffer) else {
+        //                fatalError()
+        //            }
+        //
+        //            DispatchQueue.main.async {
+        //                print(classifierOutput.classLabel)
+        //            }
+        //        }
         
         let sizedImage = ImageProcessor.resizeImage(image: testImage!, newLength: 224)
         if let pixelBuffer = ImageProcessor.pixelBuffer(forImage: (sizedImage?.cgImage)!) {
@@ -163,17 +153,9 @@ class BaseGame {
     func getAICoins() -> Int {
         return AICoinsAmount
     }
-
+    
     func getHumanPaintingValue() -> Int {
         return humanPaintingValue
-    }
-    
-    func getHumanCard() -> Card {
-        return card1
-    }
-    
-    func getAICard() -> Card {
-        return card2
     }
     
     func getAIPaintingValue() -> Int {
