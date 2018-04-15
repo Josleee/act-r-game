@@ -1,17 +1,10 @@
-;;; TEST            WORK IN act-r game
+;; Painting Cheat
 
 (add-dm
-    (goal isa goal state setup round nil hvalue nil hcat nil haction nil maction nil results nil)
+(goal isa goal state setup round nil hvalue nil hcat nil haction nil maction nil results nil)
 )
 
-(set-all-baselevels -100 10) ;; time offset and number of references
-
-;; Should I save human action patterns? like call, raise 6?
-
-;; TO DO:
-;; CAN RETRIEVE AN ACTION THAT'S NOT A POSSIBILITY      !!!     (human raise 6, model raise 3)
-;; start uneven turn (so after human chose something) goes to random retrieval, not limited random
-;; should it save model action when human folded?
+(set-all-baselevels -100 10)
 
 ;; -----------------------
 
@@ -82,7 +75,7 @@
 
 (p retrieve-value-success
     =goal>
-	    isa goal
+	   isa goal
         state try-retrieve-value
         hvalue =c
     =retrieval>
@@ -153,20 +146,6 @@
         state try-random
 )
 
-(p retrieve-cat-fail-even-turn-later
-    =goal>
-        isa goal
-        state try-retrieve-cat
-        round even
-    ?retrieval>
-        state error
-    =action>
-        haction =d
-==>
-    =goal>
-        isa goal
-        state try-random-limited
-)
 ;; ---------------------------------------------
 ;;      Do appropriate retrieved action
 ;;                  ---------------- Even turn (everyting is still possible)
@@ -215,23 +194,6 @@
         round uneven
         haction raisemid
         maction raiselow
-==>
-    =goal>
-	    isa goal
-        state doit
-        maction raisemid
-	+action>
-		maction raisemid
-		secondturn question
-)
-
-(p retrieved-whatever-uneven-human-raisedmid-retrieved-mid
-    =goal>
-        isa goal
-        state retrieved-whatever
-        round uneven
-        haction raisemid
-        maction raisemid
 ==>
     =goal>
 	    isa goal
@@ -296,29 +258,24 @@
 		secondturn question
 )
 
-(p retrieved-whatever-uneven-human-raisedhigh-retrieved-high
+;;                  ---------------- Same actions always possible
+
+(p retrieved-whatever-uneven-human-raisedx-retrieved-x
     =goal>
         isa goal
         state retrieved-whatever
         round uneven
-        haction raisehigh
-        maction raisehigh
+        haction =same
+        maction =same
 ==>
     =goal>
 	    isa goal
         state doit
-        maction raisehigh
+        maction =same
 	+action>
-		maction raisehigh
+		maction =same
 		secondturn question
 )
-
-
-
-
-
-
-
 
 ;;                  ---------------- Folding always possible
 
@@ -398,19 +355,19 @@
 )
 
 ;; ---------------------------------------------
-;;      Switching Possible Second Turn (after swift pass)
+;;      Switching Possible Second Turn
 
 (p need-second-turn
 	=goal>
 		isa goal
 		state doit
-        round even               ;;    FOR TESTING PURPOSES, DISABLE!!
+        round even
 	=action>
 		secondturn yes
 ==>
 	=goal>
 		isa goal
-        state secondturn        ;; try-random-limited before
+        	state secondturn
 )
 
 (p dont-need-second-turn
@@ -444,6 +401,75 @@
 
 ;; ---------------------------------------------
 ;;      Random Actions Limited (Second Turn)
+
+;;                  ---------------- Options Human folded
+
+(p try-random-limited-human-folded
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+		haction fold
+==>
+    =goal>
+        isa goal
+        state request-results
+        maction raiselow
+    +action>
+        maction raiselow
+		secondturn no
+)
+
+;;                  ---------------- Options Human raised low
+
+(p try-random-limited-human-raisedlow-raiselow
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+		haction raiselow
+==>
+    =goal>
+        isa goal
+        state request-results
+        maction raiselow
+    +action>
+        maction raiselow
+		secondturn no
+)
+
+(p try-random-limited-human-raisedlow-raisemid
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+		haction raiselow
+==>
+    =goal>
+        isa goal
+        state request-results
+        maction raisemid
+    +action>
+        maction raisemid
+		secondturn no
+)
+
+(p try-random-limited-human-raisedlow-raisehigh
+    =goal>
+        isa goal
+        state try-random-limited
+	=action>
+		haction raiselow
+==>
+    =goal>
+        isa goal
+        state request-results
+        maction raisehigh
+    +action>
+        maction raisehigh
+		secondturn no
+)
+
 ;;                  ---------------- Options Human raised mid
 
 (p try-random-limited-human-raisedmid-model-raisemid
@@ -496,7 +522,7 @@
 		secondturn no
 )
 
-;;                  ---------------- Fold
+;;                  ---------------- Fold is always possible
 
 (p try-random-limited-fold
     =goal>
@@ -521,39 +547,30 @@
     =goal>
         isa goal
         state request-results
+        hcat =b
+        hvalue =c
+        haction =d
+        maction =e
     =action>
         results draw
-)
-
-(p won-by-human-fold
-    =goal>
-        isa goal
-        state request-results
-        hcat =b
-        hvalue =c
-        haction fold
-        maction =e
-    =action>
-        results win
 ==>
-    =goal>
-        isa goal
-        state reset
-    +imaginal>
-        isa game-experience
-        isa game-experience
-        hcat =b
-        hvalue =c
-        maction =e
+	=goal>
+		isa goal
+		state reset
+	+imaginal>
+		isa game-experience
+		hcat =b
+		hvalue =c
+		maction =e
 )
 
-(p won-by-raiselow
+(p won                  ;; Can be because of human folding or model has higher painting
 	=goal>
 		isa goal
 		state request-results
 		hcat =b
 		hvalue =c
-		maction raiselow
+		maction =e
 	=action>
 		results win
 ==>
@@ -564,47 +581,7 @@
 		isa game-experience
 		hcat =b
 		hvalue =c
-		maction raisehigh
-)
-
-(p won-by-raisemid
-	=goal>
-		isa goal
-		state request-results
-		hcat =b
-		hvalue =c
-		maction raisemid
-	=action>
-		results win
-==>
-	=goal>
-		isa goal
-		state reset
-	+imaginal>
-		isa game-experience
-		hcat =b
-		hvalue =c
-		maction raisehigh
-)
-
-(p won-by-raisehigh
-	=goal>
-		isa goal
-		state request-results
-		hcat =b
-		hvalue =c
-		maction raisehigh
-	=action>
-		results win
-==>
-	=goal>
-		isa goal
-		state reset
-	+imaginal>
-		isa game-experience
-		hcat =b
-		hvalue =c
-		maction raisehigh
+		maction =e
 )
 
 (p lost-by-fold-unnecessarily
@@ -653,7 +630,7 @@
 		state request-results
 		hcat =b
 		hvalue =c
-- maction fold          ;; does this work?
+        - maction fold
 	=action>
 		results lose
 ==>
@@ -685,3 +662,4 @@
 )
 
 (goal-focus goal)
+
