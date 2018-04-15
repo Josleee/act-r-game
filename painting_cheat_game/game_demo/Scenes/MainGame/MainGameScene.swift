@@ -457,6 +457,7 @@ class MainGameScene: SKScene {
                 self.moveCoins(numberOfCoins: 1, humanPlayer: true)
                 self.moveCoins(numberOfCoins: 1, humanPlayer: false)
                 if self.humanTurn {
+                    print("Show your turn hint.")
                     self.showHintYourTurn()
                 }
             }
@@ -605,21 +606,23 @@ class MainGameScene: SKScene {
     
     func showHintYourTurn() {
         if (game.getCoinsInPot() == 2 && !newGame) {
-            var isOpShow : Bool = false
             if hintInvalidRaise.isHidden == false {
                 hintInvalidRaise.isHidden = true
-                isOpShow = true
             }
             
-            hintYourTurn.isHidden = false
-            let wait = SKAction.wait(forDuration:5)
+            let wait = SKAction.wait(forDuration:6)
             let action = SKAction.run {
-                self.hintYourTurn.isHidden = true
-                if isOpShow {
-                    self.showHintInvalidRaise()
+                if (self.humanTurn == true) {
+                    self.hintYourTurn.isHidden = false
                 }
             }
-            run(SKAction.sequence([wait,action]))
+            run(SKAction.sequence([wait, action]))
+            
+            let wait2 = SKAction.wait(forDuration:9)
+            let action2 = SKAction.run {
+                self.hintYourTurn.isHidden = true
+            }
+            run(SKAction.sequence([wait2, action2]))
         }
     }
     
@@ -708,7 +711,7 @@ class MainGameScene: SKScene {
             
             var wait2 = SKAction.wait(forDuration:3)
             if game.getLastRaise() == 0 {
-                wait2 = SKAction.wait(forDuration:6)
+                wait2 = SKAction.wait(forDuration:5)
             }
             let action2 = SKAction.run {
                 _ = self.checkGameState(nextIsAITurn: false)
