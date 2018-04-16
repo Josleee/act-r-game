@@ -16,6 +16,7 @@ class MainGameScene: SKScene {
     private var isInitializingCoins : Bool = true
     private var numberOfCoinsExist : Int = 0
     private var totalCoins : Int = 20
+    private var numberOfRound : Int = 0
     private var coinSize: CGSize!
     private var gameTimer : Timer!
     
@@ -53,6 +54,8 @@ class MainGameScene: SKScene {
     private var lastRaiseLabel : SKLabelNode!
     private var currentRaiseLabel : SKLabelNode!
     
+    private var roundLabel : SKLabelNode!
+
     private let moveNodeUp = SKAction.moveBy(x: 0, y: 10, duration: 0.2)
     private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
     private let scaleUpAlongY = SKAction.scaleY(to: 0.8, duration: 0.2)
@@ -113,6 +116,8 @@ class MainGameScene: SKScene {
         // Load paintings
         loadPaintings()
         loadPaintingValueLabels()
+        
+        loadRoundLabels()
         
         // Load hints
         hintYourTurn = SKSpriteNode(imageNamed: "YourTurn")
@@ -255,6 +260,21 @@ class MainGameScene: SKScene {
         currentRaiseLabel.text = String("Current raise: " + String(coinsToRaise - game.getCoinsInPot()))
         currentRaiseLabel.zPosition = 2
         self.addChild(currentRaiseLabel)
+    }
+    
+    func loadRoundLabels() {
+        numberOfRound += 1
+        
+        if roundLabel != nil {
+            roundLabel.removeFromParent()
+        }
+        
+        roundLabel = SKLabelNode(fontNamed: "Chalkduster")
+        roundLabel.fontSize = 15
+        roundLabel.position = CGPoint(x: -270, y: 152)
+        roundLabel.text = String("Round: " + String(numberOfRound) + "/10")
+        roundLabel.zPosition = 2
+        self.addChild(roundLabel)
     }
     
     func loadPaintings() {
@@ -467,6 +487,14 @@ class MainGameScene: SKScene {
             GameData.shared.winner = Winner.AIPlayer
         }
         
+        if numberOfRound >= 10 {
+            if humanCoins >= AICoins {
+                GameData.shared.winner = Winner.HumanPlayer
+            } else {
+                GameData.shared.winner = Winner.AIPlayer
+            }
+        }
+        
         if (GameData.shared.winner == Winner.HumanPlayer) {
             print("Human wins!!!")
             self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
@@ -536,6 +564,8 @@ class MainGameScene: SKScene {
             }
             
             newGame = false
+            loadRoundLabels()
+
             loadPaintings()
             loadPaintingValueLabels()
             
