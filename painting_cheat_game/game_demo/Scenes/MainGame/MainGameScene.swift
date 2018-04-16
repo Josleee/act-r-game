@@ -50,6 +50,9 @@ class MainGameScene: SKScene {
     private var pictureHumanValueLabel : SKLabelNode!
     private var pictureAIValueLabel : SKLabelNode!
     
+    private var lastRaiseLabel : SKLabelNode!
+    private var currentRaiseLabel : SKLabelNode!
+    
     private let moveNodeUp = SKAction.moveBy(x: 0, y: 10, duration: 0.2)
     private let moveNodeDown = SKAction.moveBy(x: 0, y: -10, duration: 0.2)
     private let scaleUpAlongY = SKAction.scaleY(to: 0.8, duration: 0.2)
@@ -218,6 +221,42 @@ class MainGameScene: SKScene {
         pictureAIValueLabel.zPosition = 2
     }
     
+    func loadRaiseLabels() {
+        if lastRaiseLabel != nil {
+            lastRaiseLabel.removeFromParent()
+        }
+        if currentRaiseLabel != nil {
+            currentRaiseLabel.removeFromParent()
+        }
+        
+        lastRaiseLabel = SKLabelNode(fontNamed: "Chalkduster")
+        lastRaiseLabel.fontSize = 15
+        lastRaiseLabel.position = CGPoint(x: -270, y: -152)
+        lastRaiseLabel.text = String("Last raise: " + String(game.getLastRaise()))
+        lastRaiseLabel.zPosition = 2
+        self.addChild(lastRaiseLabel)
+        
+        var coinsToRaise : Int = 0
+        for child in self.children {
+            if let spriteNode = child as? SKSpriteNode {
+                if (spriteNode.name?.range(of:"coin") != nil) {
+                    if (spriteNode.position.x > -self.scene!.size.width / 2 + 90 &&
+                        spriteNode.position.x < self.scene!.size.width / 2 - 90) {
+                        coinsToRaise += 1
+                    }
+                }
+            }
+        }
+        print(coinsToRaise)
+        
+        currentRaiseLabel = SKLabelNode(fontNamed: "Chalkduster")
+        currentRaiseLabel.fontSize = 15
+        currentRaiseLabel.position = CGPoint(x: -255, y: -173)
+        currentRaiseLabel.text = String("Current raise: " + String(coinsToRaise - game.getCoinsInPot()))
+        currentRaiseLabel.zPosition = 2
+        self.addChild(currentRaiseLabel)
+    }
+    
     func loadPaintings() {
         if picture1 != nil {
             picture1.removeFromParent()
@@ -304,6 +343,12 @@ class MainGameScene: SKScene {
             }
         }
         
+        let wait = SKAction.wait(forDuration: 0.35)
+        let action = SKAction.run {
+            self.loadRaiseLabels()
+        }
+        run(SKAction.sequence([wait,action]))
+        
         // Remove all temp nodes
         for child in self.children {
             if let spriteNode = child as? SKSpriteNode {
@@ -323,6 +368,11 @@ class MainGameScene: SKScene {
                     if (((spriteNode.position.x <= -self.scene!.size.width / 2 + 90) || (spriteNode.position.x >= self.scene!.size.width / 2 - 90))
                         && ((spriteNode.position.x > 0) == !humanPlayer)) {
                         if (count >= numberOfCoins) {
+                            let wait = SKAction.wait(forDuration: 0.35)
+                            let action = SKAction.run {
+                                self.loadRaiseLabels()
+                            }
+                            run(SKAction.sequence([wait,action]))
                             return
                         } else {
                             count += 1
@@ -526,6 +576,7 @@ class MainGameScene: SKScene {
                         }
                     }
                 }
+
                 // When human doesn't has any coin
                 if (game.getHumanCoins() == 0) {
                     _ = self.checkGameState(nextIsAITurn: true)
@@ -719,6 +770,7 @@ class MainGameScene: SKScene {
                 } else {
                     self.run(soundCoins2)
                     movableNode?.position = location
+                    self.loadRaiseLabels()
                 }
             }
         }
