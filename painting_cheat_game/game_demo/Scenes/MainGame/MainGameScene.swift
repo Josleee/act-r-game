@@ -389,6 +389,26 @@ class MainGameScene: SKScene {
     func checkWinner() -> Bool {
         let gameSceneTemp = CongratsScene(fileNamed: "CongratsScene")
         
+        var humanCoins : Int = 0
+        var AICoins : Int = 0
+        for child in self.children {
+            if let spriteNode = child as? SKSpriteNode {
+                if (spriteNode.name?.range(of:"coin") != nil) {
+                    if (spriteNode.position.x > -self.scene!.size.width / 2 + 90) {
+                        AICoins += 1
+                    } else if (spriteNode.position.x < self.scene!.size.width / 2 - 90) {
+                        humanCoins += 1
+                    }
+                }
+            }
+        }
+        
+        if AICoins == 0 {
+            GameData.shared.winner = Winner.HumanPlayer
+        } else if humanCoins == 0 {
+            GameData.shared.winner = Winner.AIPlayer
+        }
+        
         if (GameData.shared.winner == Winner.HumanPlayer) {
             print("Human wins!!!")
             self.scene?.view?.presentScene(gameSceneTemp!, transition: SKTransition.crossFade(withDuration: 0.5))
@@ -421,6 +441,7 @@ class MainGameScene: SKScene {
                 // End in draw
             }
             GameData.shared.winner = game.setWinnerAccordingToCoins()
+            
             game.printPaintingValues()
             
             if showPocker {
