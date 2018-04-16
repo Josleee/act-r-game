@@ -38,6 +38,7 @@ class MainGameScene: SKScene {
     private var btnRaise : SKSpriteNode!
     
     private var hintYourTurn : SKSpriteNode!
+    private var hintAITurn : SKSpriteNode!
     private var hintInvalidRaise : SKSpriteNode!
     
     private var game : GameHandler!
@@ -117,6 +118,13 @@ class MainGameScene: SKScene {
         hintYourTurn.isHidden = true
         self.addChild(hintYourTurn)
         
+        hintAITurn = SKSpriteNode(imageNamed: "AITurn")
+        hintAITurn.size = CGSize(width: (hintAITurn.size.width / 2), height: (hintAITurn.size.height / 2))
+        hintAITurn.zPosition = 3
+        hintAITurn.position = CGPoint(x: 0, y: 145)
+        hintAITurn.isHidden = true
+        self.addChild(hintAITurn)
+        
         hintInvalidRaise = SKSpriteNode(imageNamed: "InvalidRaise")
         hintInvalidRaise.size = CGSize(width: (hintInvalidRaise.size.width / 2), height: (hintInvalidRaise.size.height / 2))
         hintInvalidRaise.zPosition = 3
@@ -126,11 +134,11 @@ class MainGameScene: SKScene {
         
         // Add coins generator
         gameTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(addCoins), userInfo: nil, repeats: true)
+        self.showHintYourTurn()
         let wait = SKAction.wait(forDuration: 2)
         let action = SKAction.run {
             self.moveCoins(numberOfCoins: 1, humanPlayer: false)
             self.moveCoins(numberOfCoins: 1, humanPlayer: true)
-            self.showHintYourTurn()
         }
         run(SKAction.sequence([wait,action]))
     }
@@ -587,38 +595,48 @@ class MainGameScene: SKScene {
     }
     
     func showHintInvalidRaise() {
-        var isOpShow : Bool = false
-        if hintYourTurn.isHidden == false {
-            hintYourTurn.isHidden = true
-            isOpShow = true
-        }
+        hintYourTurn.isHidden = true
+        hintAITurn.isHidden = true
         
         hintInvalidRaise.isHidden = false
         let wait = SKAction.wait(forDuration:2)
         let action = SKAction.run {
             self.hintInvalidRaise.isHidden = true
-            if isOpShow {
-                self.showHintYourTurn()
-            }
         }
         run(SKAction.sequence([wait,action]))
     }
     
-    func showHintYourTurn() {
-        if (game.getCoinsInPot() == 2 && !newGame) {
-            if hintInvalidRaise.isHidden == false {
-                hintInvalidRaise.isHidden = true
+    func showHintAITurn() {
+        if (!newGame) {
+            if (self.humanTurn == false) {
+                self.hintInvalidRaise.isHidden = true
+                self.hintYourTurn.isHidden = true
+                
+                self.hintAITurn.isHidden = false
             }
             
-            let wait = SKAction.wait(forDuration:6)
+            let wait2 = SKAction.wait(forDuration:6)
+            let action2 = SKAction.run {
+                self.hintAITurn.isHidden = true
+            }
+            run(SKAction.sequence([wait2, action2]))
+        }
+    }
+    
+    func showHintYourTurn() {
+        if (game.getCoinsInPot() == 2 && !newGame) {
+            let wait = SKAction.wait(forDuration:3)
             let action = SKAction.run {
+                self.hintInvalidRaise.isHidden = true
+                self.hintAITurn.isHidden = true
+                
                 if (self.humanTurn == true) {
                     self.hintYourTurn.isHidden = false
                 }
             }
             run(SKAction.sequence([wait, action]))
             
-            let wait2 = SKAction.wait(forDuration:9)
+            let wait2 = SKAction.wait(forDuration:6)
             let action2 = SKAction.run {
                 self.hintYourTurn.isHidden = true
             }
@@ -681,6 +699,8 @@ class MainGameScene: SKScene {
         }
         
         if (!humanTurn && !newGame) {
+            showHintAITurn()
+            
             var wait = SKAction.wait(forDuration:2)
             if game.getLastRaise() == 0 {
                 wait = SKAction.wait(forDuration:5)
@@ -715,7 +735,7 @@ class MainGameScene: SKScene {
             }
             let action2 = SKAction.run {
                 _ = self.checkGameState(nextIsAITurn: false)
-                self.showHintYourTurn()
+//                self.showHintYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))
             humanTurn = true
