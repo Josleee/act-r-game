@@ -39,8 +39,9 @@ class MainGameScene: SKScene {
     
     private var hintYourTurn : SKSpriteNode!
     private var hintAITurn : SKSpriteNode!
+    private var hintAIFold : SKSpriteNode!
     private var hintInvalidRaise : SKSpriteNode!
-    
+
     private var game : GameHandler!
     private var backgroundMusic: SKAudioNode!
     private var soundCoins : SKAction!
@@ -124,6 +125,13 @@ class MainGameScene: SKScene {
         hintAITurn.position = CGPoint(x: 0, y: 145)
         hintAITurn.isHidden = true
         self.addChild(hintAITurn)
+        
+        hintAIFold = SKSpriteNode(imageNamed: "AIFold")
+        hintAIFold.size = CGSize(width: (hintAIFold.size.width / 2), height: (hintAIFold.size.height / 2))
+        hintAIFold.zPosition = 3
+        hintAIFold.position = CGPoint(x: 0, y: 145)
+        hintAIFold.isHidden = true
+        self.addChild(hintAIFold)
         
         hintInvalidRaise = SKSpriteNode(imageNamed: "InvalidRaise")
         hintInvalidRaise.size = CGSize(width: (hintInvalidRaise.size.width / 2), height: (hintInvalidRaise.size.height / 2))
@@ -618,6 +626,7 @@ class MainGameScene: SKScene {
     func showHintInvalidRaise() {
         hintYourTurn.isHidden = true
         hintAITurn.isHidden = true
+        hintAIFold.isHidden = true
         
         hintInvalidRaise.isHidden = false
         let wait = SKAction.wait(forDuration:2)
@@ -627,12 +636,26 @@ class MainGameScene: SKScene {
         run(SKAction.sequence([wait,action]))
     }
     
+    func showHintAIFold() {
+        hintYourTurn.isHidden = true
+        hintAITurn.isHidden = true
+        hintInvalidRaise.isHidden = true
+        
+        hintAIFold.isHidden = false
+        let wait = SKAction.wait(forDuration:3)
+        let action = SKAction.run {
+            self.hintAIFold.isHidden = true
+        }
+        run(SKAction.sequence([wait,action]))
+    }
+    
     func showHintAITurn() {
         if (!newGame) {
             if (self.humanTurn == false) {
                 self.hintInvalidRaise.isHidden = true
                 self.hintYourTurn.isHidden = true
-                
+                self.hintAIFold.isHidden = true
+
                 self.hintAITurn.isHidden = false
             }
             
@@ -650,7 +673,8 @@ class MainGameScene: SKScene {
             let action = SKAction.run {
                 self.hintInvalidRaise.isHidden = true
                 self.hintAITurn.isHidden = true
-                
+                self.hintAIFold.isHidden = true
+
                 if (self.humanTurn == true) {
                     self.hintYourTurn.isHidden = false
                 }
@@ -733,7 +757,7 @@ class MainGameScene: SKScene {
                 
                 // If AI fold
                 if AIRaiseAmount == -1 {
-                    // Button animation
+                    self.showHintAIFold()
                     self.resetCoins(humanPlayerWin: true)
                     GameData.shared.winner = self.game.setWinnerAccordingToCoins()
                     self.game.printPaintingValues()
@@ -756,7 +780,7 @@ class MainGameScene: SKScene {
             }
             let action2 = SKAction.run {
                 _ = self.checkGameState(nextIsAITurn: false)
-//                self.showHintYourTurn()
+                self.showHintYourTurn()
             }
             run(SKAction.sequence([wait2,action2]))
             humanTurn = true
